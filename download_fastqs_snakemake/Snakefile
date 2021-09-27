@@ -30,7 +30,7 @@ shell("mkdir -p {OUTDIR}")
 
 SRR = list(pd.read_csv(config['SAMPLE_SHEET'])['SRR.accession'])
 for i in range(0,len(SRR)):
-    SRR[i] = SRR[i].split()
+    SRR[i] = SRR[i].split(",")
 SRR = list(itertools.chain(*SRR))
 
 ########################################################################################################
@@ -40,21 +40,11 @@ PREFETCH = config["PREFETCH"]
 PFD = config["PFD"]
 
 ########################################################################################################
+########################################################################################################
 rule all:
     input:
         expand('{OUTDIR}/{sample}_1.fq.gz', OUTDIR=config['OUTDIR'], sample=SRR), # R1 fastq
         expand('{OUTDIR}/{sample}_2.fq.gz', OUTDIR=config['OUTDIR'], sample=SRR) # R2 fastq
-
-# rule make_outdir:
-#     priority:
-#         100
-#     output:
-#         outdir = OUTDIR
-#     shell:
-#         """
-#         mkdir -p {TMPDIR}
-#         mkdir -p {output.outdir}
-#         """
 
 #############################################
 ## prefetch (SRA-toolkit)

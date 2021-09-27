@@ -6,8 +6,8 @@
 
 # Sample sheet requires a sampleID, and locations of fastqs for R1 and R2
 
-SAMPLE_SHEET: /workdir/dwm269/scMuscle2/test_metadata.csv
-# SAMPLE_SHEET: /workdir/dwm269/scMuscle2/scMuscle2_metadata_v1-0.csv
+# SAMPLE_SHEET: /workdir/dwm269/scMuscle2/test_metadata.csv #test sample sheet
+SAMPLE_SHEET: /workdir/dwm269/scMuscle2/scMuscle2_metadata_v1-0.csv
 
 # Parallelization parameter(s)
 THREADS: 6 # how many threads to use for parallel-fastq-dump (snakemake automatically parallelizes process using "snakemake -j {numTotalCores}")
