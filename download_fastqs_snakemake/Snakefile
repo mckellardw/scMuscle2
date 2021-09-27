@@ -1,0 +1,80 @@
+########################################################################################################
+# download_fastqs_snakemake
+#   Snakemake workflow to download fastq files from SRA
+#   v1.0
+#   Written by David McKellar
+#   Last edited: --/--/--, DWM
+########################################################################################################
+
+import pandas as pd
+
+########################################################################################################
+# Config file
+########################################################################################################
+configfile:'config.yaml'
+########################################################################################################
+# Directories and locations
+########################################################################################################
+DATADIR = config['DATADIR']
+TMPDIR = config['TMPDIR']
+OUTDIR = config['OUTDIR']
+
+########################################################################################################
+# Variables and references
+########################################################################################################
+# SAMPLES = list(pd.read_csv(config['SAMPLE_SHEET'])['sample'])
+SRR = dict(zip(SAMPLES, list(pd.read_csv(config['SAMPLE_SHEET'])['SRR.accession'])))
+
+########################################################################################################
+# Executables
+########################################################################################################
+PREFETCH = config["PREFETCH"]
+PFD = config["PFD"]
+
+########################################################################################################
+rule all:
+    input:
+        expand('{OUTDIR}/', OUTDIR=config['OUTDIR'], srr=SRR), # R1 fastq
+        expand('{OUTDIR}/', OUTDIR=config['OUTDIR'], srr=SRR) # R2 fastq
+
+#############################################
+## Optional parallel-fastq-dump (if SRR number is passed, instead of .fastq location)
+#############################################
+# TODO- add multi-SRR number passing (delimit the sample_sheet with ;?)
+rule prefetch:
+    output:
+
+    params:
+        SRR = lambda wildcards: SRR[wildcards.sample]
+        # SAMPLE = '{sample}'
+    run:
+        if len(SRR)>1:
+
+        elif len(SRR)==1:
+            print("Downloading .fastq's for ", params.SRR)
+            shell("prefetch --max-size 999999999999 {params.SRR}") #TODO add tmp folder
+
+        else:
+            print("No SRR number for ", params.SAMPLE, "- proceeding without download.\n")
+
+
+# TODO- add multi-SRR number passing (delimit the sample_sheet with ;?)
+rule get_fastqs:
+    output:
+        R1_FQ = '{OUTDIR}/{srr}_R1.fq.gz',
+        R2_FQ = '{OUTDIR}/{srr}_R2.fq.gz'
+    params:
+        SRR = lambda wildcards: SRR[wildcards.sample]
+        # SAMPLE = '{sample}'
+    run:
+        if len(SRR)>1:
+
+        elif len(SRR)==1:
+            print("Downloading .fastq's for ", params.SRR)
+            shell("prefetch --max-size 999999999999 {params.SRR}")
+            shell("parallel-fastq-dump --sra-id {params.SRR} --threads {threads} --outdir {params.OUT_DIR} --tmpdir {params.TMP_DIR} --split-files --gzip")
+
+            #TODO change name of output files?
+
+        else:
+            print("No SRR number for ", params.SAMPLE, "- proceeding without download.\n")
