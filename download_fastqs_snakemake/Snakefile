@@ -7,23 +7,31 @@
 ########################################################################################################
 
 import pandas as pd
+import itertools
 
 ########################################################################################################
 # Config file
 ########################################################################################################
 configfile:'config.yaml'
+
 ########################################################################################################
 # Directories and locations
 ########################################################################################################
-DATADIR = config['DATADIR']
 TMPDIR = config['TMPDIR']
 OUTDIR = config['OUTDIR']
+
+shell("mkdir -p {TMPDIR}")
+shell("mkdir -p {OUTDIR}")
 
 ########################################################################################################
 # Variables and references
 ########################################################################################################
 # SAMPLES = list(pd.read_csv(config['SAMPLE_SHEET'])['sample'])
-SRR = dict(zip(SAMPLES, list(pd.read_csv(config['SAMPLE_SHEET'])['SRR.accession'])))
+
+SRR = list(pd.read_csv(config['SAMPLE_SHEET'])['SRR.accession'])
+for i in range(0,len(SRR)):
+    SRR[i] = SRR[i].split()
+SRR = list(itertools.chain(*SRR))
 
 ########################################################################################################
 # Executables
@@ -34,47 +42,65 @@ PFD = config["PFD"]
 ########################################################################################################
 rule all:
     input:
-        expand('{OUTDIR}/', OUTDIR=config['OUTDIR'], srr=SRR), # R1 fastq
-        expand('{OUTDIR}/', OUTDIR=config['OUTDIR'], srr=SRR) # R2 fastq
+        expand('{OUTDIR}/{sample}_1.fq.gz', OUTDIR=config['OUTDIR'], sample=SRR), # R1 fastq
+        expand('{OUTDIR}/{sample}_2.fq.gz', OUTDIR=config['OUTDIR'], sample=SRR) # R2 fastq
+
+# rule make_outdir:
+#     priority:
+#         100
+#     output:
+#         outdir = OUTDIR
+#     shell:
+#         """
+#         mkdir -p {TMPDIR}
+#         mkdir -p {output.outdir}
+#         """
 
 #############################################
-## Optional parallel-fastq-dump (if SRR number is passed, instead of .fastq location)
+## prefetch (SRA-toolkit)
 #############################################
-# TODO- add multi-SRR number passing (delimit the sample_sheet with ;?)
 rule prefetch:
     output:
-
+        SRA_tmp = temp(TMPDIR+"/{sample}.sra")
     params:
-        SRR = lambda wildcards: SRR[wildcards.sample]
-        # SAMPLE = '{sample}'
-    run:
-        if len(SRR)>1:
+        TMPDIR=TMPDIR
+    shell:
+        """
+        echo "Prefetching SRA files for {wildcards.sample}"
 
-        elif len(SRR)==1:
-            print("Downloading .fastq's for ", params.SRR)
-            shell("prefetch --max-size 999999999999 {params.SRR}") #TODO add tmp folder
+        {PREFETCH} \
+        --verify yes \
+        --max-size 999999999999 \
+        --output-directory {params.TMPDIR} \
+        {wildcards.sample}
+        """
 
-        else:
-            print("No SRR number for ", params.SAMPLE, "- proceeding without download.\n")
-
-
-# TODO- add multi-SRR number passing (delimit the sample_sheet with ;?)
+#############################################
+## parallel-fastq-dump
+##      https://github.com/rvalieris/parallel-fastq-dump
+#############################################
+# TODO- merge fastqs by sample?
 rule get_fastqs:
+    input:
+        SRA_tmp = TMPDIR+"/{sample}.sra"
     output:
-        R1_FQ = '{OUTDIR}/{srr}_R1.fq.gz',
-        R2_FQ = '{OUTDIR}/{srr}_R2.fq.gz'
+        R1_FQ = '{OUTDIR}/{sample}_1.fq.gz',
+        R2_FQ = '{OUTDIR}/{sample}_2.fq.gz'
     params:
-        SRR = lambda wildcards: SRR[wildcards.sample]
-        # SAMPLE = '{sample}'
-    run:
-        if len(SRR)>1:
+        TMPDIR=TMPDIR
+    threads:
+        config["THREADS"]
+    shell:
+        # TODO: make sure multiple SRA numbers works; space-delimited?
+        # TODO: add R1, R2, etc to name?
+        """
+        echo "Converting SRA files to .fastq's for {wildcards.sample}"
 
-        elif len(SRR)==1:
-            print("Downloading .fastq's for ", params.SRR)
-            shell("prefetch --max-size 999999999999 {params.SRR}")
-            shell("parallel-fastq-dump --sra-id {params.SRR} --threads {threads} --outdir {params.OUT_DIR} --tmpdir {params.TMP_DIR} --split-files --gzip")
-
-            #TODO change name of output files?
-
-        else:
-            print("No SRR number for ", params.SAMPLE, "- proceeding without download.\n")
+        {PFD} \
+        --sra-id {input.SRA_tmp} \
+        --threads {threads} \
+        --outdir {OUTDIR} \
+        --tmpdir {params.TMPDIR} \
+        --split-files \
+        --gzip
+        """
