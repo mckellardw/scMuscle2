@@ -1,0 +1,96 @@
+########################################################################################################
+# download_fastqs_snakemake
+#   Snakemake workflow to download fastq files from SRA
+#   v1.0
+#   Written by David McKellar
+#   Last edited: --/--/--, DWM
+########################################################################################################
+
+import pandas as pd
+import itertools
+
+########################################################################################################
+# Config file
+########################################################################################################
+configfile:'config.yaml'
+
+########################################################################################################
+# Directories and locations
+########################################################################################################
+TMPDIR = config['TMPDIR']
+OUTDIR = config['OUTDIR']
+
+shell("mkdir -p {TMPDIR}")
+shell("mkdir -p {OUTDIR}")
+
+########################################################################################################
+# Variables and references
+########################################################################################################
+# SAMPLES = list(pd.read_csv(config['SAMPLE_SHEET'])['sample'])
+
+SRR = list(pd.read_csv(config['SAMPLE_SHEET'])['SRR.accession'])
+for i in range(0,len(SRR)):
+    SRR[i] = SRR[i].split(",")
+SRR = list(itertools.chain(*SRR))
+
+########################################################################################################
+# Executables
+########################################################################################################
+PREFETCH = config["PREFETCH"]
+PFD = config["PFD"]
+
+########################################################################################################
+########################################################################################################
+rule all:
+    input:
+        expand('{OUTDIR}/{sample}_1.fq.gz', OUTDIR=config['OUTDIR'], sample=SRR), # R1 fastq
+        expand('{OUTDIR}/{sample}_2.fq.gz', OUTDIR=config['OUTDIR'], sample=SRR) # R2 fastq
+
+#############################################
+## prefetch (SRA-toolkit)
+#############################################
+rule prefetch:
+    output:
+        SRA_tmp = temp(TMPDIR+"/{sample}.sra")
+    params:
+        TMPDIR=TMPDIR
+    shell:
+        """
+        echo "Prefetching SRA files for {wildcards.sample}"
+
+        {PREFETCH} \
+        --verify yes \
+        --max-size 999999999999 \
+        --output-directory {params.TMPDIR} \
+        {wildcards.sample}
+        """
+
+#############################################
+## parallel-fastq-dump
+##      https://github.com/rvalieris/parallel-fastq-dump
+#############################################
+# TODO- merge fastqs by sample?
+rule get_fastqs:
+    input:
+        SRA_tmp = TMPDIR+"/{sample}.sra"
+    output:
+        R1_FQ = '{OUTDIR}/{sample}_1.fq.gz',
+        R2_FQ = '{OUTDIR}/{sample}_2.fq.gz'
+    params:
+        TMPDIR=TMPDIR
+    threads:
+        config["THREADS"]
+    shell:
+        # TODO: make sure multiple SRA numbers works; space-delimited?
+        # TODO: add R1, R2, etc to name?
+        """
+        echo "Converting SRA files to .fastq's for {wildcards.sample}"
+
+        {PFD} \
+        --sra-id {input.SRA_tmp} \
+        --threads {threads} \
+        --outdir {OUTDIR} \
+        --tmpdir {params.TMPDIR} \
+        --split-files \
+        --gzip
+        """
