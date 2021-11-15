@@ -29,9 +29,12 @@ shell("mkdir -p {OUTDIR}")
 # SAMPLES = list(pd.read_csv(config['SAMPLE_SHEET'])['sample'])
 
 SRR = list(pd.read_csv(config['SAMPLE_SHEET'])['SRR.accession'])
+print(SRR[range(1,12)])
 for i in range(0,len(SRR)):
-    SRR[i] = SRR[i].split(",")
+    SRR[i] = SRR[i].split(";")
 SRR = list(itertools.chain(*SRR))
+
+print(SRR[range(1,12)])
 
 ########################################################################################################
 # Executables
