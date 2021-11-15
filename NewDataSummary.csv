@@ -1,0 +1,14 @@
+﻿Source,Species,Samples,Samples info,Number of Cells,,,,,,,
+"Barruet et al, eLife, 2020",H. sapiens,13,4 different muscles,"110,293",,,,,,,
+Chow et al (no citation sc Parker),H. sapiens,6,snRNA,33862,,,,,,,
+"Rubenstein et al, Sci Rep, 2020",H. sapiens,4,,3479,,,,,,,
+"Martins et al, Cell Stem Cell, 2020",H. sapiens,5,5 different organoids,22429,,,,,,,
+"Chestnut et al, Nat Comm, 2020",D. rerio,2,,2637,,,,,,,
+"Metikala et al, PLOS ONE, 2021",D. rerio,1,,"20,279",,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,myo,scMuscle,vis
+,,,,,,,,compressed,25,175,2.4
+,,,,,,,,uncompressed,6.5,35,0.7
