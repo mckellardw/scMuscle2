@@ -1,151 +1,174 @@
-source.label,sample,description,include,species,GSE.accession,GSM.accession,SRA.is.fastq,SRR.accession,SAMN.accession,other.accession,source
-Giordani 2019,Uninjured_WT_1,,T,M. musculus,,,,SRR8352705,,,"Giordani et al, Molc Cell, 2019"
-Giordani 2019,Uninjured_WT_2,,T,M. musculus,,,,SRR8352706,,,"Giordani et al, Molc Cell, 2019"
-Dell'Orso 2019,total_muscle_wt_rep1,,T,M. musculus,,,,SRR8602275,,,"Dell'Orso et al, Development, 2019"
-Dell'Orso 2019,total_muscle_wt_rep2,,T,M. musculus,,,,SRR8602276,,,"Dell'Orso et al, Development, 2019"
-Dell'Orso 2019,homeostatic_MuSCs_rep1,,T,M. musculus,,,,SRR8602277,,,"Dell'Orso et al, Development, 2019"
-Dell'Orso 2019,homeostatic_MuSCs_rep2,,T,M. musculus,,,,SRR8602278,,,"Dell'Orso et al, Development, 2019"
-Dell'Orso 2019,inj_60h_MuSCs_rep1,,T,M. musculus,,,,SRR8602279,,,"Dell'Orso et al, Development, 2019"
-Dell'Orso 2019,inj_60h_MuSCs_rep2,,T,M. musculus,,,,SRR8602280,,,"Dell'Orso et al, Development, 2019"
-Dell'Orso 2019,,,F,M. musculus,,,,,,,"Dell'Orso et al, Development, 2019"
-Tabula Muris 2018,10X_P7_14,,T,M. musculus,,,,SRR6835866,,,"Tabula Muris, Nature, 2018"
-Tabula Muris 2018,10X_P7_15,,T,M. musculus,,,,SRR6835867,,,"Tabula Muris, Nature, 2018"
-De Micheli 2020a,D0_A,,T,M. musculus,,,,SRR10870296,,,"De Micheli et al, Cell Reports, 2020"
-De Micheli 2020a,D0_B,,T,M. musculus,,,,SRR10870297,,,"De Micheli et al, Cell Reports, 2020"
-De Micheli 2020a,D0_C,,F,M. musculus,,,,,,,
-De Micheli 2020a,D2_C,,T,M. musculus,,,,SRR10870299,,,"De Micheli et al, Cell Reports, 2020"
-De Micheli 2020a,D2_D,,T,M. musculus,,,,SRR10870300,,,"De Micheli et al, Cell Reports, 2020"
-De Micheli 2020b,D2_Ev3,,T,M. musculus,,,,SRR12820638,,,"De Micheli et al, unpublished"
-De Micheli 2020a,D5_A,,T,M. musculus,,,,SRR10870301,,,"De Micheli et al, Cell Reports, 2020"
-De Micheli 2020a,D5_B,,T,M. musculus,,,,SRR10870302,,,"De Micheli et al, Cell Reports, 2020"
-De Micheli 2020a,D5_C,,T,M. musculus,,,,SRR10870303,,,"De Micheli et al, Cell Reports, 2020"
-De Micheli 2020a,D7_C,,T,M. musculus,,,,SRR10870304,,,"De Micheli et al, Cell Reports, 2020"
-De Micheli 2020a,D7_D,,T,M. musculus,,,,SRR10870305,,,"De Micheli et al, Cell Reports, 2020"
-De Micheli 2020b,D7_Ev3,,T,M. musculus,,,,SRR12820639,,,"De Micheli et al, unpublished"
-De Micheli 2020a,D0_FACS_01,,T,M. musculus,,,,SRR10870267,,,"De Micheli et al, Cell Reports, 2020"
-De Micheli 2020a,D0_FACS_02,,T,M. musculus,,,,SRR10870268,,,"De Micheli et al, Cell Reports, 2020"
-De Micheli 2020a,D2_FACS,,T,M. musculus,,,,SRR10870269,,,"De Micheli et al, Cell Reports, 2020"
-De Micheli 2020a,D5_FACS,,T,M. musculus,,,,SRR10870270,,,"De Micheli et al, Cell Reports, 2020"
-De Micheli 2020a,D7_FACS,,T,M. musculus,,,,SRR10870271,,,"De Micheli et al, Cell Reports, 2020"
-McKellar/Walter 2020,Old_D0_A,,T,M. musculus,,GSM4944170,,SRR13143337,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D0_B,,T,M. musculus,,GSM4944171,,SRR13143338,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D0_C,,T,M. musculus,,GSM4944172,,SRR13143339,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D0_D,,T,M. musculus,,GSM4944173,,SRR13143340,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D1_A,,T,M. musculus,,GSM4944174,,SRR13143341,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D1_B,,T,M. musculus,,GSM4944175,,SRR13143342,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D2_A,,T,M. musculus,,GSM4944176,,SRR13143343,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D2_B,,T,M. musculus,,GSM4944177,,SRR13143344,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D2_C,,T,M. musculus,,GSM4944178,,SRR13143345,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D3_5_A,,T,M. musculus,,GSM4944179,,SRR13143346,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D3_5_B,,T,M. musculus,,GSM4944180,,SRR13143347,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D5_A,,T,M. musculus,,GSM4944181,,SRR13143348,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D5_B,,T,M. musculus,,GSM4944182,,SRR13143349,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D5_C,,T,M. musculus,,GSM4944183,,SRR13143350,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D7_A,,T,M. musculus,,GSM4944184,,SRR13143351,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D7_B,,T,M. musculus,,GSM4944185,,SRR13143352,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D7_C,,T,M. musculus,,GSM4944186,,SRR13143353,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D1_C,,T,M. musculus,,GSM4944187,,SRR13143354,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D1_D,,T,M. musculus,,GSM4944188,,SRR13143355,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D3_5_C,,T,M. musculus,,GSM4944189,,SRR13143356,,,"McKellar/Walter et al, bioRxiv, 2020"
-McKellar/Walter 2020,Old_D3_5_D,,T,M. musculus,,GSM4944190,,SRR13143357,,,"McKellar/Walter et al, bioRxiv, 2020"
-Tabula Muris Senis 2020,MACA_18m_F_MUSCLE_50,,T,M. musculus,,,,,,,"Tabula Muris Senis, Nature, 2020"
-Tabula Muris Senis 2020,MACA_18m_F_MUSCLE_51,,T,M. musculus,,,,,,,"Tabula Muris Senis, Nature, 2020"
-Tabula Muris Senis 2020,MACA_18m_M_MUSCLE_52,,T,M. musculus,,,,,,,"Tabula Muris Senis, Nature, 2020"
-Tabula Muris Senis 2020,MACA_18m_M_MUSCLE_53,,T,M. musculus,,,,,,,"Tabula Muris Senis, Nature, 2020"
-Tabula Muris Senis 2020,MACA_21m_F_MUSCLE_54,,T,M. musculus,,,,,,,"Tabula Muris Senis, Nature, 2020"
-Tabula Muris Senis 2020,MACA_21m_F_MUSCLE_55,,T,M. musculus,,,,,,,"Tabula Muris Senis, Nature, 2020"
-Tabula Muris Senis 2020,MACA_24m_M_MUSCLE_58,,T,M. musculus,,,,,,,"Tabula Muris Senis, Nature, 2020"
-Tabula Muris Senis 2020,MACA_24m_M_MUSCLE_59,,T,M. musculus,,,,,,,"Tabula Muris Senis, Nature, 2020"
-Tabula Muris Senis 2020,MACA_24m_M_MUSCLE_60,,T,M. musculus,,,,,,,"Tabula Muris Senis, Nature, 2020"
-Tabula Muris Senis 2020,MACA_24m_M_MUSCLE_61,,T,M. musculus,,,,,,,"Tabula Muris Senis, Nature, 2020"
-Li 2019,Pax7Hi,,T,M. musculus,,,,SRR9715805; SRR9715806; SRR9715807; SRR9715808,,,"Li et al, The EMBO Journal, 2019"
-Li 2019,Pax7Mi,,T,M. musculus,,,,SRR9715810; SRR9715811; SRR9715812; SRR9715813; SRR9715814; SRR9715815; SRR9715816,,,"Li et al, The EMBO Journal, 2019"
-Li 2019,Pax7Lo,,T,M. musculus,,,,SRR9715817; SRR9715818; SRR9715819; SRR9715820; SRR9715821; SRR9715822; SRR9715823; SRR9715824,,,"Li et al, The EMBO Journal, 2019"
-Jin 2018,N_plus_CTX_Rep1,,T,M. musculus,,,,SRR6998056,,,"Jin et al, JCI Insights, 2018"
-Jin 2018,N_plus_CTX_Rep2,,T,M. musculus,,,,SRR6998057,,,"Jin et al, JCI Insights, 2018"
-Rubenstein 2020,Rubenstein_quads,,T,M. musculus,GSE138707,,,SRR10257731,,,"Rubenstein et al, Sci Rep, 2020"
-Rubenstein 2020,Rubenstein_diaph,,T,M. musculus,GSE138707,,,SRR10257732,,,"Rubenstein et al, Sci Rep, 2020"
-Rubenstein 2020,Muscle_1,,,H. sapiens,GSE130646,GSM3746212,,SRR9018531; SRR9018532,SAMN11567249,,
-Rubenstein 2020,Muscle_2,,,H. sapiens,GSE130646,GSM3746213,,SRR9018533; SRR9018534,SAMN11567248,,
-Rubenstein 2020,Muscle_3,,,H. sapiens,GSE130646,GSM3746214,,SRR9018527; SRR9018528,SAMN11567247,,
-Rubenstein 2020,Muscle_4,,,H. sapiens,GSE130646,GSM3746215,,SRR9018529; SRR9018530,SAMN11567246,,
-Kimmel 2020,Y1_LRC_Q,,T,M. musculus,,,,SRR10874104; SRR10874105,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,Y1_LRC_A,,T,M. musculus,,,,SRR10874106; SRR10874107,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,Y2_LRC_Q,,T,M. musculus,,,,SRR10874108; SRR10874109,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,Y2_LRC_A,,T,M. musculus,,,,SRR10874110; SRR10874111,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,Y1_nonLRC_Q,,T,M. musculus,,,,SRR10874112; SRR10874113,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,Y1_nonLRC_A,,T,M. musculus,,,,SRR10874114; SRR10874115,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,Y2_nonLRC_Q,,T,M. musculus,,,,SRR10874116; SRR10874117,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,Y2_nonLRC_A,,T,M. musculus,,,,SRR10874118; SRR10874119,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,A1_LRC_Q,,T,M. musculus,,,,SRR10874120; SRR10874121,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,A1_LRC_A,,T,M. musculus,,,,SRR10874122; SRR10874123,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,A2_LRC_Q,,T,M. musculus,,,,SRR10874124; SRR10874125,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,A2_LRC_A,,T,M. musculus,,,,SRR10874126; SRR10874127,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,A1_nonLRC_Q,,T,M. musculus,,,,SRR10874128; SRR10874129,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,A1_nonLRC_A,,T,M. musculus,,,,SRR10874130; SRR10874131,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,A2_nonLRC_Q,,T,M. musculus,,,,SRR10874132; SRR10874133,,,"Kimmel et al, Development, 2020"
-Kimmel 2020,A2_nonLRC_A,,T,M. musculus,,,,SRR10874134; SRR10874135,,,"Kimmel et al, Development, 2020"
-Verma 2019,NoInjury,,T,M. musculus,,,,SRR8832578,,,NO_LINKED_PUBLICATION
-Verma 2019,3dCTX,,T,M. musculus,,,,SRR8832579,,,NO_LINKED_PUBLICATION
-Stepien 2020,D0_IR1,,T,M. musculus,,,,SRR11007782,,,"Stepien et al, J Immunol, 2020"
-Stepien 2020,D0_IR2,,T,M. musculus,,,,SRR11007783,,,"Stepien et al, J Immunol, 2020"
-Stepien 2020,D3_IR1,,T,M. musculus,,,,SRR10969329,,,"Stepien et al, J Immunol, 2020"
-Stepien 2020,D3_IR2,,T,M. musculus,,,,SRR10969330,,,"Stepien et al, J Immunol, 2020"
-Stepien 2020,D3_IR3,,T,M. musculus,,,,SRR10969331,,,"Stepien et al, J Immunol, 2020"
-Stepien 2020,,,,,,,,,,,
-Oprescu 2020,oprescu_D0_5,,T,M. musculus,,,,SRR10275413,,,"Oprescu et al, iScience, 2020"
-Oprescu 2020,oprescu_D2,,T,M. musculus,,,,SRR10275414,,,"Oprescu et al, iScience, 2020"
-Oprescu 2020,oprescu_D3_5,,T,M. musculus,,,,SRR10275415,,,"Oprescu et al, iScience, 2020"
-Oprescu 2020,oprescu_D5,,T,M. musculus,,,,SRR10275416,,,"Oprescu et al, iScience, 2020"
-Oprescu 2020,oprescu_D10,,T,M. musculus,,,,SRR10275417,,,"Oprescu et al, iScience, 2020"
-Oprescu 2020,oprescu_D21,,T,M. musculus,,,,SRR10275418,,,"Oprescu et al, iScience, 2020"
-Oprescu 2020,oprescu_D0,,T,M. musculus,,,,SRR10275419,,,"Oprescu et al, iScience, 2020"
-Kalucka 2020,kalucka_edl,,T,M. musculus,,,,,,NA,"Kalucka et al, Cell, 2020"
-Kalucka 2020,kalucka_soleus,,T,M. musculus,,,,,,NA,"Kalucka et al, Cell, 2020"
-Petrany 2020,WT_TA_24mo,,T,M. musculus,,,,SRR11336245; SRR11336246,,,"Petrany et al, Nat Comm, 2020"
-Petrany 2020,WT_TA_5mo,,T,M. musculus,,,,SRR11336247; SRR11336248,,,"Petrany et al, Nat Comm, 2020"
-Petrany 2020,WT_soleus_5mo,,T,M. musculus,,,,SRR11336255; SRR11336256,,,"Petrany et al, Nat Comm, 2020"
-Petrany 2020,WT_TA_P21,,T,M. musculus,,,,SRR11336253; SRR11336254,,,"Petrany et al, Nat Comm, 2020"
-Petrany 2020,WT_TA_P10,,T,M. musculus,,,,SRR11336251; SRR11336252,,,"Petrany et al, Nat Comm, 2020"
-Petrany 2020,WT_TA_30mo,,T,M. musculus,,,,SRR11336249; SRR11336250,,,"Petrany et al, Nat Comm, 2020"
-Dos Santos 2020,snRNA-seq_Soleus,,T,M. musculus,,,,SRR11729338,,,"Dos Santos et al, Nat Comm, 2020"
-Dos Santos 2020,snRNA-seq_Quadriceps,,T,M. musculus,,,,SRR11729339,,,"Dos Santos et al, Nat Comm, 2020"
-Dos Santos 2020,snRNA-seq_Tibialis,,T,M. musculus,,,,SRR11729340,,,"Dos Santos et al, Nat Comm, 2020"
-Dos Santos 2020,snRNA-seq_Mix,,T,M. musculus,,,,SRR11729341,,,"Dos Santos et al, Nat Comm, 2020"
-Wang 2020,muscle_d,,T,M. musculus,,,,SRR10752709; SRR10752710; SRR10752711,,,"Wang et al, PNAS, 2020"
-Wang 2020,muscle_q,,T,M. musculus,,,,SRR10752718; SRR10752719; SRR10752720,,,"Wang et al, PNAS, 2020"
-Chemello 2020,Chemello_WT,,T,M. musculus,,,,SRR12478037; SRR12478038; SRR12478039; SRR12478040,,,"Chemello et al, PNAS, 2020"
-Chemello 2020,,,,,,,,,,,"Chemello et al, PNAS, 2020"
-Yartseva 2020,Yartseva_0dpi,,T,M. musculus,,,,SRR10764954; SRR10764955,,,"Yartseva et al, Cell Reports, 2020"
-Yartseva 2020,Yartseva_4dpi,,T,M. musculus,,,,SRR10764956; SRR10764957,,,"Yartseva et al, Cell Reports, 2020"
-Yartseva 2020,,,,,,,,,,,"Yartseva et al, Cell Reports, 2020"
-De Micheli 2020c,hu07_021219,,T,H. sapiens,GSE143704,,,SRR10897760,,,"De Micheli et al, Skeletal Muscle, 2020"
-De Micheli 2020c,hu01_061419,,T,H. sapiens,GSE143704,,,SRR10897761,,,"De Micheli et al, Skeletal Muscle, 2020"
-De Micheli 2020c,hu02_062419,,T,H. sapiens,GSE143704,,,SRR10897762,,,"De Micheli et al, Skeletal Muscle, 2020"
-De Micheli 2020c,hu03_062719,,T,H. sapiens,GSE143704,,,SRR10897763,,,"De Micheli et al, Skeletal Muscle, 2020"
-De Micheli 2020c,hu04_080619,,T,H. sapiens,GSE143704,,,SRR10897764,,,"De Micheli et al, Skeletal Muscle, 2020"
-De Micheli 2020c,hu08_092618,,T,H. sapiens,GSE143704,,,SRR10897765,,,"De Micheli et al, Skeletal Muscle, 2020"
-De Micheli 2020c,hu09_092718,,T,H. sapiens,GSE143704,,,SRR10897766,,,"De Micheli et al, Skeletal Muscle, 2020"
-De Micheli 2020c,hu10_101018,,T,H. sapiens,GSE143704,,,SRR10897767,,,"De Micheli et al, Skeletal Muscle, 2020"
-De Micheli 2020c,hu05_111418,,T,H. sapiens,GSE143704,,,SRR10897768,,,"De Micheli et al, Skeletal Muscle, 2020"
-De Micheli 2020c,hu06_120518,,T,H. sapiens,GSE143704,,,SRR10897769,,,"De Micheli et al, Skeletal Muscle, 2020"
-Robinson 2021,Nelfb-KO_3,,,M. musculus,GSE150278,GSM4544638,,SRR11768423; SRR11768424; SRR11768425; SRR11768426,SAMN14888052,,"Robinson et al, Developmental Cell, 2021"
-Robinson 2021,Nelfb-KO_B,,,M. musculus,GSE150278,GSM4544639,,SRR11768409; SRR11768410; SRR11768428; SRR11768427,SAMN14888051,,"Robinson et al, Developmental Cell, 2021"
-Robinson 2021,Nelfb-WT_1,,,M. musculus,GSE150278,GSM4544640,,SRR11768411; SRR11768412; SRR11768413; SRR11768414,,,"Robinson et al, Developmental Cell, 2021"
-Robinson 2021,Nelfb-WT_A,,,M. musculus,GSE150278,GSM4544641,,SRR11768415; SRR11768416; SRR11768417; SRR11768418,,,"Robinson et al, Developmental Cell, 2021"
-Robinson 2021,Nelfb-WT_B,,,M. musculus,GSE150278,GSM4544642,,SRR11768419; SRR11768420; SRR11768421; SRR11768422,,,"Robinson et al, Developmental Cell, 2021"
-Barruet 2020,,,,H. sapiens,,,,,,https://datadryad.org/stash/dataset/doi:10.7272/Q65X273X,"Barruet et al, eLife, 2020"
-Sunadome 2020,,"C2C12 cells, cultured in different stiffness settings",F,M. musculus,GSE160098,,,SRR12898550,SAMN16552266,,NO_LINKED_PUBLICATION
-Sunadome 2020,,"C2C12 cells, cultured in different stiffness settings",F,M. musculus,GSE160098,,,SRR12898551,SAMN16552265,,NO_LINKED_PUBLICATION
-Chow 2021,133155-hg19: Human snRNA no FANS rep 1,,,H. sapiens,,GSM5396679,,,,,NO_LINKED_PUBLICATION
-Chow 2021,133156-hg19: Human snRNA FANS rep 1,,,H. sapiens,,GSM5396680,,,,,NO_LINKED_PUBLICATION
-Chow 2021,133157-hg19: Human snRNA no FANS rep 2,,,H. sapiens,,GSM5396681,,,,,NO_LINKED_PUBLICATION
-Chow 2021,133158-hg19: Human snRNA FANS rep 2,,,H. sapiens,,GSM5396682,,,,,NO_LINKED_PUBLICATION
-Chow 2021,63_20_rna-hg19: Human snRNA 20k nuclei,,,H. sapiens,,GSM5396684,,,,,NO_LINKED_PUBLICATION
-Chow 2021,63_40_rna-hg19: Human snRNA 40k nuclei,,,H. sapiens,,GSM5396685,,,,,NO_LINKED_PUBLICATION
-Martins 2020,Day 5 NM organoids,,,H. sapiens,,,,SRR8734990,,,"Martins et al, Cell Stem Cell, 2020"
-Martins 2020,Day 50 NM organoids 1-3,,,H. sapiens,,,,SRR8734991,,,"Martins et al, Cell Stem Cell, 2020"
-Martins 2020,Day 50 NM organoid 4,,,H. sapiens,,,,SRR10914868,,,"Martins et al, Cell Stem Cell, 2020"
-Chestnut 2020,10X_Etv2_heterozygous_20ss,,,D. rerio,GSE143750,,,SRR10899957; SRR10899958,,,"Chestnut et al, Nat Comm, 2020"
-Chestnut 2020,10X_Etv2_homozygous_20ss,,,D. rerio,GSE143750,,,SRR10899959; SRR10899960,,,"Chestnut et al, Nat Comm, 2020"
-Metikala 2021,Zf_30h_trunk,,,D. rerio,GSE152982,,,SRR12067712; SRR12067711,,,"Metikala et al, PLOS ONE, 2021"
+source.label,sample,description,include,species,GSE.accession,GSM.accession,SRA.format,SRR.accession,SAMN.accession,wget_link,other.accession,source,manuscript.pubmed
+Giordani 2019,Uninjured_WT_1,,T,M. musculus,,,fastq,SRR8352705,,,,"Giordani et al, Molc Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/30922843/
+Giordani 2019,Uninjured_WT_2,,T,M. musculus,,,fastq,SRR8352706,,,,"Giordani et al, Molc Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/30922843/
+Dell'Orso 2019,total_muscle_wt_rep1,,T,M. musculus,,,fastq,SRR8602275,,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/
+Dell'Orso 2019,total_muscle_wt_rep2,,T,M. musculus,,,fastq,SRR8602276,,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/
+Dell'Orso 2019,homeostatic_MuSCs_rep1,,T,M. musculus,,,fastq,SRR8602277,,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/
+Dell'Orso 2019,homeostatic_MuSCs_rep2,,T,M. musculus,,,fastq,SRR8602278,,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/
+Dell'Orso 2019,inj_60h_MuSCs_rep1,,T,M. musculus,,,fastq,SRR8602279,,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/
+Dell'Orso 2019,inj_60h_MuSCs_rep2,,T,M. musculus,,,fastq,SRR8602280,,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/
+Dell'Orso 2019,,#TODO - add remaining samples from paper,F,M. musculus,,,fastq,,,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/
+Tabula Muris 2018,10X_P7_14,,T,M. musculus,,,bam,SRR6835866,,,,"Tabula Muris, Nature, 2018",
+Tabula Muris 2018,10X_P7_15,,T,M. musculus,,,bam,SRR6835867,,,,"Tabula Muris, Nature, 2018",
+De Micheli 2020a,D0_A,,T,M. musculus,,,fastq,SRR10870296,,,,"De Micheli et al, Cell Reports, 2020",
+De Micheli 2020a,D0_B,,T,M. musculus,,,fastq,SRR10870297,,,,"De Micheli et al, Cell Reports, 2020",
+De Micheli 2020a,D0_C,,F,M. musculus,,,fastq,,,,,,
+De Micheli 2020a,D2_C,,T,M. musculus,,,fastq,SRR10870299,,,,"De Micheli et al, Cell Reports, 2020",
+De Micheli 2020a,D2_D,,T,M. musculus,,,fastq,SRR10870300,,,,"De Micheli et al, Cell Reports, 2020",
+De Micheli 2020b,D2_Ev3,,T,M. musculus,,,fastq,SRR12820638,,,,"De Micheli et al, unpublished",
+De Micheli 2020a,D5_A,,T,M. musculus,,,fastq,SRR10870301,,,,"De Micheli et al, Cell Reports, 2020",
+De Micheli 2020a,D5_B,,T,M. musculus,,,fastq,SRR10870302,,,,"De Micheli et al, Cell Reports, 2020",
+De Micheli 2020a,D5_C,,T,M. musculus,,,fastq,SRR10870303,,,,"De Micheli et al, Cell Reports, 2020",
+De Micheli 2020a,D7_C,,T,M. musculus,,,fastq,SRR10870304,,,,"De Micheli et al, Cell Reports, 2020",
+De Micheli 2020a,D7_D,,T,M. musculus,,,fastq,SRR10870305,,,,"De Micheli et al, Cell Reports, 2020",
+De Micheli 2020b,D7_Ev3,,T,M. musculus,,,fastq,SRR12820639,,,,"De Micheli et al, unpublished",
+De Micheli 2020a,D0_FACS_01,,T,M. musculus,,,fastq,SRR10870267,,,,"De Micheli et al, Cell Reports, 2020",
+De Micheli 2020a,D0_FACS_02,,T,M. musculus,,,fastq,SRR10870268,,,,"De Micheli et al, Cell Reports, 2020",
+De Micheli 2020a,D2_FACS,,T,M. musculus,,,fastq,SRR10870269,,,,"De Micheli et al, Cell Reports, 2020",
+De Micheli 2020a,D5_FACS,,T,M. musculus,,,fastq,SRR10870270,,,,"De Micheli et al, Cell Reports, 2020",
+De Micheli 2020a,D7_FACS,,T,M. musculus,,,fastq,SRR10870271,,,,"De Micheli et al, Cell Reports, 2020",
+McKellar/Walter 2020,Old_D0_A,,T,M. musculus,,GSM4944170,fastq,SRR13143337,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D0_B,,T,M. musculus,,GSM4944171,fastq,SRR13143338,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D0_C,,T,M. musculus,,GSM4944172,fastq,SRR13143339,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D0_D,,T,M. musculus,,GSM4944173,fastq,SRR13143340,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D1_A,,T,M. musculus,,GSM4944174,fastq,SRR13143341,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D1_B,,T,M. musculus,,GSM4944175,fastq,SRR13143342,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D2_A,,T,M. musculus,,GSM4944176,fastq,SRR13143343,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D2_B,,T,M. musculus,,GSM4944177,fastq,SRR13143344,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D2_C,,T,M. musculus,,GSM4944178,fastq,SRR13143345,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D3_5_A,,T,M. musculus,,GSM4944179,fastq,SRR13143346,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D3_5_B,,T,M. musculus,,GSM4944180,fastq,SRR13143347,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D5_A,,T,M. musculus,,GSM4944181,fastq,SRR13143348,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D5_B,,T,M. musculus,,GSM4944182,fastq,SRR13143349,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D5_C,,T,M. musculus,,GSM4944183,fastq,SRR13143350,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D7_A,,T,M. musculus,,GSM4944184,fastq,SRR13143351,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D7_B,,T,M. musculus,,GSM4944185,fastq,SRR13143352,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D7_C,,T,M. musculus,,GSM4944186,fastq,SRR13143353,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D1_C,,T,M. musculus,,GSM4944187,fastq,SRR13143354,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D1_D,,T,M. musculus,,GSM4944188,fastq,SRR13143355,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D3_5_C,,T,M. musculus,,GSM4944189,fastq,SRR13143356,,,,"McKellar/Walter et al, Communications Biology, 2021",
+McKellar/Walter 2020,Old_D3_5_D,,T,M. musculus,,GSM4944190,fastq,SRR13143357,,,,"McKellar/Walter et al, Communications Biology, 2021",
+Tabula Muris Senis 2020,MACA_18m_F_MUSCLE_50,,T,M. musculus,,,,,,,,"Tabula Muris Senis, Nature, 2020",
+Tabula Muris Senis 2020,MACA_18m_F_MUSCLE_51,,T,M. musculus,,,,,,,,"Tabula Muris Senis, Nature, 2020",
+Tabula Muris Senis 2020,MACA_18m_M_MUSCLE_52,,T,M. musculus,,,,,,,,"Tabula Muris Senis, Nature, 2020",
+Tabula Muris Senis 2020,MACA_18m_M_MUSCLE_53,,T,M. musculus,,,,,,,,"Tabula Muris Senis, Nature, 2020",
+Tabula Muris Senis 2020,MACA_21m_F_MUSCLE_54,,T,M. musculus,,,,,,,,"Tabula Muris Senis, Nature, 2020",
+Tabula Muris Senis 2020,MACA_21m_F_MUSCLE_55,,T,M. musculus,,,,,,,,"Tabula Muris Senis, Nature, 2020",
+Tabula Muris Senis 2020,MACA_24m_M_MUSCLE_58,,T,M. musculus,,,,,,,,"Tabula Muris Senis, Nature, 2020",
+Tabula Muris Senis 2020,MACA_24m_M_MUSCLE_59,,T,M. musculus,,,,,,,,"Tabula Muris Senis, Nature, 2020",
+Tabula Muris Senis 2020,MACA_24m_M_MUSCLE_60,,T,M. musculus,,,,,,,,"Tabula Muris Senis, Nature, 2020",
+Tabula Muris Senis 2020,MACA_24m_M_MUSCLE_61,,T,M. musculus,,,,,,,,"Tabula Muris Senis, Nature, 2020",
+Li 2019,Pax7Hi,,T,M. musculus,,,fastq,SRR9715805; SRR9715806; SRR9715807; SRR9715808,,,,"Li et al, The EMBO Journal, 2019",
+Li 2019,Pax7Mi,,T,M. musculus,,,fastq,SRR9715810; SRR9715811; SRR9715812; SRR9715813; SRR9715814; SRR9715815; SRR9715816,,,,"Li et al, The EMBO Journal, 2019",
+Li 2019,Pax7Lo,,T,M. musculus,,,fastq,SRR9715817; SRR9715818; SRR9715819; SRR9715820; SRR9715821; SRR9715822; SRR9715823; SRR9715824,,,,"Li et al, The EMBO Journal, 2019",
+Jin 2018,N_plus_CTX_Rep1,,T,M. musculus,,,,SRR6998056,,,,"Jin et al, JCI Insights, 2018",
+Jin 2018,N_plus_CTX_Rep2,,T,M. musculus,,,,SRR6998057,,,,"Jin et al, JCI Insights, 2018",
+Rubenstein 2020,Rubenstein_quads,,T,M. musculus,GSE138707,,,SRR10257731,,,,"Rubenstein et al, Sci Rep, 2020",https://pubmed.ncbi.nlm.nih.gov/31937892/
+Rubenstein 2020,Rubenstein_diaph,,T,M. musculus,GSE138707,,,SRR10257732,,,,"Rubenstein et al, Sci Rep, 2020",https://pubmed.ncbi.nlm.nih.gov/31937892/
+Rubenstein 2020,Muscle_1,,,H. sapiens,GSE130646,GSM3746212,,SRR9018531; SRR9018532,SAMN11567249,,,"Rubenstein et al, Sci Rep, 2021",https://pubmed.ncbi.nlm.nih.gov/31937892/
+Rubenstein 2020,Muscle_2,,,H. sapiens,GSE130646,GSM3746213,,SRR9018533; SRR9018534,SAMN11567248,,,"Rubenstein et al, Sci Rep, 2022",https://pubmed.ncbi.nlm.nih.gov/31937892/
+Rubenstein 2020,Muscle_3,,,H. sapiens,GSE130646,GSM3746214,,SRR9018527; SRR9018528,SAMN11567247,,,"Rubenstein et al, Sci Rep, 2023",https://pubmed.ncbi.nlm.nih.gov/31937892/
+Rubenstein 2020,Muscle_4,,,H. sapiens,GSE130646,GSM3746215,,SRR9018529; SRR9018530,SAMN11567246,,,"Rubenstein et al, Sci Rep, 2024",https://pubmed.ncbi.nlm.nih.gov/31937892/
+Kimmel 2020,Y1_LRC_Q,,T,M. musculus,,,fastq,SRR10874104; SRR10874105,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,Y1_LRC_A,,T,M. musculus,,,fastq,SRR10874106; SRR10874107,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,Y2_LRC_Q,,T,M. musculus,,,fastq,SRR10874108; SRR10874109,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,Y2_LRC_A,,T,M. musculus,,,fastq,SRR10874110; SRR10874111,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,Y1_nonLRC_Q,,T,M. musculus,,,fastq,SRR10874112; SRR10874113,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,Y1_nonLRC_A,,T,M. musculus,,,fastq,SRR10874114; SRR10874115,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,Y2_nonLRC_Q,,T,M. musculus,,,fastq,SRR10874116; SRR10874117,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,Y2_nonLRC_A,,T,M. musculus,,,fastq,SRR10874118; SRR10874119,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,A1_LRC_Q,,T,M. musculus,,,fastq,SRR10874120; SRR10874121,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,A1_LRC_A,,T,M. musculus,,,fastq,SRR10874122; SRR10874123,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,A2_LRC_Q,,T,M. musculus,,,fastq,SRR10874124; SRR10874125,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,A2_LRC_A,,T,M. musculus,,,fastq,SRR10874126; SRR10874127,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,A1_nonLRC_Q,,T,M. musculus,,,fastq,SRR10874128; SRR10874129,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,A1_nonLRC_A,,T,M. musculus,,,fastq,SRR10874130; SRR10874131,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,A2_nonLRC_Q,,T,M. musculus,,,fastq,SRR10874132; SRR10874133,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Kimmel 2020,A2_nonLRC_A,,T,M. musculus,,,fastq,SRR10874134; SRR10874135,,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/
+Verma 2019,NoInjury,,T,M. musculus,,,fastq,SRR8832578,,,,NO_LINKED_PUBLICATION,
+Verma 2019,3dCTX,,T,M. musculus,,,fastq,SRR8832579,,,,NO_LINKED_PUBLICATION,
+Stepien 2020,D0_IR1,,T,M. musculus,,,,SRR11007782,,,,"Stepien et al, J Immunol, 2020",
+Stepien 2020,D0_IR2,,T,M. musculus,,,,SRR11007783,,,,"Stepien et al, J Immunol, 2020",
+Stepien 2020,D3_IR1,,T,M. musculus,,,,SRR10969329,,,,"Stepien et al, J Immunol, 2020",
+Stepien 2020,D3_IR2,,T,M. musculus,,,,SRR10969330,,,,"Stepien et al, J Immunol, 2020",
+Stepien 2020,D3_IR3,,T,M. musculus,,,,SRR10969331,,,,"Stepien et al, J Immunol, 2020",
+Stepien 2020,,#TODO - add remaining samples from paper,,H. sapiens,,,,,,,,,
+Oprescu 2020,oprescu_D0_5,,T,M. musculus,,,fastq,SRR10275413,,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/
+Oprescu 2020,oprescu_D2,,T,M. musculus,,,fastq,SRR10275414,,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/
+Oprescu 2020,oprescu_D3_5,,T,M. musculus,,,fastq,SRR10275415,,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/
+Oprescu 2020,oprescu_D5,,T,M. musculus,,,fastq,SRR10275416,,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/
+Oprescu 2020,oprescu_D10,,T,M. musculus,,,fastq,SRR10275417,,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/
+Oprescu 2020,oprescu_D21,,T,M. musculus,,,fastq,SRR10275418,,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/
+Oprescu 2020,oprescu_D0,,T,M. musculus,,,fastq,SRR10275419,,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/
+Kalucka 2020,kalucka_edl,,T,M. musculus,,,,,,,NA,"Kalucka et al, Cell, 2020",
+Kalucka 2020,kalucka_soleus,,T,M. musculus,,,,,,,NA,"Kalucka et al, Cell, 2020",
+Petrany 2020,WT_TA_24mo,,T,M. musculus,,,fastq,SRR11336245; SRR11336246,,,,"Petrany et al, Nat Comm, 2020",
+Petrany 2020,WT_TA_5mo,,T,M. musculus,,,fastq,SRR11336247; SRR11336248,,,,"Petrany et al, Nat Comm, 2020",
+Petrany 2020,WT_soleus_5mo,,T,M. musculus,,,fastq,SRR11336255; SRR11336256,,,,"Petrany et al, Nat Comm, 2020",
+Petrany 2020,WT_TA_P21,,T,M. musculus,,,fastq,SRR11336253; SRR11336254,,,,"Petrany et al, Nat Comm, 2020",
+Petrany 2020,WT_TA_P10,,T,M. musculus,,,fastq,SRR11336251; SRR11336252,,,,"Petrany et al, Nat Comm, 2020",
+Petrany 2020,WT_TA_30mo,,T,M. musculus,,,fastq,SRR11336249; SRR11336250,,,,"Petrany et al, Nat Comm, 2020",
+Dos Santos 2020,snRNA-seq_Soleus,#TODO confirm that these samples are different than those in Machado paper (https://pubmed.ncbi.nlm.nih.gov/33609440/),T,M. musculus,,,,SRR11729338,,,,"Dos Santos et al, Nat Comm, 2020",
+Dos Santos 2020,snRNA-seq_Quadriceps,,T,M. musculus,,,,SRR11729339,,,,"Dos Santos et al, Nat Comm, 2020",
+Dos Santos 2020,snRNA-seq_Tibialis,,T,M. musculus,,,,SRR11729340,,,,"Dos Santos et al, Nat Comm, 2020",
+Dos Santos 2020,snRNA-seq_Mix,,T,M. musculus,,,,SRR11729341,,,,"Dos Santos et al, Nat Comm, 2020",
+Wang 2020,muscle_d,,T,M. musculus,,,,SRR10752709; SRR10752710; SRR10752711,,,,"Wang et al, PNAS, 2020",
+Wang 2020,muscle_q,,T,M. musculus,,,,SRR10752718; SRR10752719; SRR10752720,,,,"Wang et al, PNAS, 2020",
+Wang 2020,,#TODO - add remaining samples from paper,,M. musculus,,,,,,,,,
+Chemello 2020,Chemello_WT,,T,M. musculus,,,,SRR12478037; SRR12478038; SRR12478039; SRR12478040,,,,"Chemello et al, PNAS, 2020",https://pubmed.ncbi.nlm.nih.gov/33148801/
+Chemello 2020,,#TODO - add remaining samples from paper,,M. musculus,,,,,,,,"Chemello et al, PNAS, 2020",https://pubmed.ncbi.nlm.nih.gov/33148801/
+Yartseva 2020,Yartseva_0dpi,,T,M. musculus,,,,SRR10764954; SRR10764955,,,,"Yartseva et al, Cell Reports, 2020",https://pubmed.ncbi.nlm.nih.gov/32023464/
+Yartseva 2020,Yartseva_4dpi,,T,M. musculus,,,,SRR10764956; SRR10764957,,,,"Yartseva et al, Cell Reports, 2020",https://pubmed.ncbi.nlm.nih.gov/32023464/
+Yartseva 2020,,#TODO - add remaining samples from paper,,,,,,,,,,"Yartseva et al, Cell Reports, 2020",https://pubmed.ncbi.nlm.nih.gov/32023464/
+De Micheli 2020c,hu07_021219,,T,H. sapiens,GSE143704,,,SRR10897760,,,,"De Micheli et al, Skeletal Muscle, 2020",
+De Micheli 2020c,hu01_061419,,T,H. sapiens,GSE143704,,,SRR10897761,,,,"De Micheli et al, Skeletal Muscle, 2020",
+De Micheli 2020c,hu02_062419,,T,H. sapiens,GSE143704,,,SRR10897762,,,,"De Micheli et al, Skeletal Muscle, 2020",
+De Micheli 2020c,hu03_062719,,T,H. sapiens,GSE143704,,,SRR10897763,,,,"De Micheli et al, Skeletal Muscle, 2020",
+De Micheli 2020c,hu04_080619,,T,H. sapiens,GSE143704,,,SRR10897764,,,,"De Micheli et al, Skeletal Muscle, 2020",
+De Micheli 2020c,hu08_092618,,T,H. sapiens,GSE143704,,,SRR10897765,,,,"De Micheli et al, Skeletal Muscle, 2020",
+De Micheli 2020c,hu09_092718,,T,H. sapiens,GSE143704,,,SRR10897766,,,,"De Micheli et al, Skeletal Muscle, 2020",
+De Micheli 2020c,hu10_101018,,T,H. sapiens,GSE143704,,,SRR10897767,,,,"De Micheli et al, Skeletal Muscle, 2020",
+De Micheli 2020c,hu05_111418,,T,H. sapiens,GSE143704,,,SRR10897768,,,,"De Micheli et al, Skeletal Muscle, 2020",
+De Micheli 2020c,hu06_120518,,T,H. sapiens,GSE143704,,,SRR10897769,,,,"De Micheli et al, Skeletal Muscle, 2020",
+Robinson 2021,Nelfb-KO_3,,,M. musculus,GSE150278,GSM4544638,,SRR11768423; SRR11768424; SRR11768425; SRR11768426,SAMN14888052,,,"Robinson et al, Developmental Cell, 2021",
+Robinson 2021,Nelfb-KO_B,,,M. musculus,GSE150278,GSM4544639,,SRR11768409; SRR11768410; SRR11768428; SRR11768427,SAMN14888051,,,"Robinson et al, Developmental Cell, 2021",
+Robinson 2021,Nelfb-WT_1,,,M. musculus,GSE150278,GSM4544640,,SRR11768411; SRR11768412; SRR11768413; SRR11768414,,,,"Robinson et al, Developmental Cell, 2021",
+Robinson 2021,Nelfb-WT_A,,,M. musculus,GSE150278,GSM4544641,,SRR11768415; SRR11768416; SRR11768417; SRR11768418,,,,"Robinson et al, Developmental Cell, 2021",
+Robinson 2021,Nelfb-WT_B,,,M. musculus,GSE150278,GSM4544642,,SRR11768419; SRR11768420; SRR11768421; SRR11768422,,,,"Robinson et al, Developmental Cell, 2021",
+Barruet 2020,,,,H. sapiens,,,,,,,https://datadryad.org/stash/dataset/doi:10.7272/Q65X273X,"Barruet et al, eLife, 2020",
+Sunadome 2020,,"C2C12 cells, cultured in different stiffness settings",F,M. musculus,GSE160098,,,SRR12898550,SAMN16552266,,,NO_LINKED_PUBLICATION,
+Sunadome 2020,,"C2C12 cells, cultured in different stiffness settings",F,M. musculus,GSE160098,,,SRR12898551,SAMN16552265,,,NO_LINKED_PUBLICATION,
+Chow 2021,133155-hg19: Human snRNA no FANS rep 1,#TODO - shorten sampleID to something passable to R,,H. sapiens,,GSM5396679,,,,,,NO_LINKED_PUBLICATION,
+Chow 2021,133156-hg19: Human snRNA FANS rep 1,#TODO - shorten sampleID to something passable to R,,H. sapiens,,GSM5396680,,,,,,NO_LINKED_PUBLICATION,
+Chow 2021,133157-hg19: Human snRNA no FANS rep 2,#TODO - shorten sampleID to something passable to R,,H. sapiens,,GSM5396681,,,,,,NO_LINKED_PUBLICATION,
+Chow 2021,133158-hg19: Human snRNA FANS rep 2,#TODO - shorten sampleID to something passable to R,,H. sapiens,,GSM5396682,,,,,,NO_LINKED_PUBLICATION,
+Chow 2021,63_20_rna-hg19: Human snRNA 20k nuclei,#TODO - shorten sampleID to something passable to R,,H. sapiens,,GSM5396684,,,,,,NO_LINKED_PUBLICATION,
+Chow 2021,63_40_rna-hg19: Human snRNA 40k nuclei,#TODO - shorten sampleID to something passable to R,,H. sapiens,,GSM5396685,,,,,,NO_LINKED_PUBLICATION,
+Martins 2020,Day 5 NM organoids,#TODO - shorten sampleID to something passable to R,,H. sapiens,,,,SRR8734990,,,,"Martins et al, Cell Stem Cell, 2020",
+Martins 2020,Day 50 NM organoids 1-3,#TODO - shorten sampleID to something passable to R,,H. sapiens,,,,SRR8734991,,,,"Martins et al, Cell Stem Cell, 2020",
+Martins 2020,Day 50 NM organoid 4,#TODO - shorten sampleID to something passable to R,,H. sapiens,,,,SRR10914868,,,,"Martins et al, Cell Stem Cell, 2020",
+Chestnut 2020,10X_Etv2_heterozygous_20ss,,,D. rerio,GSE143750,,,SRR10899957; SRR10899958,,,,"Chestnut et al, Nat Comm, 2020",
+Chestnut 2020,10X_Etv2_homozygous_20ss,,,D. rerio,GSE143750,,,SRR10899959; SRR10899960,,,,"Chestnut et al, Nat Comm, 2020",
+Metikala 2021,Zf_30h_trunk,,,D. rerio,GSE152982,,,SRR12067712; SRR12067711,,,,"Metikala et al, PLOS ONE, 2021",
+FINISH,ALL,SAMPLES,BELOW,THIS,LINE,,,,,,,,
+Xu 2021,,,,M. musculus,,,,,,,,"Xu et al, Journal of Cachexia, Sarcopenia and Muscle, 2021",https://onlinelibrary.wiley.com/doi/10.1002/jcsm.12643
+Qiu 2020,,,,Pig,,,,,,,,"Qiu et al, Cells, 2020",https://www.mdpi.com/2073-4409/9/4/1045
+Scott 2019,,,,M. musculus,,,,,,,,"Scott et al, Cell Stem Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/31809738/
+Han 2021,,,,D. rerio,,,,,,,,"Han et al, eLife, 2021",https://elifesciences.org/articles/62387
+Fan 2021,,,,M. musculus,,,,,,,,"Fan et al, Cell Metabolism, 2021",https://pubmed.ncbi.nlm.nih.gov/34358431/
+Mournetas 2021,,,,H. sapiens,,,,,,,,"Mournetas et al, Journal of Cachexia, Sarcopenia and Muscle, 2021",https://pubmed.ncbi.nlm.nih.gov/33586340/
+Cherry 2021,,,,M. musculus,,,,,,,,"Cherry et al, Nature Biomedical Engineering, 2021",https://pubmed.ncbi.nlm.nih.gov/34341534/
+Sono 2021,,,,M. musculus,,,,,,,,"Sono et al, Am J Pathol, 2021",https://pubmed.ncbi.nlm.nih.gov/32533926/
+Proetti 2021,,,,M. musculus,,,,,,,,"Proietti et al, JCI Insights, 2021",https://pubmed.ncbi.nlm.nih.gov/33661767/
+Edwards 2020,,,,,,,,,,,,"Edwards et al, FASEB J, 2020",https://pubmed.ncbi.nlm.nih.gov/33089917/
+Kimmel 2021,,,,M. musculus,,,,,,,,"Kimmel et al, Cell Reports, 2021",https://pubmed.ncbi.nlm.nih.gov/33910007/
+Foster 2020,,,,M. musculus,,,,,,,,"Foster et al, Nature Communications, 2020",https://pubmed.ncbi.nlm.nih.gov/32792541/
+Barruet 2020,,,,H. sapiens,,,,,,,,"Barruet et al, eLife, 2020",https://pubmed.ncbi.nlm.nih.gov/32234209/
+Liang 2020,,,,M. musculus,,,,,,,,"Liang et al, Theranostics, 2020",https://pubmed.ncbi.nlm.nih.gov/32226549/
+Sorkin 2020,,,,M. musculus,,,,,,,,"Sorkin et al, Nature Communications, 2020",https://pubmed.ncbi.nlm.nih.gov/32024825/
+Penaloza 2019,,,,M. musculus,,,,,,,,"Penaloza et al, Biochem Biophys Res Commun, 2019",https://pubmed.ncbi.nlm.nih.gov/31590918/
+Hwang 2019,,tendon,,M. musculus,,,,,,,,"Hwang et al, Bone Res, 2019",https://pubmed.ncbi.nlm.nih.gov/31840004/
+Ma 2020,,,,R. Norvegicus,,,,,,,,"Ma et al, Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32109414/
+,,,,,,,,,,,,,https://pubmed.ncbi.nlm.nih.gov/32473656/
+,,,,,,,,,,,,,https://pubmed.ncbi.nlm.nih.gov/33981032/
+,,,,H. sapiens,,,,,,,,,https://pubmed.ncbi.nlm.nih.gov/33287869/
