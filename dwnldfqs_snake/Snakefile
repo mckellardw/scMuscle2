@@ -28,13 +28,13 @@ shell("mkdir -p {OUTDIR}")
 ########################################################################################################
 # SAMPLES = list(pd.read_csv(config['SAMPLE_SHEET'])['sample'])
 
-SRR = list(pd.read_csv(config['SAMPLE_SHEET'])['SRR.accession'])
-print(SRR[range(1,12)])
+SRR = list(pd.read_csv(config['SAMPLE_SHEET'], na_filter=False)['SRR.accession'])
+print(SRR)
 for i in range(0,len(SRR)):
-    SRR[i] = SRR[i].split(";")
+    SRR[i] = SRR[i].split("; ")
 SRR = list(itertools.chain(*SRR))
 
-print(SRR[range(1,12)])
+# print(SRR[range(1,12)])
 
 ########################################################################################################
 # Executables
@@ -46,12 +46,13 @@ PFD = config["PFD"]
 ########################################################################################################
 rule all:
     input:
-        expand('{OUTDIR}/{sample}_1.fq.gz', OUTDIR=config['OUTDIR'], sample=SRR), # R1 fastq
-        expand('{OUTDIR}/{sample}_2.fq.gz', OUTDIR=config['OUTDIR'], sample=SRR) # R2 fastq
+        expand('{OUTDIR}/{sample}_1.fastq.gz', OUTDIR=config['OUTDIR'], sample=SRR), # R1 fastq
+        expand('{OUTDIR}/{sample}_2.fastq.gz', OUTDIR=config['OUTDIR'], sample=SRR) # R2 fastq
 
 #############################################
 ## prefetch (SRA-toolkit)
 #############################################
+#TODO add a check for the SRR ID with ffq
 rule prefetch:
     output:
         SRA_tmp = temp(TMPDIR+"/{sample}.sra")
@@ -77,8 +78,8 @@ rule get_fastqs:
     input:
         SRA_tmp = TMPDIR+"/{sample}.sra"
     output:
-        R1_FQ = '{OUTDIR}/{sample}_1.fq.gz',
-        R2_FQ = '{OUTDIR}/{sample}_2.fq.gz'
+        R1_FQ = '{OUTDIR}/{sample}_1.fastq.gz',
+        R2_FQ = '{OUTDIR}/{sample}_2.fastq.gz'
     params:
         TMPDIR=TMPDIR
     threads:
