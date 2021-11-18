@@ -3,16 +3,25 @@ In the scMuscle project, we attempted to gain a better understanding of the cons
 
 # TODO:
 - Finish updating sample list, including new meta data (species, etc) [ ]
+  - Add the following metadata columns: age, tissue/muscle, disease/injury status
 - Download fastqs [ ]
-- Build reference genomes (w/ GENCODE)
-  - Mouse [X]
-  - Human [X]
+- Build reference genomes (w/ GENCODE) AND a list of commonly used transgenes
+  - Mouse []
+  - Human []
   - ZF [ ]
+  - rat []
+  - pig(?) []
 - Run STARsolo [ ]
   - Add species selection step to STARsolo pipeline
 - Single-cell analysis (seurat or scanpy?) [ ]
 - Figure out multi-species integration (https://github.com/atarashansky/self-assembling-manifold) [ ]
 
+## Transgenes to include
+- GFP
+- RFP
+- CreERT?
+- Luciferase(s?)
+- tdTomato
 
 # Description of meta data
 - **source.label** - shorthand for the publication from which this data was taken (first author's last name plus year final manuscript was published)
