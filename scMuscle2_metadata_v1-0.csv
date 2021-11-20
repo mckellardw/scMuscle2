@@ -250,7 +250,7 @@ Penaloza 2019,Penaloza_Mesp1,,,Mus musculus,GSE131734,GSM3814860,,SRR9117286,SAM
 He 2021,Muscle_cDNA,,,Homo sapiens,GSE159929,GSM4850585,,SRR13075726,SAMN16523253,,,"He et al, Genome Biology, 2020",https://pubmed.ncbi.nlm.nih.gov/33287869/,5prime
 Akbar 2021b,,tendon,,Homo sapiens,NA,NA,,NA,NA,,,"Akbar et al, PNAS, 2021",https://pubmed.ncbi.nlm.nih.gov/34544860/,
 ,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,
+Nakajima 2021,,ipsc/tendon,,Homo sapiens,,,,,,,,"Najajima et al, Nature Communications, 20021",https://pubmed.ncbi.nlm.nih.gov/34408142/,
 ,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,
@@ -276,7 +276,7 @@ Mournetas 2021,,,,Homo sapiens,,,,,,,https://www.ebi.ac.uk/arrayexpress/experime
 ,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,
-Nakajima 2021,,ipsc/tendon,,Homo sapiens,,,,,,,,"Najajima et al, Nature Communications, 20021",https://pubmed.ncbi.nlm.nih.gov/34408142/,
+,,,,,,,,,,,,,,
 Lee 2021,,tendon,,Homo sapiens,,,,,,,,"Lee et al, Nature Communications, 2021",https://pubmed.ncbi.nlm.nih.gov/34400627/,
 Akbar 2021a,,tendon (#TODO: compare with Akar 2020b),,Homo sapiens,,,,,,,,"Akbar et al, Ann Rheum Dis, 2021",https://pubmed.ncbi.nlm.nih.gov/34001518/,
 Garcia-Melchor 2021,,tendon,,Homo sapiens,,,,,,,,"Garcia-Melchor et al, Ann Rheum Dis, 2021",https://pubmed.ncbi.nlm.nih.gov/33692018/,
