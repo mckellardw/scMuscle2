@@ -41,7 +41,8 @@ In the scMuscle project, we attempted to gain a better understanding of the cons
 - **chemistry** - All of the samples we collected used the Chromium platform from 10x Genomics. This column specifies what version of the chemistry was used. (v2/v3/v3.1)
 
 ## Sources used to find samples
-- [NCBI/GEO](https://www.ncbi.nlm.nih.gov/geo/) - keywords used: ""
+- [NCBI/GEO](https://www.ncbi.nlm.nih.gov/geo/) - keywords used:
+  - (muscle) AND (single-cell) AND (skeletal) 
 - [10x Genomics - 'Publications'](https://www.10xgenomics.com/resources/publications)
 - [panglaoDB](https://panglaodb.se/)
 - [Broad Single-Cell Portal](https://singlecell.broadinstitute.org/single_cell)

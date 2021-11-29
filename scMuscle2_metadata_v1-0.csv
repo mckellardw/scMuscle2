@@ -274,10 +274,44 @@ Scott 2019,Scott_d4,Single cell RNA-seq tdTomato MPs 4 day post notexin injury,,
 Scott 2019,Scott_d14,Single cell RNA-seq tdTomato MPs 14 day post notexin injury,,,GSE110037,GSM2976782,bam,SRR6664638,SAMN08455722,https://sra-download.ncbi.nlm.nih.gov/traces/sra59/SRZ/006664/SRR6664638/d14.bam,,"Scott et al, Cell Stem Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/31809738/,v2
 Proetti 2021,scDEN,"Denervated, 3 days; methanol-fixed",,Mus musculus,NA,NA,fastq,SRR11574458; SRR11574462; SRR11574463; SRR11574464,SAMN14643565,,https://www.ncbi.nlm.nih.gov/Traces/study/?acc=SRP257509&o=acc_s%3Aa,"Proietti et al, JCI Insights, 2021",https://pubmed.ncbi.nlm.nih.gov/33661767/,v3.1
 Proetti 2021,scCTR,,,Mus musculus,NA,NA,fastq,SRR11574459; SRR11574460; SRR11574461; SRR11574465,SAMN14643564,,https://www.ncbi.nlm.nih.gov/Traces/study/?acc=SRP257509&o=acc_s%3Aa,"Proietti et al, JCI Insights, 2021",https://pubmed.ncbi.nlm.nih.gov/33661767/,v3.1
-Walter unpublished,,#TODO: transfer new datasets onto cluster,,,,,,,,,,,,
+Bursac 2021,2D expanded cells,2D expanded CD56+ myogenic cells,,Homo sapiens,GSE188215,GSM5672476,fastq,SRR16774171,SAMN22892805,,,unpublished,unpublished,v3
+Bursac 2021,3-day differentiated myobundles,dissociated 3D engineered tissue (myobundle),,Homo sapiens,GSE188215,GSM5672477,fastq,SRR16774172,SAMN22892807,,,unpublished,unpublished,v3
+Bursac 2021,9-day differentiated myobundles,dissociated 3D engineered tissue (myobundle),,Homo sapiens,GSE188215,GSM5672478,fastq,SRR16774173,SAMN22892809,,,unpublished,unpublished,v3
+Bursac 2021,2 days post injury of 7-day differentiated myobundles,dissociated 3D engineered tissue (myobundle),,Homo sapiens,GSE188215,GSM5672479,fastq,SRR16774174,SAMN22892811,,,unpublished,unpublished,v3
+Bursac 2021,5 days post injury of 7-day differentiated myobundles,dissociated 3D engineered tissue (myobundle),,Homo sapiens,GSE188215,GSM5672480,fastq,SRR16774175,SAMN22892813,,,unpublished,unpublished,v3
+Fix 2021,16234X2 Young Ambulatory Control,,,Mus musculus,GSE158987,GSM4816942,fastq,SRR12769462; SRR12769463,SAMN16362797,,,"Fix et al, Aging Cell, 2021",https://pubmed.ncbi.nlm.nih.gov/34365717/,
+Fix 2021,17390X1 Young Hindlimb Unloading,,,Mus musculus,GSE158987,GSM4816943,fastq,SRR12769464; SRR12769465,SAMN16362796,,,"Fix et al, Aging Cell, 2021",https://pubmed.ncbi.nlm.nih.gov/34365717/,
+Fix 2021,17320X1 Young Reloading Day 4,,,Mus musculus,GSE158987,GSM4816944,fastq,SRR12769466; SRR12769467,SAMN16362795,,,"Fix et al, Aging Cell, 2021",https://pubmed.ncbi.nlm.nih.gov/34365717/,
+Fix 2021,16234X1 Old Ambulatory Control,,,Mus musculus,GSE158987,GSM4816945,fastq,SRR12769468; SRR12769469,SAMN16362794,,,"Fix et al, Aging Cell, 2021",https://pubmed.ncbi.nlm.nih.gov/34365717/,
+Fix 2021,17390X2 Old Hindlimb Unloading,,,Mus musculus,GSE158987,GSM4816946,fastq,SRR12769470; SRR12769471,SAMN16362793,,,"Fix et al, Aging Cell, 2021",https://pubmed.ncbi.nlm.nih.gov/34365717/,
+Fix 2021,17320X2 Old Reloading Day 4,,,Mus musculus,GSE158987,GSM4816947,fastq,SRR12769472; SRR12769473,SAMN16362792,,,"Fix et al, Aging Cell, 2021",https://pubmed.ncbi.nlm.nih.gov/34365717/,
+Yagi 2021,primary_fSCs,muscle stem cells freshly isolated from skeletal muscles; Skeletal muscles (8-10 weeks age of mice) not cultured in vitro (freshly isolated from in vivo),,Mus musculus,GSE171039,GSM5217005,bam,SRR14092514,SAMN18524925,,,"Yagi et al, Genes Dev, 2021",https://pubmed.ncbi.nlm.nih.gov/34413137/,
+Yagi 2021,expanded_cSCs,muscle stem cells cultured in vitro for 6 days; Skeletal muscles (8-10 weeks age of mice) cultured in satellite cell medium for 6 days,,Mus musculus,GSE171039,GSM5217006,bam,SRR14092515,SAMN18524924,,,"Yagi et al, Genes Dev, 2021",https://pubmed.ncbi.nlm.nih.gov/34413137/,
+Yagi 2021,diff_cSCs,muscle stem cells cultured in vitro for 2 days with horse serum; Skeletal muscles (8-10 weeks age of mice) cultured in satellite cell medium for 4 days then cultured in differentiating medium for 2 days,,Mus musculus,GSE171039,GSM5217007,bam,SRR14092516,SAMN18524923,,,"Yagi et al, Genes Dev, 2021",https://pubmed.ncbi.nlm.nih.gov/34413137/,
+Yagi 2021,MEF_Day0,Mouse embryonic fibroblasts (MEFs); E13.5 embryo cultured in MEF medium for 2 days,,Mus musculus,GSE171039,GSM5217008,bam,SRR14092517,SAMN18524922,,,"Yagi et al, Genes Dev, 2021",https://pubmed.ncbi.nlm.nih.gov/34413137/,
+Yagi 2021,MEF_Dox_Day2,Myocytes/Myotubes derived from MEFs; E13.5 embryo overexpressing MyoD for 2 days,,Mus musculus,GSE171039,GSM5217009,bam,SRR14092518,SAMN18524921,,,"Yagi et al, Genes Dev, 2021",https://pubmed.ncbi.nlm.nih.gov/34413137/,
+Yagi 2021,MEF_DoxFRG_Day2,"Muscle progenitor cells/Myocytes/Myotubes derived from MEFs; E13.5 embryo overexpressing MyoD in the presense of Forskolin, Repsox and GSK3 inhibitor (FRG) for 2 days",,Mus musculus,GSE171039,GSM5217010,bam,SRR14092519,SAMN18524920,,,"Yagi et al, Genes Dev, 2021",https://pubmed.ncbi.nlm.nih.gov/34413137/,
+Yagi 2021,MEF_DoxFRG_Day8,"Muscle progenitor cells/Myocytes/Myotubes derived from MEFs; E13.5 embryo overexpressing MyoD in the presense of Forskolin, Repsox and GSK3 inhibitor (FRG) for 8 days",,Mus musculus,GSE171039,GSM5217011,bam,SRR14092520,SAMN18524919,,,"Yagi et al, Genes Dev, 2021",https://pubmed.ncbi.nlm.nih.gov/34413137/,
+Yagi 2021,MEF_Dox_Day4,Myocytes/Myotubes derived from MEFs; E13.5 embryo overexpressing MyoD for 4 days,,Mus musculus,GSE171039,GSM5217012,bam,SRR14092521,SAMN18524918,,,"Yagi et al, Genes Dev, 2021",https://pubmed.ncbi.nlm.nih.gov/34413137/,
+Yagi 2021,MEF_DoxFRG_Day4,"Muscle progenitor cells/Myocytes/Myotubes derived from MEFs; E13.5 embryo overexpressing MyoD in the presense of Forskolin, Repsox and GSK3 inhibitor (FRG) for 4 days",,Mus musculus,GSE171039,GSM5217013,bam,SRR14092522,SAMN18524917,,,"Yagi et al, Genes Dev, 2021",https://pubmed.ncbi.nlm.nih.gov/34413137/,
+Yagi 2021,iMPCs,"Muscle progenitor cells derived from MEFs; E13.5 embryo overexpressing MyoD in the presense of Forskolin, Repsox and GSK3 inhibitor (FRG) for 10 days, Pax7-nGFP sorted by FACS",,Mus musculus,GSE171039,GSM5217014,bam,SRR14092523,SAMN18524916,,,"Yagi et al, Genes Dev, 2021",https://pubmed.ncbi.nlm.nih.gov/34413137/,
+Sivaraj 2021,BSC rep1,Bone stromal cells,,Mus musculus,GSE156635,GSM4735393,fastq,SRR12492372,SAMN15877884,,,"Sivaraj et al, Cell Reports, 2021",https://pubmed.ncbi.nlm.nih.gov/34260921/,v2
+Sivaraj 2021,BSC rep2,Bone stromal cells,,Mus musculus,GSE156635,GSM4735394,fastq,SRR12492373,SAMN15877883,,,"Sivaraj et al, Cell Reports, 2021",https://pubmed.ncbi.nlm.nih.gov/34260921/,v2
+Sivaraj 2021,BSC rep3,Bone stromal cells,,Mus musculus,GSE156635,GSM4735395,fastq,SRR12492374,SAMN15877882,,,"Sivaraj et al, Cell Reports, 2021",https://pubmed.ncbi.nlm.nih.gov/34260921/,v2
+Sivaraj 2021,BSC rep4,Bone stromal cells,,Mus musculus,GSE156635,GSM4735396,fastq,SRR12492375,SAMN15877881,,,"Sivaraj et al, Cell Reports, 2021",https://pubmed.ncbi.nlm.nih.gov/34260921/,v2
+Sivaraj 2021,rbGFP rep1,PdgfrbCre GFP+ cells; C57BL/6 : PdgfrbCreERT2; R26 mTmG,,Mus musculus,GSE156635,GSM4735397,fastq,SRR12492376,SAMN15877880,,,"Sivaraj et al, Cell Reports, 2021",https://pubmed.ncbi.nlm.nih.gov/34260921/,v2
+Sivaraj 2021,rbGFP rep2,PdgfrbCre GFP+ cells; C57BL/6 : PdgfrbCreERT2; R26 mTmG,,Mus musculus,GSE156635,GSM4735398,fastq,SRR12492377,SAMN15877879,,,"Sivaraj et al, Cell Reports, 2021",https://pubmed.ncbi.nlm.nih.gov/34260921/,v2
+Nie 2021,runx2b+/+ scRNA-seq,,,Danio rerio,GSE186957,GSM5664292,fastq,,,,,unpublished,unpublished,
+Nie 2021,runx2b-/- scRNA-seq,,,Danio rerio,GSE186957,GSM5664293,fastq,SRR16681977,SAMN22822661,,,unpublished,unpublished,
+Laplace-Builhe 2021,Cut caudal fin_scRNA,,,Danio rerio,GSE158851,GSM4812243,fastq,SRR12749697; SRR12749698,SAMN16320526,,,"Laplace-Builhe et al, Nature Communications, 2021",https://pubmed.ncbi.nlm.nih.gov/34732706/,
+Laplace-Builhe 2021,Uncut caudal fin_scRNA,,,Danio rerio,GSE158851,GSM4812244,fastq,SRR12749699; SRR12749700,SAMN16320525,,,"Laplace-Builhe et al, Nature Communications, 2021",https://pubmed.ncbi.nlm.nih.gov/34732706/,
+Ambrosi 2021,Old_PBS-treated,,,Mus musculus,GSE172149,GSM5242734,fastq,SRR14243850,SAMN18747477,,,"Ambrosi et al, Nature, 2021",https://pubmed.ncbi.nlm.nih.gov/34381212/,v3.1
+Ambrosi 2021,Old_Rescue_aCSF1_BMP2-treated,,,Mus musculus,GSE172149,GSM5242735,fastq,SRR14243851,SAMN18747476,,,"Ambrosi et al, Nature, 2021",https://pubmed.ncbi.nlm.nih.gov/34381212/,v3.1
 ,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,
-Hwang 2019,,"#TODO: compare to ""Sorkin 2020""",,Mus musculus,,,,,,,,"Hwang et al, Bone Res, 2019",https://pubmed.ncbi.nlm.nih.gov/31840004/,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
 Buechler 2021,,,,,,,,,,,https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-10324/,"Buechler et al, Nature, 221",https://pubmed.ncbi.nlm.nih.gov/33981032/,
 Mournetas 2021,,,,Homo sapiens,,,,,,,https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-9510/,"Mournetas et al, Journal of Cachexia, Sarcopenia and Muscle, 2021",https://pubmed.ncbi.nlm.nih.gov/33586340/,
 Xu 2021,,,,Mus musculus,,,,,,,Couldn't find data availability info,"Xu et al, Journal of Cachexia, Sarcopenia and Muscle, 2021",https://pubmed.ncbi.nlm.nih.gov/33244879/,
@@ -289,3 +323,4 @@ Qiu 2020,,,,Sus domesticus,,,,,,,Couldn't find data availability info,"Qiu et al
 ,,,,,,,,,,,,,,
 Tabula Sapiens 2021,,,,Homo sapiens,,,,,,,https://registry.opendata.aws/tabula-sapiens/,"Tabula Sapiens Consortium et al, bioRxiv, 2021",https://www.biorxiv.org/content/10.1101/2021.07.19.452956v2,
 Akbar 2021a,,tendon (#TODO: compare with Akar 2020b),,Homo sapiens,,,,,,,,"Akbar et al, Ann Rheum Dis, 2021",https://pubmed.ncbi.nlm.nih.gov/34001518/,
+Walter unpublished,,#TODO: transfer new datasets onto cluster,,,,,,,,,,,,
