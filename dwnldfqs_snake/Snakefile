@@ -18,17 +18,19 @@ configfile:'config.yaml'
 # Directories and locations
 ########################################################################################################
 TMPDIR = config['TMPDIR']
-OUTDIR = config['OUTDIR']
+PRODIR = config['PRODIR']
 
 shell("mkdir -p {TMPDIR}")
-shell("mkdir -p {OUTDIR}")
+shell("mkdir -p {PRODIR}")
 
 ########################################################################################################
 # Variables and references
 ########################################################################################################
+META = pd.read_csv(config['SAMPLE_SHEET'], na_filter=False)
+
 # SAMPLES = list(pd.read_csv(config['SAMPLE_SHEET'])['sample'])
 
-SRR = list(pd.read_csv(config['SAMPLE_SHEET'], na_filter=False)['SRR.accession'])
+SRR = list(META['SRR.accession'])
 print(SRR)
 for i in range(0,len(SRR)):
     SRR[i] = SRR[i].split("; ")
@@ -46,13 +48,26 @@ PFD = config["PFD"]
 ########################################################################################################
 rule all:
     input:
-        expand('{OUTDIR}/{sample}_1.fastq.gz', OUTDIR=config['OUTDIR'], sample=SRR), # R1 fastq
-        expand('{OUTDIR}/{sample}_2.fastq.gz', OUTDIR=config['OUTDIR'], sample=SRR) # R2 fastq
+        expand('{PRODIR}/{sample}_1.fastq.gz', PRODIR=config['PRODIR'], sample=SRR), # R1 fastq
+        expand('{PRODIR}/{sample}_2.fastq.gz', PRODIR=config['PRODIR'], sample=SRR) # R2 fastq
+
+#############################################
+## Get metadata with `ffq`
+#############################################
+#TODO add a check for the SRR ID with ffq
+rule get_metadata:
+    output:
+        metajson = '{PRODIR}/metadata_ffq/{}.json'
+    params:
+
+    shell:
+        """
+
+        """
 
 #############################################
 ## prefetch (SRA-toolkit)
 #############################################
-#TODO add a check for the SRR ID with ffq
 rule prefetch:
     output:
         SRA_tmp = temp(TMPDIR+"/{sample}.sra")
@@ -78,10 +93,11 @@ rule get_fastqs:
     input:
         SRA_tmp = TMPDIR+"/{sample}.sra"
     output:
-        R1_FQ = '{OUTDIR}/{sample}_1.fastq.gz',
-        R2_FQ = '{OUTDIR}/{sample}_2.fastq.gz'
+        R1_FQ = '{PRODIR}/data/fastqs/{sample}_1.fastq.gz',
+        R2_FQ = '{PRODIR}/data/fastqs/{sample}_2.fastq.gz'
     params:
-        TMPDIR=TMPDIR
+        TMPDIR=TMPDIR,
+        OUTDIR = '{PRODIR}/data/fastqs/'
     threads:
         config["THREADS"]
     shell:
@@ -93,7 +109,7 @@ rule get_fastqs:
         {PFD} \
         --sra-id {input.SRA_tmp} \
         --threads {threads} \
-        --outdir {OUTDIR} \
+        --outdir {params.OUTDIR} \
         --tmpdir {params.TMPDIR} \
         --split-files \
         --gzip

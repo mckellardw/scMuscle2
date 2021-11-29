@@ -16,7 +16,7 @@ THREADS: 10 # how many threads to use for parallel-fastq-dump (snakemake automat
 # Important directory file paths
 ########################################################################################################
 TMPDIR: /workdir/dwm269/scMuscle2/tmp # directory for temporary files
-OUTDIR: /workdir/dwm269/scMuscle2/data/fastqs
+PRODIR: /workdir/dwm269/scMuscle2 # Project directory
 
 ########################################################################################################
 # Executables - file paths

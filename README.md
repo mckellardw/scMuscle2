@@ -48,7 +48,7 @@ In the scMuscle project, we attempted to gain a better understanding of the cons
 - [Svensson et al Database](http://www.nxn.se/single-cell-studies/gui)
 
 ## Other useful tools for exploring sequencing data
-- [ffq](https://github.com/pachterlab/ffq)
+- [ffq](https://github.com/pachterlab/ffq) - used to clarify metadata, fill out accession info. Incorporated into the `dwnldfqs_snake` pipeline
 - [fastqerq-dump](https://github.com/ncbi/sra-tools/wiki/HowTo:-fasterq-dump)
 - [parallel-fastq-dump](https://github.com/rvalieris/parallel-fastq-dump)
 
