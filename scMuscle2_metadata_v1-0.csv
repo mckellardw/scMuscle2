@@ -111,8 +111,10 @@ Dos Santos 2020,snRNA-seq_Soleus,#TODO confirm that these samples are different 
 Dos Santos 2020,snRNA-seq_Quadriceps,,muscle,T,Mus musculus,,,,SRR11729339,,,,"Dos Santos et al, Nat Comm, 2020",,
 Dos Santos 2020,snRNA-seq_Tibialis,,muscle,T,Mus musculus,,,,SRR11729340,,,,"Dos Santos et al, Nat Comm, 2020",,
 Dos Santos 2020,snRNA-seq_Mix,,muscle,T,Mus musculus,,,,SRR11729341,,,,"Dos Santos et al, Nat Comm, 2020",,
-Wang 2020,muscle_d,,muscle,T,Mus musculus,,,,SRR10752709; SRR10752710; SRR10752711,,,,"Wang et al, PNAS, 2020",https://pubmed.ncbi.nlm.nih.gov/32796104/,
-Wang 2020,muscle_q,,muscle,T,Mus musculus,,,,SRR10752718; SRR10752719; SRR10752720,,,,"Wang et al, PNAS, 2020",https://pubmed.ncbi.nlm.nih.gov/32796104/,
+Wang 2020,muscle_D,Mouse Diaphragm Muscle Macrophage,muscle,,Mus musculus,GSE142480,GSM4230226,,SRR10752709; SRR10752710; SRR10752711,SAMN13663852,,,"Wang et al, PNAS, 2020",https://pubmed.ncbi.nlm.nih.gov/32796104/,v2
+Wang 2020,muscle_L,Mouse Lung Alveolar Macrophage,lung,,Mus musculus,GSE142480,GSM4230227,,SRR10752712; SRR10752713; SRR10752714,SAMN13663851,,,"Wang et al, PNAS, 2020",https://pubmed.ncbi.nlm.nih.gov/32796104/,v2
+Wang 2020,muscle_P,Mouse Peritoneal Macrophage,peritoneum,T,Mus musculus,GSE142480,GSM4230228,,SRR10752715; SRR10752716; SRR10752717,SAMN13663850,,,"Wang et al, PNAS, 2020",https://pubmed.ncbi.nlm.nih.gov/32796104/,v2
+Wang 2020,muscle_Q,Mouse Quadriceps Muscle Macrophage,muscle,T,Mus musculus,GSE142480,GSM4230229,,SRR10752718; SRR10752719; SRR10752720,SAMN13663849,,,"Wang et al, PNAS, 2020",https://pubmed.ncbi.nlm.nih.gov/32796104/,v2
 Chemello 2020,Chemello_WT,,muscle,T,Mus musculus,GSE156497,GSM4732631,,SRR12478037; SRR12478038; SRR12478039; SRR12478040,SAMN15858612,,,"Chemello et al, PNAS, 2020",https://pubmed.ncbi.nlm.nih.gov/33148801/,
 Chemello 2020,Chemello_Delta51,,muscle,,Mus musculus,GSE156497,GSM4732632,,SRR12478041; SRR12478042; SRR12478043; SRR12478044,SAMN15858611,,,"Chemello et al, PNAS, 2020",https://pubmed.ncbi.nlm.nih.gov/33148801/,
 Yartseva 2020,Yartseva_0dpi,,muscle,T,Mus musculus,GSE142581,GSM4232371,,SRR10764954; SRR10764955,SAMN13677038,,,"Yartseva et al, Cell Reports, 2020",https://pubmed.ncbi.nlm.nih.gov/32023464/,
@@ -378,6 +380,23 @@ Ratnayake 2023,PN4_3dpi_mpeg1_mcherry_R1,,muscle,,Danio rerio,GSE162979,GSM49697
 Ratnayake 2024,PN5_1dpi_mpeg1_mcherry_R2,,muscle,,Danio rerio,GSE162979,GSM4969713,fastq,SRR13238442; SRR13238443; SRR13238444; SRR13238445,SAMN17052267,,,"Ratnayake et al, Nature, 2021",https://pubmed.ncbi.nlm.nih.gov/33568815/,CelSeq2
 Ratnayake 2025,PN7_3dpi_mpeg1_mcherry_R2,,muscle,,Danio rerio,GSE162979,GSM4969714,fastq,SRR13238446; SRR13238447; SRR13238448; SRR13238449,SAMN17052266,,,"Ratnayake et al, Nature, 2021",https://pubmed.ncbi.nlm.nih.gov/33568815/,CelSeq2
 Ratnayake 2026,PN8_4dpf_uninjured_mpeg1_mcherry_R2,,muscle,,Danio rerio,GSE162979,GSM4969715,fastq,SRR13238450,SAMN17052265,,,"Ratnayake et al, Nature, 2021",https://pubmed.ncbi.nlm.nih.gov/33568815/,CelSeq2
+X Fu 2020,control veh,,bone,,Mus musculus,GSE150291,GSM4546352,bam,SRR11770269,SAMN14888343,,,"X Fu et al, Signal Transduct Target Ther, 2020",https://pubmed.ncbi.nlm.nih.gov/33361757/,v3
+X Fu 2020,control PTH,,bone,,Mus musculus,GSE150291,GSM4546353,bam,SRR11770270,SAMN14888342,,,"X Fu et al, Signal Transduct Target Ther, 2020",https://pubmed.ncbi.nlm.nih.gov/33361757/,v3
+X Fu 2020,cKO veh,,bone,,Mus musculus,GSE150291,GSM4546354,bam,SRR11770271,SAMN14888341,,,"X Fu et al, Signal Transduct Target Ther, 2020",https://pubmed.ncbi.nlm.nih.gov/33361757/,v3
+X Fu 2020,cKO PTH,,bone,,Mus musculus,GSE150291,GSM4546355,bam,SRR11770272,SAMN14888340,,,"X Fu et al, Signal Transduct Target Ther, 2020",https://pubmed.ncbi.nlm.nih.gov/33361757/,v3
+Fang 2021,Neonatal dermal cells,Neonatal skin,skin,,Mus musculus,GSE158691,GSM4805558,fastq,SRR12734268,SAMN16283199,,,"Fang et al, Nat Biomed Eng, 2021",https://pubmed.ncbi.nlm.nih.gov/33737730/,v3
+Fang 2021,Neonatal dermal cells with FR treatment,Neonatal skin,skin,,Mus musculus,GSE158691,GSM4805560,fastq,SRR12734269,SAMN16283198,,,"Fang et al, Nat Biomed Eng, 2021",https://pubmed.ncbi.nlm.nih.gov/33737730/,v3
+Fang 2021,Adult dermal cells with FR treatment,Adult skin,skin,,Mus musculus,GSE158691,GSM4805563,fastq,SRR12734270,SAMN16283197,,,"Fang et al, Nat Biomed Eng, 2021",https://pubmed.ncbi.nlm.nih.gov/33737730/,v3
+Fang 2021,Hindlimb skeletal muscle stromal cells,Adult hindlimb muscle,muscle,,Mus musculus,GSE158691,GSM4805565,fastq,SRR12734271,SAMN16283196,,,"Fang et al, Nat Biomed Eng, 2021",https://pubmed.ncbi.nlm.nih.gov/33737730/,v3
+Ritchie 2020,MuSC 10 percent library,illumina & nanopore sequencing,muscle,,Mus musculus,GSE154868,GSM4681738,fastq,SRR12282454; SRR12282455,SAMN15594467,,,unpublished,unpublished,v2
+Ritchie 2020,MuSC 90 percent library,illumina only,muscle,,Mus musculus,GSE154868,GSM4681739,fastq,SRR12282456,SAMN15594465,,,unpublished,unpublished,v2
+Al-Barghouthi 2021,Bone marrow-derived stromal cells,Bone marrow-derived stromal cells cultured from femoral bone marrow,bone,,Mus musculus,GSE152806,GSM4626772,fastq,SRR12053313; SRR12053314; SRR12053315; SRR12053316,SAMN15325041,,,"Al-Barghouthi et al, Nature Communications, 2021",https://pubmed.ncbi.nlm.nih.gov/34099702/,v2
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,
