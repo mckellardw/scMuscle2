@@ -42,7 +42,7 @@ In the scMuscle project, we attempted to gain a better understanding of the cons
 
 ## Sources used to find samples
 - [NCBI/GEO](https://www.ncbi.nlm.nih.gov/geo/) - keywords used:
-  - (muscle) AND (single-cell) AND (skeletal) 
+  - (muscle) AND (single-cell) AND (skeletal) #30 [11/29, DWM]
 - [10x Genomics - 'Publications'](https://www.10xgenomics.com/resources/publications)
 - [panglaoDB](https://panglaodb.se/)
 - [Broad Single-Cell Portal](https://singlecell.broadinstitute.org/single_cell)
