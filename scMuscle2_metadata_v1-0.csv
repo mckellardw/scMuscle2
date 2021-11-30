@@ -1,13 +1,13 @@
 source.label,sample,description,tissue,include,species,GSE.accession,GSM.accession,GEO.format,SRR.accession,SAMN.accession,wget_link,other.accession,source,manuscript.pubmed,chemistry
-Giordani 2019,Uninjured_WT_1,,muscle,T,Mus musculus,,GSM3520458,fastq,SRR8352705,,,,"Giordani et al, Molc Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/30922843/,
-Giordani 2019,Uninjured_WT_2,,muscle,T,Mus musculus,,GSM3520459,fastq,SRR8352706,,,,"Giordani et al, Molc Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/30922843/,
-Dell'Orso 2019,total_muscle_wt_rep1,,muscle,T,Mus musculus,,GSM3614992,fastq,SRR8602275,,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/,
-Dell'Orso 2019,total_muscle_wt_rep2,,muscle,T,Mus musculus,,GSM3614993,fastq,SRR8602276,,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/,
-Dell'Orso 2019,homeostatic_MuSCs_rep1,,muscle,T,Mus musculus,,GSM3614994,fastq,SRR8602277,,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/,
-Dell'Orso 2019,homeostatic_MuSCs_rep2,,muscle,T,Mus musculus,,GSM3614995,fastq,SRR8602278,,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/,
-Dell'Orso 2019,inj_60h_MuSCs_rep1,,muscle,T,Mus musculus,,GSM3614996,fastq,SRR8602279,,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/,
-Dell'Orso 2019,inj_60h_MuSCs_rep2,,muscle,T,Mus musculus,,GSM3614997,fastq,SRR8602280,,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/,
-Dell'Orso 2019,Primary_MB,FACS Isolated Muscle satellite cells cultured for 4-5 passages on collagen coated plates,muscle,F,Mus musculus,,GSM3614998,fastq,SRR8602281,,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/,
+Giordani 2019,Uninjured_WT_1,,muscle,T,Mus musculus,GSE110878,GSM3520458,fastq,SRR8352705,SAMN10614781,,,"Giordani et al, Molc Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/30922843/,
+Giordani 2019,Uninjured_WT_2,,muscle,T,Mus musculus,GSE110878,GSM3520459,fastq,SRR8352706,SAMN10614780,,,"Giordani et al, Molc Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/30922843/,
+Dell'Orso 2019,total_muscle_wt_rep1,total muscle,muscle,T,Mus musculus,GSE126834,GSM3614992,fastq,SRR8602275,SAMN10977231,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/,
+Dell'Orso 2019,total_muscle_wt_rep2,total muscle,muscle,T,Mus musculus,GSE126834,GSM3614993,fastq,SRR8602276,SAMN10977225,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/,
+Dell'Orso 2019,homeostatic_MuSCs_rep1,FACS Isolated Muscle satellite cells,muscle,T,Mus musculus,GSE126834,GSM3614994,fastq,SRR8602277,SAMN10977221,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/,
+Dell'Orso 2019,homeostatic_MuSCs_rep2,FACS Isolated Muscle satellite cells,muscle,T,Mus musculus,GSE126834,GSM3614995,fastq,SRR8602278,SAMN10977220,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/,
+Dell'Orso 2019,inj_60h_MuSCs_rep1,Post injury (60h) FACS Isolated Muscle satellite cells,muscle,T,Mus musculus,GSE126834,GSM3614996,fastq,SRR8602279,SAMN10977218,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/,
+Dell'Orso 2019,inj_60h_MuSCs_rep2,Post injury (60h) FACS Isolated Muscle satellite cells,muscle,T,Mus musculus,GSE126834,GSM3614997,fastq,SRR8602280,SAMN10977217,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/,
+Dell'Orso 2019,Primary_MB,FACS Isolated Muscle satellite cells cultured for 4-5 passages on collagen coated plates,muscle,F,Mus musculus,GSE126834,GSM3614998,fastq,SRR8602281,SAMN10977216,,,"Dell'Orso et al, Development, 2019",https://pubmed.ncbi.nlm.nih.gov/30890574/,
 Tabula Muris 2018,10X_P7_14,,muscle,T,Mus musculus,,GSM3040912,bam,SRR6835866,,ftp://ftp.sra.ebi.ac.uk/vol1/SRA653/SRA653146/bam/10X_P7_14.bam,,"Tabula Muris, Nature, 2018",,
 Tabula Muris 2018,10X_P7_15,,muscle,T,Mus musculus,,GSM3040913,bam,SRR6835867,,ftp://ftp.sra.ebi.ac.uk/vol1/SRA653/SRA653146/bam/10X_P7_15.bam,,"Tabula Muris, Nature, 2018",,
 De Micheli 2020a,D0_A,,muscle,T,Mus musculus,GSE143437,GSM4259473,fastq,SRR10870296,,,,"De Micheli et al, Cell Reports, 2020",,
@@ -61,8 +61,12 @@ Tabula Muris Senis 2020,MACA_24m_M_MUSCLE_61,,muscle,T,Mus musculus,,,,,,,#TODO,
 Li 2019,Pax7Hi,,muscle,T,Mus musculus,,GSM3955372,fastq,SRR9715805; SRR9715806; SRR9715807; SRR9715808,,,,"Li et al, The EMBO Journal, 2019",,
 Li 2019,Pax7Mi,,muscle,T,Mus musculus,,GSM3955373,fastq,SRR9715810; SRR9715811; SRR9715812; SRR9715813; SRR9715814; SRR9715815; SRR9715816,,,,"Li et al, The EMBO Journal, 2019",,
 Li 2019,Pax7Lo,,muscle,T,Mus musculus,,GSM3955374,fastq,SRR9715817; SRR9715818; SRR9715819; SRR9715820; SRR9715821; SRR9715822; SRR9715823; SRR9715824,,,,"Li et al, The EMBO Journal, 2019",,
-Jin 2018,N_plus_CTX_Rep1,,muscle,T,Mus musculus,,GSM3097061,bam,SRR6998056,,ftp://ftp.sra.ebi.ac.uk/vol1/SRA688/SRA688834/bam/N_plus_CTX_rep1_possorted_genome_bam.bam,,"Jin et al, JCI Insights, 2018",,
-Jin 2018,N_plus_CTX_Rep2,,muscle,T,Mus musculus,,GSM3097062,bam,SRR6998057,,ftp://ftp.sra.ebi.ac.uk/vol1/SRA688/SRA688834/bam/N_plus_CTX_rep2_possorted_genome_bam.bam,,"Jin et al, JCI Insights, 2018",,
+Jin 2018,N_plus_CTX_rep1,4 days post-CTX; not infected; 7AAD-CD45+CD64+MerTK+,muscle,T,Mus musculus,GSE113111,GSM3097061,bam,SRR6998056,SAMN08928280,ftp://ftp.sra.ebi.ac.uk/vol1/SRA688/SRA688834/bam/N_plus_CTX_rep1_possorted_genome_bam.bam,,"Jin et al, JCI Insights, 2018",https://pubmed.ncbi.nlm.nih.gov/30232283/,
+Jin 2018,N_plus_CTX_rep2,4 days post-CTX; not infected; 7AAD-CD45+CD64+MerTK+,muscle,T,Mus musculus,GSE113111,GSM3097062,bam,SRR6998057,SAMN08928279,ftp://ftp.sra.ebi.ac.uk/vol1/SRA688/SRA688834/bam/N_plus_CTX_rep2_possorted_genome_bam.bam,,"Jin et al, JCI Insights, 2018",https://pubmed.ncbi.nlm.nih.gov/30232283/,
+Jin 2018,Inf_rep1,No CTX; T. gondii infected; 7AAD-CD45+CD64+MerTK+,muscle,,Mus musculus,GSE113111,GSM3097063,bam,SRR6998058,SAMN08928278,,,"Jin et al, JCI Insights, 2018",https://pubmed.ncbi.nlm.nih.gov/30232283/,
+Jin 2018,Inf_rep2,No CTX; T. gondii infected; 7AAD-CD45+CD64+MerTK+,muscle,,Mus musculus,GSE113111,GSM3097064,bam,SRR6998059,SAMN08928283,,,"Jin et al, JCI Insights, 2018",https://pubmed.ncbi.nlm.nih.gov/30232283/,
+Jin 2018,Inf_plus_CTX_rep1,4 days post-CTX; T. gondii infected; 7AAD-CD45+CD64+MerTK+,muscle,,Mus musculus,GSE113111,GSM3097065,bam,SRR6998060,SAMN08928282,,,"Jin et al, JCI Insights, 2018",https://pubmed.ncbi.nlm.nih.gov/30232283/,
+Jin 2018,Inf_plus_CTX_rep2,4 days post-CTX; T. gondii infected; 7AAD-CD45+CD64+MerTK+,muscle,,Mus musculus,GSE113111,GSM3097066,bam,SRR6998061,SAMN08928281,,,"Jin et al, JCI Insights, 2018",https://pubmed.ncbi.nlm.nih.gov/30232283/,
 Rubenstein 2020,Rubenstein_quads,,muscle,T,Mus musculus,GSE138707,GSM4116571,fastq,SRR10257731,,,,"Rubenstein et al, Sci Rep, 2020",https://pubmed.ncbi.nlm.nih.gov/31937892/,
 Rubenstein 2020,Rubenstein_diaph,,muscle,T,Mus musculus,GSE138707,GSM4116572,fastq,SRR10257732,,,,"Rubenstein et al, Sci Rep, 2020",https://pubmed.ncbi.nlm.nih.gov/31937892/,
 Rubenstein 2020,Muscle_1,,muscle,,Homo sapiens,GSE130646,GSM3746212,fastq,SRR9018531; SRR9018532,SAMN11567249,,,"Rubenstein et al, Sci Rep, 2021",https://pubmed.ncbi.nlm.nih.gov/31937892/,
@@ -85,20 +89,20 @@ Kimmel 2020,A1_nonLRC_Q,,muscle,T,Mus musculus,GSE143476,GSM4260204,fastq,SRR108
 Kimmel 2020,A1_nonLRC_A,,muscle,T,Mus musculus,GSE143476,GSM4260205,fastq,SRR10874130; SRR10874131,SAMN13830199,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/,
 Kimmel 2020,A2_nonLRC_Q,,muscle,T,Mus musculus,GSE143476,GSM4260206,fastq,SRR10874132; SRR10874133,SAMN13830198,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/,
 Kimmel 2020,A2_nonLRC_A,,muscle,T,Mus musculus,GSE143476,GSM4260207,fastq,SRR10874134; SRR10874135,SAMN13830197,,,"Kimmel et al, Development, 2020",https://pubmed.ncbi.nlm.nih.gov/32198156/,
-Verma 2019,NoInjury,,muscle,T,Mus musculus,,,fastq,SRR8832578,,,,NO_LINKED_PUBLICATION,,
-Verma 2019,3dCTX,,muscle,T,Mus musculus,,,fastq,SRR8832579,,,,NO_LINKED_PUBLICATION,,
+Verma 2019,NoInjury,,muscle,T,Mus musculus,GSE129057,GSM3692304,fastq,SRR8832578,SAMN11288434,,,"Verma et al, bioRxiv, 2021",https://www.biorxiv.org/content/10.1101/2021.08.28.458037v1,
+Verma 2019,3dCTX,,muscle,T,Mus musculus,GSE129057,GSM3692305,fastq,SRR8832579,SAMN11288433,,,"Verma et al, bioRxiv, 2021",https://www.biorxiv.org/content/10.1101/2021.08.28.458037v1,
 Stepien 2020,D0_IR1,,muscle,T,Mus musculus,,,,SRR11007782,,,,"Stepien et al, J Immunol, 2020",https://pubmed.ncbi.nlm.nih.gov/32161098/,
 Stepien 2020,D0_IR2,,muscle,T,Mus musculus,,,,SRR11007783,,,,"Stepien et al, J Immunol, 2020",https://pubmed.ncbi.nlm.nih.gov/32161098/,
 Stepien 2020,D3_IR1,,muscle,T,Mus musculus,,,,SRR10969329,,,,"Stepien et al, J Immunol, 2020",https://pubmed.ncbi.nlm.nih.gov/32161098/,
 Stepien 2020,D3_IR2,,muscle,T,Mus musculus,,,,SRR10969330,,,,"Stepien et al, J Immunol, 2020",https://pubmed.ncbi.nlm.nih.gov/32161098/,
 Stepien 2020,D3_IR3,,muscle,T,Mus musculus,,,,SRR10969331,,,,"Stepien et al, J Immunol, 2020",https://pubmed.ncbi.nlm.nih.gov/32161098/,
-Oprescu 2020,oprescu_D0_5,,muscle,T,Mus musculus,,,fastq,SRR10275413,,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/,
-Oprescu 2020,oprescu_D2,,muscle,T,Mus musculus,,,fastq,SRR10275414,,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/,
-Oprescu 2020,oprescu_D3_5,,muscle,T,Mus musculus,,,fastq,SRR10275415,,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/,
-Oprescu 2020,oprescu_D5,,muscle,T,Mus musculus,,,fastq,SRR10275416,,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/,
-Oprescu 2020,oprescu_D10,,muscle,T,Mus musculus,,,fastq,SRR10275417,,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/,
-Oprescu 2020,oprescu_D21,,muscle,T,Mus musculus,,,fastq,SRR10275418,,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/,
-Oprescu 2020,oprescu_D0,,muscle,T,Mus musculus,,,fastq,SRR10275419,,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/,
+Oprescu 2020,oprescu_D0_5,tibialis anterior non-injured SM,muscle,T,Mus musculus,GSE138826,GSM4120117,fastq,SRR10275413,SAMN13026775,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/,v3
+Oprescu 2020,oprescu_D2,tibialis anterior 0.5 days post CTX injury,muscle,T,Mus musculus,GSE138826,GSM4120118,fastq,SRR10275414,SAMN13026787,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/,v3
+Oprescu 2020,oprescu_D3_5,tibialis anterior 2 days post CTX injury,muscle,T,Mus musculus,GSE138826,GSM4120119,fastq,SRR10275415,SAMN13026786,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/,v3
+Oprescu 2020,oprescu_D5,tibialis anterior 3.5 days post CTX injury,muscle,T,Mus musculus,GSE138826,GSM4120120,fastq,SRR10275416,SAMN13026785,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/,v3
+Oprescu 2020,oprescu_D10,tibialis anterior 5 days post CTX injury,muscle,T,Mus musculus,GSE138826,GSM4120121,fastq,SRR10275417,SAMN13026784,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/,v3
+Oprescu 2020,oprescu_D21,tibialis anterior 10 days post CTX injury,muscle,T,Mus musculus,GSE138826,GSM4120122,fastq,SRR10275418,SAMN13026783,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/,v3
+Oprescu 2020,oprescu_D0,tibialis anterior 21 days post CTX injury,muscle,T,Mus musculus,GSE138826,GSM4120123,fastq,SRR10275419,SAMN13026782,,,"Oprescu et al, iScience, 2020",https://pubmed.ncbi.nlm.nih.gov/32248062/,v3
 Kalucka 2020,kalucka_edl,#TODO: add ENA download info,muscle,T,Mus musculus,,,,,,,,"Kalucka et al, Cell, 2020",,
 Kalucka 2020,kalucka_soleus,,muscle,T,Mus musculus,,,,,,,,"Kalucka et al, Cell, 2020",,
 Petrany 2020,WT_TA_24mo,,muscle,T,Mus musculus,,,fastq,SRR11336245; SRR11336246,,,,"Petrany et al, Nat Comm, 2020",,
@@ -151,11 +155,11 @@ Chow 2021,noFANS_2,133157-hg19: Human snRNA no FANS rep 2,muscle,,Homo sapiens,G
 Chow 2021,FANS_2,133158-hg19: Human snRNA FANS rep 2,muscle,,Homo sapiens,GSE178734,GSM5396682,NA,NA,NA,,,NO_LINKED_PUBLICATION,,
 Chow 2021,human_20k_nuc,63_20_rna-hg19: Human snRNA 20k nuclei,muscle,,Homo sapiens,GSE178734,GSM5396684,NA,NA,NA,,,NO_LINKED_PUBLICATION,,
 Chow 2021,human_40k_nuc,63_40_rna-hg19: Human snRNA 40k nuclei,muscle,,Homo sapiens,GSE178734,GSM5396685,NA,NA,NA,,,NO_LINKED_PUBLICATION,,
-Martins 2020,NMorganoids_D5,Day 5 NM organoids,,,Homo sapiens,,,,SRR8734990,,,,"Martins et al, Cell Stem Cell, 2020",,
-Martins 2020,NMorganoids_D50_1-3,Day 50 NM organoids 1-3,,,Homo sapiens,,,,SRR8734991,,,,"Martins et al, Cell Stem Cell, 2020",,
-Martins 2020,NMorganoids_D50_4,Day 50 NM organoid 4,,,Homo sapiens,,,,SRR10914868,,,,"Martins et al, Cell Stem Cell, 2020",,
-Chestnut 2020,10X_Etv2_heterozygous_20ss,,,,Danio rerio,GSE143750,,,SRR10899957; SRR10899958,,,,"Chestnut et al, Nat Comm, 2020",,
-Chestnut 2020,10X_Etv2_homozygous_20ss,,,,Danio rerio,GSE143750,,,SRR10899959; SRR10899960,,,,"Chestnut et al, Nat Comm, 2020",,
+Martins 2020,NMorganoids_D5,Neuromuscular organoid. Time point: 50 days differentiated.,organoid,,Homo sapiens,GSE128357,GSM4276650,fastq,SRR8734990,SAMN13884430,,,"Martins et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/31956040/,v2
+Martins 2020,NMorganoids_D50_1-3,Neuromuscular organoid. Time point: 5 days differentiated. 10 Day 5 NM organoids labelled with two indexes (pooled 5+5).,organoid,,Homo sapiens,GSE128357,GSM3672209,fastq,SRR8734991,SAMN11131652,,,"Martins et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/31956040/,v2
+Martins 2020,NMorganoids_D50_4,"Neuromuscular organoid. Time point: 50 days differentiated. Day 50 NM organoids 1, 2 and 3, labelled with different indexes.",organoid,,Homo sapiens,GSE128357,GSM3672210,fastq,SRR10914868,SAMN11131649,,,"Martins et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/31956040/,v2
+Chestnut 2020,10X_Etv2_heterozygous_20ss,Jul11_2016_15-18ss_etv2gfp; ,muscle,,Danio rerio,GSE143750,GSM4230286,,SRR10753170; SRR10753171; SRR10753172; SRR10753173; SRR10753174; SRR10753175; SRR10753176; SRR10753177; SRR10753178; SRR10753179; SRR10753180; SRR10753181; SRR10753182; SRR10753183; SRR10753184; SRR10753185; SRR10753186; SRR10753187; SRR10753188; SRR10753189; SRR10753190; SRR10753191; SRR10753192; SRR10753193; SRR10753194; SRR10753195; SRR10753196; SRR10753197; SRR10753198; SRR10753199; SRR10753200; SRR10753201; SRR10753202; SRR10753203; SRR10753204; SRR10753205; SRR10753206; SRR10753207; SRR10753208; SRR10753209; SRR10753210; SRR10753211; SRR10753212; SRR10753213; SRR10753214; SRR10753215; SRR10753216; SRR10753217,SAMN13663991,,,"Chestnut et al, Nat Comm, 2020",https://pubmed.ncbi.nlm.nih.gov/32493965/,
+Chestnut 2020,10X_Etv2_homozygous_20ss,Aug1_2016_20ss_etv2gfp; 20 somite stage,muscle,,Danio rerio,GSE143750,GSM4230287,,SRR10753218; SRR10753219; SRR10753220; SRR10753221; SRR10753222; SRR10753223; SRR10753224; SRR10753225; SRR10753226; SRR10753227; SRR10753228; SRR10753229; SRR10753230; SRR10753231; SRR10753232; SRR10753233; SRR10753234; SRR10753235; SRR10753236; SRR10753237; SRR10753238; SRR10753239; SRR10753240; SRR10753241; SRR10753242; SRR10753243; SRR10753244; SRR10753245; SRR10753246; SRR10753247; SRR10753248; SRR10753249; SRR10753250; SRR10753251; SRR10753252; SRR10753253; SRR10753254; SRR10753255; SRR10753256; SRR10753257; SRR10753258; SRR10753259; SRR10753260; SRR10753261; SRR10753262; SRR10753263; SRR10753264; SRR10753265,SAMN13663990,,,"Chestnut et al, Nat Comm, 2020",https://pubmed.ncbi.nlm.nih.gov/32493965/,
 Metikala 2021,Zf_30h_trunk,,,,Danio rerio,GSE152982,,,SRR12067712; SRR12067711,,,,"Metikala et al, PLOS ONE, 2021",,
 Han 2021,E14_singlecell_Osr2-KICreRunx2flfl,E14_singlecell_Osr2-KICre;Runx2fl/fl,,,Danio rerio,GSE155928,GSM4716009,,"SRR12416692, SRR12416691",,,,"Han et al, eLife, 2021",https://elifesciences.org/articles/62387,
 Han 2021,E13_singlecell_control,E13_singlecell_control,,,Danio rerio,GSE155928,GSM5222799,,"SRR14130123, SRR14130122	",,,,"Han et al, eLife, 2021",https://elifesciences.org/articles/62387,
@@ -213,12 +217,12 @@ Kimmel 2021,Aged_1_Post-differentiation,Differentiated 60 hours,,,Mus musculus,G
 Kimmel 2021,Aged_2_Post-differentiation,Differentiated 60 hours,,,Mus musculus,GSE145256,GSM4310256,,SRR11080216,SAMN14096387,,,"Kimmel et al, Cell Reports, 2021",https://pubmed.ncbi.nlm.nih.gov/33910007/,
 Kimmel 2021,Young_1_Post-differentiation,Differentiated 60 hours,,,Mus musculus,GSE145256,GSM4310257,,SRR11080217,SAMN14096386,,,"Kimmel et al, Cell Reports, 2021",https://pubmed.ncbi.nlm.nih.gov/33910007/,
 Kimmel 2021,Young_2_Post-differentiation,Differentiated 60 hours,,,Mus musculus,GSE145256,GSM4310258,,SRR11080218,SAMN14096385,,,"Kimmel et al, Cell Reports, 2021",https://pubmed.ncbi.nlm.nih.gov/33910007/,
-Ma 2020,Muscle-M-Y,,muscle,,Rattus norvegicus,GSE137869,GSM4331858,,SRR11143068; SRR11143069; SRR11143070; SRR11143071,SAMN14162462,,,"Ma et al, Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32109414/,
-Ma 2020,Muscle-M-O,,muscle,,Rattus norvegicus,GSE137869,GSM4331859,,SRR11143072; SRR11143073; SRR11143074; SRR11143075,SAMN14162461,,,"Ma et al, Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32109414/,
-Ma 2020,Muscle-M-CR,,muscle,,Rattus norvegicus,GSE137869,GSM4331860,,SRR11143076; SRR11143077; SRR11143078; SRR11143079,SAMN14162460,,,"Ma et al, Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32109414/,
-Ma 2020,Muscle-F-Y,,muscle,,Rattus norvegicus,GSE137869,GSM4331861,,SRR11143080; SRR11143081; SRR11143082; SRR11143083,SAMN14162459,,,"Ma et al, Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32109414/,
-Ma 2020,Muscle-F-O,,muscle,,Rattus norvegicus,GSE137869,GSM4331862,,SRR11143084; SRR11143085; SRR11143086; SRR11143087,SAMN14162458,,,"Ma et al, Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32109414/,
-Ma 2020,Muscle-F-CR,,muscle,,Rattus norvegicus,GSE137869,GSM4331863,,SRR11143088; SRR11143089; SRR11143090; SRR11143091,SAMN14162457,,,"Ma et al, Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32109414/,
+Ma 2020,Muscle-M-Y,,muscle,,Rattus norvegicus,GSE137869,GSM4331858,,SRR11143068; SRR11143069; SRR11143070; SRR11143071,SAMN14162462,,,"Ma et al, Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32109414/,v2
+Ma 2020,Muscle-M-O,,muscle,,Rattus norvegicus,GSE137869,GSM4331859,,SRR11143072; SRR11143073; SRR11143074; SRR11143075,SAMN14162461,,,"Ma et al, Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32109414/,v2
+Ma 2020,Muscle-M-CR,,muscle,,Rattus norvegicus,GSE137869,GSM4331860,,SRR11143076; SRR11143077; SRR11143078; SRR11143079,SAMN14162460,,,"Ma et al, Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32109414/,v2
+Ma 2020,Muscle-F-Y,,muscle,,Rattus norvegicus,GSE137869,GSM4331861,,SRR11143080; SRR11143081; SRR11143082; SRR11143083,SAMN14162459,,,"Ma et al, Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32109414/,v2
+Ma 2020,Muscle-F-O,,muscle,,Rattus norvegicus,GSE137869,GSM4331862,,SRR11143084; SRR11143085; SRR11143086; SRR11143087,SAMN14162458,,,"Ma et al, Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32109414/,v2
+Ma 2020,Muscle-F-CR,,muscle,,Rattus norvegicus,GSE137869,GSM4331863,,SRR11143088; SRR11143089; SRR11143090; SRR11143091,SAMN14162457,,,"Ma et al, Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32109414/,v2
 de Lima 2021,"Forelimb,_E4",,,,Gallus gallus,GSE166981,GSM5090142,,SRR13733760,SAMN17965279,,,"de Lima et al, Nature Communications, 2021",https://pubmed.ncbi.nlm.nih.gov/34158501/,
 de Lima 2021,"Forelimb,_E6",,,,Gallus gallus,GSE166981,GSM5090143,,SRR13733761,SAMN17965275,,,"de Lima et al, Nature Communications, 2021",https://pubmed.ncbi.nlm.nih.gov/34158501/,
 de Lima 2021,"Forelimb,_E10",,,,Gallus gallus,GSE166981,GSM5090144,,SRR13733762,SAMN17965276,,,"de Lima et al, Nature Communications, 2021",https://pubmed.ncbi.nlm.nih.gov/34158501/,
@@ -247,7 +251,7 @@ Sorkin 2020,HODay0replicate4,Tenotomy site of a burn/tenotomy mouse A partial-th
 Sorkin 2020,HODay7replicate4,Tenotomy site of a burn/tenotomy mouse A partial-thickness scald burn injury was administered to animals; CD47 activating peptide (10mg/kg i.p. daily) treated 3 days prior to injury and 3 days after injury. cells recruited to injury site at day 7 ,tendon,,Mus musculus,GSE126060,GSM4141559,,SRR8528198,SAMN10869529,,,"Sorkin et al, Nature Communications, 2020",https://pubmed.ncbi.nlm.nih.gov/32024825/,
 Sorkin 2020,HODay21replicate4,Tenotomy site of a burn/tenotomy mouse A partial-thickness scald burn injury was administered to animals; CD47 activating peptide (10mg/kg i.p. daily) treated 3 days prior to injury and 3 days after injury. cells recruited to injury site at day 7 ,tendon,,Mus musculus,GSE126060,GSM4141560,,SRR8528199,SAMN10869528,,,"Sorkin et al, Nature Communications, 2020",https://pubmed.ncbi.nlm.nih.gov/32024825/,
 Sorkin 2020,HO_CD47_treatedreplicate4,Tenotomy site of a burn/tenotomy mouse A partial-thickness scald burn injury was administered to animals; CD47 activating peptide (10mg/kg i.p. daily) treated 3 days prior to injury and 3 days after injury. cells recruited to injury site at day 7 ,tendon,,Mus musculus,GSE126060,GSM4141561,,SRR8528200,SAMN10869527,,,"Sorkin et al, Nature Communications, 2020",https://pubmed.ncbi.nlm.nih.gov/32024825/,
-Penaloza 2019,Penaloza_Mesp1,,,,Mus musculus,GSE131734,GSM3814860,,SRR9117286,SAMN11843118,,,"Penaloza et al, Biochem Biophys Res Commun, 2019",https://pubmed.ncbi.nlm.nih.gov/31590918/,
+Penaloza 2019,Penaloza_Mesp1,Single-Cell RNA-seq of Skeletal Progenitors derived from Mesp1,muscle,,Mus musculus,GSE131734,GSM3814860,,SRR9117286,SAMN11843118,,,"Penaloza et al, Biochem Biophys Res Commun, 2019",https://pubmed.ncbi.nlm.nih.gov/31590918/,
 S. He 2021,Muscle_cDNA,,,,Homo sapiens,GSE159929,GSM4850585,,SRR13075726,SAMN16523253,,,"He et al, Genome Biology, 2020",https://pubmed.ncbi.nlm.nih.gov/33287869/,5prime
 Akbar 2021b,,tendon,,,Homo sapiens,NA,NA,,NA,NA,,,"Akbar et al, PNAS, 2021",https://pubmed.ncbi.nlm.nih.gov/34544860/,
 Nakajima 2021,1_iPS,"Human iPS cell line, 1231A3",,,Homo sapiens,GSE156753,GSM4743488,,SRR12507504,SAMN15893659,,,"Najajima et al, Nature Communications, 20021",https://pubmed.ncbi.nlm.nih.gov/34408142/,
@@ -265,15 +269,15 @@ Lee 2021,BTS_D7_3,Day 7 post Burn/Tenotomy with sham neurectomy injury site,,,Ho
 Lee 2021,BTN_D7_1,Day 7 post Burn/Tenotomy with neurectomy injury site,,,Homo sapiens,GSE163446,GSM4979416,,SRR13268685; SRR13268686; SRR13268687,SAMN17106056,,,"Lee et al, Nature Communications, 2021",https://pubmed.ncbi.nlm.nih.gov/34400627/,
 Lee 2021,BTN_D7_2,Day 7 post Burn/Tenotomy with neurectomy injury site,,,Homo sapiens,GSE163446,GSM4979417,,SRR13268688; SRR13268689; SRR13268690; SRR13268691,SAMN17106065,,,"Lee et al, Nature Communications, 2021",https://pubmed.ncbi.nlm.nih.gov/34400627/,
 Lee 2021,BTN_D7_3,Day 7 post Burn/Tenotomy with neurectomy injury site,,,Homo sapiens,GSE163446,GSM4979418,,SRR13268692; SRR13268693; SRR13268694; SRR13268695,SAMN17106064,,,"Lee et al, Nature Communications, 2021",https://pubmed.ncbi.nlm.nih.gov/34400627/,
-De Micheli 2020d,BL6_Ach_1,tendon,,,Homo sapiens,GSE138515,GSM4110112,,SRR10239195,SAMN12984496,,,"De Micheli et al, Am J Physiol Cell Physiol, 2020",https://pubmed.ncbi.nlm.nih.gov/32877217/,
-De Micheli 2020d,BL6_Ach_2,tendon,,,Homo sapiens,GSE138515,GSM4110113,,SRR10239196,SAMN12984380,,,"De Micheli et al, Am J Physiol Cell Physiol, 2020",https://pubmed.ncbi.nlm.nih.gov/32877217/,
-De Micheli 2020d,BL6_Ach_3,tendon,,,Homo sapiens,GSE138515,GSM4110114,,SRR10239197,SAMN12984498,,,"De Micheli et al, Am J Physiol Cell Physiol, 2020",https://pubmed.ncbi.nlm.nih.gov/32877217/,
-De Micheli 2020d,BL6_Ach_4,tendon,,,Homo sapiens,GSE138515,GSM4110115,,SRR10239198,SAMN12984497,,,"De Micheli et al, Am J Physiol Cell Physiol, 2020",https://pubmed.ncbi.nlm.nih.gov/32877217/,
-Scott 2019,Scott_qsnt,Single cell RNA-seq tdTomato MPs quiescent,,,Mus musculus,GSE110037,GSM2976778,bam,SRR6664634,SAMN08455725,https://sra-download.ncbi.nlm.nih.gov/traces/sra59/SRZ/006664/SRR6664634/qsnt.bam,,"Scott et al, Cell Stem Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/31809738/,v2
-Scott 2019,Scott_d1,Single cell RNA-seq tdTomato MPs 1 day post notexin injury,,,,GSE110037,GSM2976779,bam,SRR6664635,SAMN08455724,https://sra-download.ncbi.nlm.nih.gov/traces/sra59/SRZ/006664/SRR6664635/d1.bam,,"Scott et al, Cell Stem Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/31809738/,v2
-Scott 2019,Scott_d2,Single cell RNA-seq tdTomato MPs 2 day post notexin injury,,,,GSE110037,GSM2976780,bam,SRR6664636,SAMN08455723,https://sra-download.ncbi.nlm.nih.gov/traces/sra59/SRZ/006664/SRR6664636/d2.bam,,"Scott et al, Cell Stem Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/31809738/,v2
-Scott 2019,Scott_d4,Single cell RNA-seq tdTomato MPs 4 day post notexin injury,,,,GSE110037,GSM2976781,bam,SRR6664637,SAMN08455726,"	https://sra-download.ncbi.nlm.nih.gov/traces/sra59/SRZ/006664/SRR6664637/d4.bam",,"Scott et al, Cell Stem Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/31809738/,v2
-Scott 2019,Scott_d14,Single cell RNA-seq tdTomato MPs 14 day post notexin injury,,,,GSE110037,GSM2976782,bam,SRR6664638,SAMN08455722,https://sra-download.ncbi.nlm.nih.gov/traces/sra59/SRZ/006664/SRR6664638/d14.bam,,"Scott et al, Cell Stem Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/31809738/,v2
+De Micheli 2020d,BL6_Ach_1,tendon,tendon,,Homo sapiens,GSE138515,GSM4110112,,SRR10239195,SAMN12984496,,,"De Micheli et al, Am J Physiol Cell Physiol, 2020",https://pubmed.ncbi.nlm.nih.gov/32877217/,
+De Micheli 2020d,BL6_Ach_2,tendon,tendon,,Homo sapiens,GSE138515,GSM4110113,,SRR10239196,SAMN12984380,,,"De Micheli et al, Am J Physiol Cell Physiol, 2020",https://pubmed.ncbi.nlm.nih.gov/32877217/,
+De Micheli 2020d,BL6_Ach_3,tendon,tendon,,Homo sapiens,GSE138515,GSM4110114,,SRR10239197,SAMN12984498,,,"De Micheli et al, Am J Physiol Cell Physiol, 2020",https://pubmed.ncbi.nlm.nih.gov/32877217/,
+De Micheli 2020d,BL6_Ach_4,tendon,tendon,,Homo sapiens,GSE138515,GSM4110115,,SRR10239198,SAMN12984497,,,"De Micheli et al, Am J Physiol Cell Physiol, 2020",https://pubmed.ncbi.nlm.nih.gov/32877217/,
+Scott 2019,Scott_qsnt,Single cell RNA-seq tdTomato MPs quiescent,muscle,,Mus musculus,GSE110037,GSM2976778,bam,SRR6664634,SAMN08455725,https://sra-download.ncbi.nlm.nih.gov/traces/sra59/SRZ/006664/SRR6664634/qsnt.bam,,"Scott et al, Cell Stem Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/31809738/,v2
+Scott 2019,Scott_d1,Single cell RNA-seq tdTomato MPs 1 day post notexin injury,muscle,,Mus musculus,GSE110037,GSM2976779,bam,SRR6664635,SAMN08455724,https://sra-download.ncbi.nlm.nih.gov/traces/sra59/SRZ/006664/SRR6664635/d1.bam,,"Scott et al, Cell Stem Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/31809738/,v2
+Scott 2019,Scott_d2,Single cell RNA-seq tdTomato MPs 2 day post notexin injury,muscle,,Mus musculus,GSE110037,GSM2976780,bam,SRR6664636,SAMN08455723,https://sra-download.ncbi.nlm.nih.gov/traces/sra59/SRZ/006664/SRR6664636/d2.bam,,"Scott et al, Cell Stem Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/31809738/,v2
+Scott 2019,Scott_d4,Single cell RNA-seq tdTomato MPs 4 day post notexin injury,muscle,,Mus musculus,GSE110037,GSM2976781,bam,SRR6664637,SAMN08455726,"	https://sra-download.ncbi.nlm.nih.gov/traces/sra59/SRZ/006664/SRR6664637/d4.bam",,"Scott et al, Cell Stem Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/31809738/,v2
+Scott 2019,Scott_d14,Single cell RNA-seq tdTomato MPs 14 day post notexin injury,muscle,,Mus musculus,GSE110037,GSM2976782,bam,SRR6664638,SAMN08455722,https://sra-download.ncbi.nlm.nih.gov/traces/sra59/SRZ/006664/SRR6664638/d14.bam,,"Scott et al, Cell Stem Cell, 2019",https://pubmed.ncbi.nlm.nih.gov/31809738/,v2
 Proetti 2021,scDEN,"Denervated, 3 days; methanol-fixed",,,Mus musculus,NA,NA,fastq,SRR11574458; SRR11574462; SRR11574463; SRR11574464,SAMN14643565,,https://www.ncbi.nlm.nih.gov/Traces/study/?acc=SRP257509&o=acc_s%3Aa,"Proietti et al, JCI Insights, 2021",https://pubmed.ncbi.nlm.nih.gov/33661767/,v3.1
 Proetti 2021,scCTR,,,,Mus musculus,NA,NA,fastq,SRR11574459; SRR11574460; SRR11574461; SRR11574465,SAMN14643564,,https://www.ncbi.nlm.nih.gov/Traces/study/?acc=SRP257509&o=acc_s%3Aa,"Proietti et al, JCI Insights, 2021",https://pubmed.ncbi.nlm.nih.gov/33661767/,v3.1
 Bursac 2021,2D expanded cells,2D expanded CD56+ myogenic cells,,,Homo sapiens,GSE188215,GSM5672476,fastq,SRR16774171,SAMN22892805,,,unpublished,unpublished,v3
@@ -391,30 +395,76 @@ Fang 2021,Hindlimb skeletal muscle stromal cells,Adult hindlimb muscle,muscle,,M
 Ritchie 2020,MuSC 10 percent library,illumina & nanopore sequencing,muscle,,Mus musculus,GSE154868,GSM4681738,fastq,SRR12282454; SRR12282455,SAMN15594467,,,unpublished,unpublished,v2
 Ritchie 2020,MuSC 90 percent library,illumina only,muscle,,Mus musculus,GSE154868,GSM4681739,fastq,SRR12282456,SAMN15594465,,,unpublished,unpublished,v2
 Al-Barghouthi 2021,Bone marrow-derived stromal cells,Bone marrow-derived stromal cells cultured from femoral bone marrow,bone,,Mus musculus,GSE152806,GSM4626772,fastq,SRR12053313; SRR12053314; SRR12053315; SRR12053316,SAMN15325041,,,"Al-Barghouthi et al, Nature Communications, 2021",https://pubmed.ncbi.nlm.nih.gov/34099702/,v2
+Baht 2020,Uninjured Control,,muscle,,Mus musculus,GSE145236,GSM4319248,bam,SRR11107252,SAMN14128630,,,"Baht et al, Nat Metab, 2020",https://pubmed.ncbi.nlm.nih.gov/32694780/,
+Baht 2020,Injured (1d),Treatment protocol IM injection of 1.2% BaCl,muscle,,Mus musculus,GSE145236,GSM4319249,bam,SRR11107253,SAMN14128629,,,"Baht et al, Nat Metab, 2020",https://pubmed.ncbi.nlm.nih.gov/32694780/,
+H Xi 2020,Emb Wk5 AP32,,muscle,,Homo sapiens,GSE147457,GSM4431280,,SRR11402937,SAMN14439353,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Emb Wk5 AP37,,muscle,,Homo sapiens,GSE147457,GSM4431281,,SRR11402938,SAMN14439352,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Emb Wk6 AP5,,muscle,,Homo sapiens,GSE147457,GSM4431282,,SRR11402939,SAMN14439351,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Emb Wk6 AP13,,muscle,,Homo sapiens,GSE147457,GSM4431283,,SRR11402940,SAMN14439350,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Emb Wk6.5 AP22,,muscle,,Homo sapiens,GSE147457,GSM4431284,,SRR11402941,SAMN14439349,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Emb Wk7 AP6,,muscle,,Homo sapiens,GSE147457,GSM4431285,,SRR11402942,SAMN14439347,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Emb Wk7 AP24,,muscle,,Homo sapiens,GSE147457,GSM4431286,,SRR11402943,SAMN14439346,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Emb Wk7 AP30,,muscle,,Homo sapiens,GSE147457,GSM4431287,,SRR11402944,SAMN14439345,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Emb Wk7.25 AP29,,muscle,,Homo sapiens,GSE147457,GSM4431288,,SRR11402945,SAMN14439344,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Emb Wk7.25 AP38,,muscle,,Homo sapiens,GSE147457,GSM4431289,,SRR11402946,SAMN14439343,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Emb Wk7.75 AP10,,muscle,,Homo sapiens,GSE147457,GSM4431290,,SRR11402947,SAMN14439348,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Fet Wk9 AP14,,muscle,,Homo sapiens,GSE147457,GSM4431291,,SRR11402948,SAMN14439342,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Fet Wk9 AP36,,muscle,,Homo sapiens,GSE147457,GSM4431292,,SRR11402949,SAMN14439341,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Fet Wk12 AP23,,muscle,,Homo sapiens,GSE147457,GSM4431293,,SRR11402950,SAMN14439340,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Fet Wk14 AP25,,muscle,,Homo sapiens,GSE147457,GSM4431294,,SRR11402951,SAMN14439373,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Fet Wk17 AP17,,muscle,,Homo sapiens,GSE147457,GSM4431295,,SRR11402952,SAMN14439372,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Fet Wk18 AP16,,muscle,,Homo sapiens,GSE147457,GSM4431296,,SRR11402953,SAMN14439371,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Juv Yr7 AP11,,muscle,,Homo sapiens,GSE147457,GSM4431297,,SRR11402954,SAMN14439370,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Juv Yr11 AP34,,muscle,,Homo sapiens,GSE147457,GSM4431298,,SRR11402955,SAMN14439369,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Adt Yr34 AP20,,muscle,,Homo sapiens,GSE147457,GSM4431299,,SRR11402956,SAMN14439368,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,Adt Yr42 AP28,,muscle,,Homo sapiens,GSE147457,GSM4431300,,SRR11402957,SAMN14439367,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,HX D20 GFP+ HX5,,psc-derived,,Homo sapiens,GSE147457,GSM4431301,,SRR11402958,SAMN14439366,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,HX D21 Live HX16,,psc-derived,,Homo sapiens,GSE147457,GSM4431302,,SRR11402959,SAMN14439365,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,HX D27 GFP+ HX7,,psc-derived,,Homo sapiens,GSE147457,GSM4431303,,SRR11402960,SAMN14439364,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,HX D27 Live HX8,,psc-derived,,Homo sapiens,GSE147457,GSM4431304,,SRR11402961,SAMN14439363,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,HX D35 GFP+ HX19,,psc-derived,,Homo sapiens,GSE147457,GSM4431305,,SRR11402962,SAMN14439362,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,HX D35 E+N+H- HX20,,psc-derived,,Homo sapiens,GSE147457,GSM4431306,,SRR11402963,SAMN14439377,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,HX D35 Live HX21,,psc-derived,,Homo sapiens,GSE147457,GSM4431307,,SRR11402964,SAMN14439376,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,HX D41 GFP+ HX9,,psc-derived,,Homo sapiens,GSE147457,GSM4431308,,SRR11402965,SAMN14439375,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,HX D41 Live HX10,,psc-derived,,Homo sapiens,GSE147457,GSM4431309,,SRR11402966,SAMN14439374,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,HX D55 GFP+ HX11,,psc-derived,,Homo sapiens,GSE147457,GSM4431310,,SRR11402967,SAMN14439361,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,HX D55 Live HX12,,psc-derived,,Homo sapiens,GSE147457,GSM4431311,,SRR11402968,SAMN14439360,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,JC D34 GFP+ JC1,,psc-derived,,Homo sapiens,GSE147457,GSM4431312,,SRR11402969,SAMN14439359,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,JC D34 E+N+H- JC2,,psc-derived,,Homo sapiens,GSE147457,GSM4431313,,SRR11402970,SAMN14439358,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,JC D34 Live JC3,,psc-derived,,Homo sapiens,GSE147457,GSM4431314,,SRR11402971,SAMN14439357,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,MS D48 GFP+ MS2,,psc-derived,,Homo sapiens,GSE147457,GSM4431315,,SRR11402972,SAMN14439356,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,MS D48 E+N+H- MS3,,psc-derived,,Homo sapiens,GSE147457,GSM4431316,,SRR11402973,SAMN14439355,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+H Xi 2020,MS D43 Live MS5,,psc-derived,,Homo sapiens,GSE147457,GSM4431317,,SRR11402974,SAMN14439354,,,"H Xi et al, Cell Stem Cell, 2020",https://pubmed.ncbi.nlm.nih.gov/32619514/,Drop-seq
+Jiang 2020,Day_3_FSHD2_2_R1,FSHD2-2,muscle,,Homo sapiens,GSE143452,GSM4259678,fastq,SRR10870711,SAMN13825256,,,"Jiang et al, PLoS Genetics, 2020",https://pubmed.ncbi.nlm.nih.gov/32365093/,ddSeq
+Jiang 2020,Day_3_FSHD2_2_R2,FSHD2-2,muscle,,Homo sapiens,GSE143452,GSM4259679,fastq,SRR10870712,SAMN13825255,,,"Jiang et al, PLoS Genetics, 2020",https://pubmed.ncbi.nlm.nih.gov/32365093/,ddSeq
+Jiang 2020,Day_3_Control_2_R1,Control-2,muscle,,Homo sapiens,GSE143452,GSM4259680,fastq,SRR10870713,SAMN13825254,,,"Jiang et al, PLoS Genetics, 2020",https://pubmed.ncbi.nlm.nih.gov/32365093/,ddSeq
+Jiang 2020,Day_3_Control_2_R2,Control-2,muscle,,Homo sapiens,GSE143452,GSM4259681,fastq,SRR10870714,SAMN13825253,,,"Jiang et al, PLoS Genetics, 2020",https://pubmed.ncbi.nlm.nih.gov/32365093/,ddSeq
+Jiang 2020,Day_5_FSHD2_2_R1,FSHD2-2,muscle,,Homo sapiens,GSE143452,GSM4259682,fastq,SRR10870715,SAMN13825252,,,"Jiang et al, PLoS Genetics, 2020",https://pubmed.ncbi.nlm.nih.gov/32365093/,ddSeq
+Jiang 2020,Day_5_FSHD2_2_R2,FSHD2-2,muscle,,Homo sapiens,GSE143452,GSM4259683,fastq,SRR10870716,SAMN13825251,,,"Jiang et al, PLoS Genetics, 2020",https://pubmed.ncbi.nlm.nih.gov/32365093/,ddSeq
+Jiang 2020,Day_5_Control_2_R1,Control-2,muscle,,Homo sapiens,GSE143452,GSM4259684,fastq,SRR10870717,SAMN13825250,,,"Jiang et al, PLoS Genetics, 2020",https://pubmed.ncbi.nlm.nih.gov/32365093/,ddSeq
+Jiang 2020,Day_5_Control_2_R2,Control-2,muscle,,Homo sapiens,GSE143452,GSM4259685,fastq,SRR10870718,SAMN13825249,,,"Jiang et al, PLoS Genetics, 2020",https://pubmed.ncbi.nlm.nih.gov/32365093/,ddSeq
+Ono 2020,Prrx1cre_E115, Prrx1-cre; R26R(tdTomato/+),limb bud,,Mus musculus,GSE144411,GSM4287667,fastq,NOT_PUBLIC,SAMN13938142,,,unpublished,unpublished,v3
+Sacher 2019,HH25 scRNA-seq,Whole autopod; HH25,limb bud,,Gallus gallus,GSE130439,GSM3738693,fastq,SRR8985028; SRR8985029; SRR8985030; SRR8985031; SRR8985032; SRR8985033; SRR8985034; SRR8985035,SAMN11526604,,,"Sacher et al, Matrix Biol Plus, 2021",https://pubmed.ncbi.nlm.nih.gov/34195598/,v2
+Sacher 2019,HH29 scRNA-seq,Digits 3 and 4; HH29,limb bud,,Gallus gallus,GSE130439,GSM3738694,fastq,SRR8985036; SRR8985037; SRR8985038,SAMN11526603,,,"Sacher et al, Matrix Biol Plus, 2021",https://pubmed.ncbi.nlm.nih.gov/34195598/,Drop-seq
+Sacher 2019,HH31 scRNA-seq,Tip of digit 4; HH31,limb bud,,Gallus gallus,GSE130439,GSM3738695,fastq,SRR8985039; SRR8985040; SRR8985041; SRR8985042; SRR8985043; SRR8985044; SRR8985045; SRR8985046,SAMN11526602,,,"Sacher et al, Matrix Biol Plus, 2021",https://pubmed.ncbi.nlm.nih.gov/34195598/,v2
+Sommerfeld 2019,ECM,urinary bladder matrix,muscle,,Mus musculus,GSE138027,GSM4096943,bam,SRR10186720,SAMN12851009,,,"Sommerfeld et al, Scie Immunol, 2019",https://pubmed.ncbi.nlm.nih.gov/31604843/,v2
+Sommerfeld 2019,saline,saline,muscle,,Mus musculus,GSE138027,GSM4096944,bam,SRR10186721,SAMN12851008,,,"Sommerfeld et al, Scie Immunol, 2019",https://pubmed.ncbi.nlm.nih.gov/31604843/,v2
+Sommerfeld 2019,PCL,polycaprolactone,muscle,,Mus musculus,GSE138027,GSM4096945,bam,SRR10186722,SAMN12851007,,,"Sommerfeld et al, Scie Immunol, 2019",https://pubmed.ncbi.nlm.nih.gov/31604843/,v2
+Incitti 2019,Adult satellite cells single-cell RNA-Seq,ES-derived myogenic progenitors,psc-derived,,Mus musculus,GSE121469,GSM3436818,fastq,SRR8078715,SAMN10258822,,,"Incitti et al, PNAS, 2019",https://pubmed.ncbi.nlm.nih.gov/30760602/,
+Incitti 2019,iPax3 single-cell RNA-Seq,ES-derived myogenic progenitors,psc-derived,,Mus musculus,GSE121469,GSM3436819,fastq,SRR8078716,SAMN10258821,,,"Incitti et al, PNAS, 2019",https://pubmed.ncbi.nlm.nih.gov/30760602/,
+Incitti 2019,"iPax3 single-cell RNA-Seq, 2",ES-derived myogenic progenitors,psc-derived,,Mus musculus,GSE121469,GSM3494414,fastq,SRR8256805; SRR8256806,SAMN10492612,,,"Incitti et al, PNAS, 2019",https://pubmed.ncbi.nlm.nih.gov/30760602/,
+van den Heuvel 2019,FSHD1.1,FSHD1 patient-derived primary myocytes,muscle,,Homo sapiens,GSE122873,GSM3487556,fastq,SRR8239853,SAMN10473098,,,"van den Heuvel et al, Hum Mol Genet, 2019",https://pubmed.ncbi.nlm.nih.gov/30445587/,v1
+van den Heuvel 2019,FSHD1.2,FSHD1 patient-derived primary myocytes,muscle,,Homo sapiens,GSE122873,GSM3487557,fastq,SRR8239854,SAMN10473103,,,"van den Heuvel et al, Hum Mol Genet, 2019",https://pubmed.ncbi.nlm.nih.gov/30445587/,v1
+van den Heuvel 2019,FSHD2.1,FSHD2 patient-derived primary myocytes,muscle,,Homo sapiens,GSE122873,GSM3487558,fastq,SRR8239855,SAMN10473102,,,"van den Heuvel et al, Hum Mol Genet, 2019",https://pubmed.ncbi.nlm.nih.gov/30445587/,v1
+van den Heuvel 2019,FSHD2.2,FSHD2 patient-derived primary myocytes,muscle,,Homo sapiens,GSE122873,GSM3487559,fastq,SRR8239856,SAMN10473101,,,"van den Heuvel et al, Hum Mol Genet, 2019",https://pubmed.ncbi.nlm.nih.gov/30445587/,v1
+van den Heuvel 2019,CTRL.1,Healthy control individual-derived primary myocytes,muscle,,Homo sapiens,GSE122873,GSM3487560,fastq,SRR8239857,SAMN10473100,,,"van den Heuvel et al, Hum Mol Genet, 2019",https://pubmed.ncbi.nlm.nih.gov/30445587/,v1
+van den Heuvel 2019,CTRL.2,Healthy control individual-derived primary myocytes,muscle,,Homo sapiens,GSE122873,GSM3487561,fastq,SRR8239858,SAMN10473099,,,"van den Heuvel et al, Hum Mol Genet, 2019",https://pubmed.ncbi.nlm.nih.gov/30445587/,v1
+Elliott 2020,E11.5_MNP,epithelium and mesenchyme of mandibular prominence including developing tongue bud.,bone,,Mus musculus,GSE141173,GSM4196529,bam,SRR10560003,SAMN13428587,,,"Elliott et al, elife, 2020",https://pubmed.ncbi.nlm.nih.gov/33006313/,
+Elliott 2020,E13.5_MNP,epithelium and mesenchyme of mandibular prominence including developing tongue and skeletal elements,bone,,Mus musculus,GSE141173,GSM4196530,bam,SRR10560004,SAMN13428588,,,"Elliott et al, elife, 2020",https://pubmed.ncbi.nlm.nih.gov/33006313/,
 ,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
+Tabula Sapiens 2021,,,,,Homo sapiens,,,,,,,https://registry.opendata.aws/tabula-sapiens/,"Tabula Sapiens Consortium et al, bioRxiv, 2021",https://www.biorxiv.org/content/10.1101/2021.07.19.452956v2,
+Akbar 2021a,,tendon (#TODO: compare with Akar 2020b),,,Homo sapiens,,,,,,,,"Akbar et al, Ann Rheum Dis, 2021",https://pubmed.ncbi.nlm.nih.gov/34001518/,
+Walter unpublished,,#TODO: transfer new datasets onto cluster,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,
 Buechler 2021,,,,,,,,,,,,https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-10324/,"Buechler et al, Nature, 221",https://pubmed.ncbi.nlm.nih.gov/33981032/,
 Mournetas 2021,,,,,Homo sapiens,,,,,,,https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-9510/,"Mournetas et al, Journal of Cachexia, Sarcopenia and Muscle, 2021",https://pubmed.ncbi.nlm.nih.gov/33586340/,
@@ -422,9 +472,3 @@ Xu 2021,,,,,Mus musculus,,,,,,,Couldn't find data availability info,"Xu et al, J
 Kendal 2020,,tendon,,,Mus musculus,,,,,,,Couldn't find data availability info,"Kendal et al, Sci Rep, 2020",https://pubmed.ncbi.nlm.nih.gov/32883960/,
 Garcia-Melchor 2021,,tendon,,,Homo sapiens,,,,,,,Data available upon request (neal.millar@glasgow.ac.uk),"Garcia-Melchor et al, Ann Rheum Dis, 2021",https://pubmed.ncbi.nlm.nih.gov/33692018/,
 Qiu 2020,,,,,Sus domesticus,,,,,,,Couldn't find data availability info,"Qiu et al, Cells, 2020",https://pubmed.ncbi.nlm.nih.gov/32331484/,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-Tabula Sapiens 2021,,,,,Homo sapiens,,,,,,,https://registry.opendata.aws/tabula-sapiens/,"Tabula Sapiens Consortium et al, bioRxiv, 2021",https://www.biorxiv.org/content/10.1101/2021.07.19.452956v2,
-Akbar 2021a,,tendon (#TODO: compare with Akar 2020b),,,Homo sapiens,,,,,,,,"Akbar et al, Ann Rheum Dis, 2021",https://pubmed.ncbi.nlm.nih.gov/34001518/,
-Walter unpublished,,#TODO: transfer new datasets onto cluster,,,,,,,,,,,,,
