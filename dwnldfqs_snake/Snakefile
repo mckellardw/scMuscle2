@@ -77,9 +77,15 @@ rule merge_metadata:
         METACSV = '{METADIR}/merged_metadata.csv'
     run:
         df_list = list()
-        for f in input:
-            df_list.append(pd.read_json(f).T)
+        for f in input: # load metadata files for each sample
+            with open(f) as data_file:
+                data = json.load(data_file)
+            df = pd.json_normalize(data).T
+            tmp = df.index[0].split('.')[0] + '.' # Get SRR ID...
+            df = df.rename(index = lambda x: x.strip(tmp)) # Remove SRR ID from row names
+            df_list.append(df.T) # transpose so that each row is a different run
 
+        print("Concatenating metadata...")
         df_out = pd.concat(df_list)
 
         df_out.to_csv(output.METACSV, index=False)
