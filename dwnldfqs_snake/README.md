@@ -10,3 +10,6 @@ Run snakemake from command line with total desired core usage (`-j num_threads`)
 - `parallel-fastq-dump` [link](https://github.com/rvalieris/parallel-fastq-dump)
 - `pandas`
 - `itertools`
+
+- `ffq` [link](TODO)
+- ``

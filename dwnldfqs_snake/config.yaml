@@ -15,11 +15,13 @@ THREADS: 10 # how many threads to use for parallel-fastq-dump (snakemake automat
 ########################################################################################################
 # Important directory file paths
 ########################################################################################################
-TMPDIR: /workdir/dwm269/scMuscle2/tmp # directory for temporary files
-PRODIR: /workdir/dwm269/scMuscle2 # Project directory
+TMPDIR: /workdir/dwm269/scMuscle2/tmp # DIRectory for TeMPorary files
+PRODIR: /workdir/dwm269/scMuscle2 # PROject DIRectory
+METADIR: /workdir/dwm269/scMuscle2/metadata_ffq # METAdata DIRectory
 
 ########################################################################################################
-# Executables - file paths
+# Executables - file paths for commands used in the workflow
 ########################################################################################################
+FFQ: ffq
 PREFETCH: prefetch
 PFD: parallel-fastq-dump

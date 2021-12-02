@@ -38,7 +38,10 @@ In the scMuscle project, we attempted to gain a better understanding of the cons
 - **wget_link** - Link to download the original file, simply using `wget`. *Important to note that this is needed for any data for which the reads were not originally uploaded as .fastq files*
 - **other.accession** - INSERT_DESCRIPTION_HERE
 - **source** - This is a citation for each publication
-- **chemistry** - All of the samples we collected used the Chromium platform from 10x Genomics. This column specifies what version of the chemistry was used. (v2/v3/v3.1)
+- **chemistry** - All of the samples we collected used the Chromium platform from 10x Genomics. This column specifies what version of the chemistry was used. (10x Genomics Chromium v1/v2/v3/v3.1, or other methods)
+- **sequencer** - type of sequencer used
+- **sex**
+- **age** - measured in... days? weeks? months?
 
 ## Sources used to find samples
 - [NCBI/GEO](https://www.ncbi.nlm.nih.gov/geo/) - keywords used:

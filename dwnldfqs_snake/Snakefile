@@ -7,7 +7,8 @@
 ########################################################################################################
 
 import pandas as pd
-import itertools
+from itertools import chain
+from functools import reduce
 
 ########################################################################################################
 # Config file
@@ -19,28 +20,32 @@ configfile:'config.yaml'
 ########################################################################################################
 TMPDIR = config['TMPDIR']
 PRODIR = config['PRODIR']
+METADIR = config['METADIR']
 
 shell("mkdir -p {TMPDIR}")
 shell("mkdir -p {PRODIR}")
+shell("mkdir -p {METADIR}")
 
 ########################################################################################################
 # Variables and references
 ########################################################################################################
 META = pd.read_csv(config['SAMPLE_SHEET'], na_filter=False)
 
-# SAMPLES = list(pd.read_csv(config['SAMPLE_SHEET'])['sample'])
+META = META[list(META['include'])] #remove undesired samples ('include'==False)
+
 
 SRR = list(META['SRR.accession'])
-print(SRR)
+# print(SRR)
 for i in range(0,len(SRR)):
     SRR[i] = SRR[i].split("; ")
-SRR = list(itertools.chain(*SRR))
+SRR = list(chain(*SRR))
 
 # print(SRR[range(1,12)])
 
 ########################################################################################################
 # Executables
 ########################################################################################################
+FFQ = config["FFQ"]
 PREFETCH = config["PREFETCH"]
 PFD = config["PFD"]
 
@@ -48,8 +53,10 @@ PFD = config["PFD"]
 ########################################################################################################
 rule all:
     input:
-        expand('{PRODIR}/{sample}_1.fastq.gz', PRODIR=config['PRODIR'], sample=SRR), # R1 fastq
-        expand('{PRODIR}/{sample}_2.fastq.gz', PRODIR=config['PRODIR'], sample=SRR) # R2 fastq
+        expand('{METADIR}/{sample}.json', METADIR=config['METADIR'], sample=SRR), # metadata files
+        expand('{METADIR}/merged_metadata.csv', METADIR=config['METADIR'])
+        # expand('{PRODIR}/{sample}_1.fastq.gz', PRODIR=config['PRODIR'], sample=SRR), # R1 fastq
+        # expand('{PRODIR}/{sample}_2.fastq.gz', PRODIR=config['PRODIR'], sample=SRR) # R2 fastq
 
 #############################################
 ## Get metadata with `ffq`
@@ -57,20 +64,33 @@ rule all:
 #TODO add a check for the SRR ID with ffq
 rule get_metadata:
     output:
-        metajson = '{PRODIR}/metadata_ffq/{}.json'
-    params:
-
+        METAJSON = '{METADIR}/{sample}.json'
     shell:
         """
-
+        {FFQ} -o {output.METAJSON} {wildcards.sample}
         """
+
+rule merge_metadata:
+    input:
+        expand('{METADIR}/{sample}.json', METADIR=config['METADIR'], sample=SRR)
+    output:
+        METACSV = '{METADIR}/merged_metadata.csv'
+    run:
+        df_list = list()
+        for f in input:
+            df_list.append(pd.read_json(f).T)
+
+        df_out = pd.concat(df_list)
+
+        df_out.to_csv(output.METACSV, index=False)
+
 
 #############################################
 ## prefetch (SRA-toolkit)
 #############################################
 rule prefetch:
     output:
-        SRA_tmp = temp(TMPDIR+"/{sample}.sra")
+        SRA_tmp = temp("{TMPDIR}/{sample}.sra")
     params:
         TMPDIR=TMPDIR
     shell:
