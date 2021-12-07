@@ -1,6 +1,6 @@
 ########################################################################################################
-# download_fastqs_snakemake
-#   Snakemake workflow to download fastq files from SRA
+# dwnldfqs_snake
+#   Snakemake workflow to download fastq files and associated metadata from SRA
 #   v1.0
 #   Written by David McKellar
 #   Last edited: --/--/--, DWM
@@ -9,6 +9,7 @@
 import pandas as pd
 from itertools import chain
 from functools import reduce
+from os import path, remove, rename
 
 ########################################################################################################
 # Config file
@@ -32,7 +33,10 @@ shell("mkdir -p {METADIR}")
 META = pd.read_csv(config['SAMPLE_SHEET'], na_filter=False)
 
 META = META[list(META['include'])] #remove undesired samples ('include'==False)
+META = META.iloc[1:100,:]
 
+# Filter for samples with fastq's available
+META = META[list(META['GEO.format']=="fastq")]
 
 SRR = list(META['SRR.accession'])
 # print(SRR)
@@ -54,14 +58,14 @@ PFD = config["PFD"]
 rule all:
     input:
         expand('{METADIR}/{sample}.json', METADIR=config['METADIR'], sample=SRR), # metadata files
-        expand('{METADIR}/merged_metadata.csv', METADIR=config['METADIR'])
-        # expand('{PRODIR}/{sample}_1.fastq.gz', PRODIR=config['PRODIR'], sample=SRR), # R1 fastq
-        # expand('{PRODIR}/{sample}_2.fastq.gz', PRODIR=config['PRODIR'], sample=SRR) # R2 fastq
+        expand('{METADIR}/merged_metadata.csv', METADIR=config['METADIR']),
+        expand('{PRODIR}/data/fastqs/{sample}_R1.fastq.gz', PRODIR=config['PRODIR'], sample=SRR), # R1 fastq
+        expand('{PRODIR}/data/fastqs/{sample}_R2.fastq.gz', PRODIR=config['PRODIR'], sample=SRR) # R2 fastq
 
 #############################################
 ## Get metadata with `ffq`
 #############################################
-#TODO add a check for the SRR ID with ffq
+# Download metadata for each individual SRR (run) ID
 rule get_metadata:
     output:
         METAJSON = '{METADIR}/{sample}.json'
@@ -70,6 +74,7 @@ rule get_metadata:
         {FFQ} -o {output.METAJSON} {wildcards.sample}
         """
 
+# Combine ffq-downloaded .json's into a big csv for parsing
 rule merge_metadata:
     input:
         expand('{METADIR}/{sample}.json', METADIR=config['METADIR'], sample=SRR)
@@ -94,6 +99,7 @@ rule merge_metadata:
 #############################################
 ## prefetch (SRA-toolkit)
 #############################################
+# Download reads as an SRA file into a temporary directory, so they can be formatted as fastq's
 rule prefetch:
     output:
         SRA_tmp = temp("{TMPDIR}/{sample}.sra")
@@ -114,7 +120,7 @@ rule prefetch:
 ## parallel-fastq-dump
 ##      https://github.com/rvalieris/parallel-fastq-dump
 #############################################
-# TODO- merge fastqs by sample?
+ # Convert SRA files to fastq with parallel-fastq-dump
 rule get_fastqs:
     input:
         SRA_tmp = TMPDIR+"/{sample}.sra"
@@ -127,8 +133,6 @@ rule get_fastqs:
     threads:
         config["THREADS"]
     shell:
-        # TODO: make sure multiple SRA numbers works; space-delimited?
-        # TODO: add R1, R2, etc to name?
         """
         echo "Converting SRA files to .fastq's for {wildcards.sample}"
 
@@ -140,3 +144,42 @@ rule get_fastqs:
         --split-files \
         --gzip
         """
+
+# Check fastq sizes, then rename/labem files for R1 & R2 (discard I1)
+rule rename_fastqs:
+    input:
+        R1_FQ = '{PRODIR}/data/fastqs/{sample}_1.fastq.gz',
+        R2_FQ = '{PRODIR}/data/fastqs/{sample}_2.fastq.gz'
+    output:
+        R1_FQ = '{PRODIR}/data/fastqs/{sample}_R1.fastq.gz',
+        R2_FQ = '{PRODIR}/data/fastqs/{sample}_R2.fastq.gz'
+    run:
+        # Check for file sizes (R2 is biggest, then R1, then I1)
+        if path.exists(f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz'):
+            sra_sizes = {
+                f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz'),
+                f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz'),
+                f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz')
+            }
+            rename_dict = {
+                'R2': max(sra_sizes),
+                'R1': list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-2])],
+                'I1': min(sra_sizes)
+            }
+
+            remove(rename_dict['I1'])
+            rename(rename_dict['R1'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R1.fastq.gz')
+            rename(rename_dict['R2'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R2.fastq.gz')
+        else:
+            sra_sizes = {
+                f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz'),
+                f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz')
+            }
+
+            rename_dict = {
+                'R2': max(sra_sizes),
+                'R1': min(sra_sizes)
+            }
+
+            rename(rename_dict['R1'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R1.fastq.gz')
+            rename(rename_dict['R2'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R2.fastq.gz')

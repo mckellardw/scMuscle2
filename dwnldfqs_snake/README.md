@@ -13,3 +13,7 @@ Run snakemake from command line with total desired core usage (`-j num_threads`)
 
 - `ffq` [link](TODO)
 - ``
+
+
+### Useful resources on how to upload/download .fastq's from NCBI & other databases:
+- ["How to use NCBI SRA Toolkit effectively?", by Renesh Bedre](https://www.reneshbedre.com/blog/ncbi_sra_toolkit.html)
