@@ -183,3 +183,5 @@ rule rename_fastqs:
 
             rename(rename_dict['R1'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R1.fastq.gz')
             rename(rename_dict['R2'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R2.fastq.gz')
+
+#TODO- add handling for .bam files
