@@ -9,7 +9,7 @@ In the scMuscle project, we attempted to gain a better understanding of the cons
 - Build reference genomes (w/ GENCODE) AND a list of commonly used transgenes
   - Mouse []
   - Human []
-  - ZF [ ]
+  - ZF []
   - rat []
   - pig(?) []
 - Run STARsolo [ ]
@@ -50,6 +50,7 @@ In the scMuscle project, we attempted to gain a better understanding of the cons
 - [panglaoDB](https://panglaodb.se/)
 - [Broad Single-Cell Portal](https://singlecell.broadinstitute.org/single_cell)
 - [Svensson et al Database](http://www.nxn.se/single-cell-studies/gui)
+- [Single-Cell Expression Atlas](https://www.ebi.ac.uk/gxa/sc/home)
 
 ## Other useful tools for exploring sequencing data
 - [ffq](https://github.com/pachterlab/ffq) - used to clarify metadata, fill out accession info. Incorporated into the `dwnldfqs_snake` pipeline
