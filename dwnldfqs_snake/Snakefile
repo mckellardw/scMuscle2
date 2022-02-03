@@ -33,7 +33,7 @@ shell("mkdir -p {METADIR}")
 META = pd.read_csv(config['SAMPLE_SHEET'], na_filter=False)
 
 META = META[list(META['include'])] #remove undesired samples ('include'==False)
-META = META.iloc[1:100,:]
+META = META.iloc[1:150,:]
 
 # Filter for samples with fastq's available
 META = META[list(META['GEO.format']=="fastq")]
@@ -146,6 +146,7 @@ rule get_fastqs:
         """
 
 # Check fastq sizes, then rename/labem files for R1 & R2 (discard I1)
+#TODO- account for dual index (v3.1) samples!!
 rule rename_fastqs:
     input:
         R1_FQ = '{PRODIR}/data/fastqs/{sample}_1.fastq.gz',
@@ -154,8 +155,26 @@ rule rename_fastqs:
         R1_FQ = '{PRODIR}/data/fastqs/{sample}_R1.fastq.gz',
         R2_FQ = '{PRODIR}/data/fastqs/{sample}_R2.fastq.gz'
     run:
-        # Check for file sizes (R2 is biggest, then R1, then I1)
-        if path.exists(f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz'):
+        # Check for file sizes (R2 is biggest, then R1, then I2 & I1)
+        if path.exists(f'{PRODIR}/data/fastqs/{wildcards.sample}_4.fastq.gz'):
+            sra_sizes = {
+                f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz'),
+                f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz'),
+                f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz'),
+                f'{PRODIR}/data/fastqs/{wildcards.sample}_4.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_4.fastq.gz')
+            }
+            rename_dict = {
+                'R2': max(sra_sizes),
+                'R1': list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-3])],
+                'I2': list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-2])],
+                'I1': min(sra_sizes)
+            }
+
+            remove(rename_dict['I2'])
+            remove(rename_dict['I1'])
+            rename(rename_dict['R1'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R1.fastq.gz')
+            rename(rename_dict['R2'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R2.fastq.gz')
+        elif path.exists(f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz'):
             sra_sizes = {
                 f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz'),
                 f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz'),

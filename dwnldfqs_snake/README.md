@@ -3,7 +3,9 @@
 ## Runtime info
 Run snakemake from command line with total desired core usage (`-j num_threads`) and increased latency wait time as well as restarts, because of delays from SRA (`--latency-wait`):
 
-`snakemake -j 33 --latency 15 --restart-times 3`
+```
+snakemake -j 33 --latency 15 --restart-times 3
+```
 
 
 ## Requirements
