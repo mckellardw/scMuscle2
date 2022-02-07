@@ -33,7 +33,7 @@ shell("mkdir -p {METADIR}")
 META = pd.read_csv(config['SAMPLE_SHEET'], na_filter=False)
 
 META = META[list(META['include'])] #remove undesired samples ('include'==False)
-META = META.iloc[1:150,:]
+# META = META.iloc[1:150,:]
 
 # Filter for samples with fastq's available
 META = META[list(META['GEO.format']=="fastq")]
