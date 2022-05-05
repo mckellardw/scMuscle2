@@ -55,11 +55,25 @@ rule fetch_genomes:
         """
 
 #############################################
-## generate reference
+## generate reference(s)
 #############################################
-rule get_fastqs:
+rule configure_STAR_ref:
     input:
-        S
+
+    output:
+
+    params:
+        TMPDIR=TMPDIR
+    threads:
+        config["THREADS"]
+    shell:
+        """
+        #TODO: script to generate STAR ref w/ fasta, gtf
+        """
+
+rule configure_kallisto_standard_ref:
+    input:
+
     output:
 
     params:

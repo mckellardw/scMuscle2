@@ -41,7 +41,7 @@ META = META[list(META['GEO.format']=="fastq")]
 SRR = list(META['SRR.accession'])
 # print(SRR)
 for i in range(0,len(SRR)):
-    SRR[i] = SRR[i].split("; ")
+    SRR[i] = SRR[i].split(";")
 SRR = list(chain(*SRR))
 
 # print(SRR[range(1,12)])
@@ -57,10 +57,10 @@ PFD = config["PFD"]
 ########################################################################################################
 rule all:
     input:
-        expand('{METADIR}/{sample}.json', METADIR=config['METADIR'], sample=SRR), # metadata files
-        expand('{METADIR}/merged_metadata.csv', METADIR=config['METADIR']),
         expand('{PRODIR}/data/fastqs/{sample}_R1.fastq.gz', PRODIR=config['PRODIR'], sample=SRR), # R1 fastq
-        expand('{PRODIR}/data/fastqs/{sample}_R2.fastq.gz', PRODIR=config['PRODIR'], sample=SRR) # R2 fastq
+        expand('{PRODIR}/data/fastqs/{sample}_R2.fastq.gz', PRODIR=config['PRODIR'], sample=SRR), # R2 fastq
+        expand('{METADIR}/{sample}.json', METADIR=config['METADIR'], sample=SRR), # metadata files
+        expand('{METADIR}/merged_metadata.csv', METADIR=config['METADIR'])
 
 #############################################
 ## Get metadata with `ffq`
@@ -121,6 +121,7 @@ rule prefetch:
 ##      https://github.com/rvalieris/parallel-fastq-dump
 #############################################
  # Convert SRA files to fastq with parallel-fastq-dump
+ #TODO: handle bam files
 rule get_fastqs:
     input:
         SRA_tmp = TMPDIR+"/{sample}.sra"
@@ -128,7 +129,7 @@ rule get_fastqs:
         R1_FQ = '{PRODIR}/data/fastqs/{sample}_1.fastq.gz',
         R2_FQ = '{PRODIR}/data/fastqs/{sample}_2.fastq.gz'
     params:
-        TMPDIR=TMPDIR,
+        TMPDIR = TMPDIR,
         OUTDIR = '{PRODIR}/data/fastqs/'
     threads:
         config["THREADS"]
@@ -144,6 +145,27 @@ rule get_fastqs:
         --split-files \
         --gzip
         """
+
+        # if UPLOADTYPE == "fastq":
+        #     shell(
+        #         """
+        #         echo "Converting SRA files to .fastq's for {wildcards.sample}"
+        #
+        #         {PFD} \
+        #         --sra-id {input.SRA_tmp} \
+        #         --threads {threads} \
+        #         --outdir {params.OUTDIR} \
+        #         --tmpdir {params.TMPDIR} \
+        #         --split-files \
+        #         --gzip
+        #         """
+        #     )
+        # elif UPLOADTYPE == "bam":
+        #     shell(
+        #         """
+        #         wget {sample$WGET_LINK}
+        #         """
+        #     )
 
 # Check fastq sizes, then rename/labem files for R1 & R2 (discard I1)
 #TODO- account for dual index (v3.1) samples!!
@@ -202,5 +224,3 @@ rule rename_fastqs:
 
             rename(rename_dict['R1'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R1.fastq.gz')
             rename(rename_dict['R2'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R2.fastq.gz')
-
-#TODO- add handling for .bam files

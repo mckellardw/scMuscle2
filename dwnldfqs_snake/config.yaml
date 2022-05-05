@@ -13,7 +13,7 @@ SAMPLE_SHEET: /workdir/dwm269/scMuscle2/scMuscle2_metadata_v1-0.csv
 THREADS: 4 # how many threads to use for parallel-fastq-dump (snakemake automatically parallelizes process using "snakemake -j {numTotalCores}")
 
 ########################################################################################################
-# Important directory file paths
+# Important directory paths
 ########################################################################################################
 TMPDIR: /workdir/dwm269/scMuscle2/tmp # DIRectory for TeMPorary files
 PRODIR: /workdir/dwm269/scMuscle2 # PROject DIRectory
