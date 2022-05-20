@@ -33,10 +33,12 @@ shell("mkdir -p {METADIR}")
 META = pd.read_csv(config['SAMPLE_SHEET'], na_filter=False)
 
 META = META[list(META['include'])] #remove undesired samples ('include'==False)
-# META = META.iloc[1:150,:]
 
 # Filter for samples with fastq's available
-META = META[list(META['GEO.format']=="fastq")]
+META = META[list(META['file.format']=="bam")]
+META = META[list(META['tissue']=="muscle")]
+
+# META = META.iloc[1:4,:] # subset to only download certain samples...
 
 SRR = list(META['SRR.accession'])
 # print(SRR)
@@ -52,13 +54,14 @@ SRR = list(chain(*SRR))
 FFQ = config["FFQ"]
 PREFETCH = config["PREFETCH"]
 PFD = config["PFD"]
+BAM2FQ = config["BAM2FQ"]
 
 ########################################################################################################
 ########################################################################################################
 rule all:
     input:
-        expand('{PRODIR}/data/fastqs/{sample}_R1.fastq.gz', PRODIR=config['PRODIR'], sample=SRR), # R1 fastq
-        expand('{PRODIR}/data/fastqs/{sample}_R2.fastq.gz', PRODIR=config['PRODIR'], sample=SRR), # R2 fastq
+        expand('{PRODIR}/data/fastqs/{sample}_{READ}.fastq.gz', PRODIR=config['PRODIR'], sample=SRR, READ=["R1", "R2"]), # R1 fastq
+        expand('{TMPDIR}/{sample}.txt', TMPDIR=config['TMPDIR'], sample=SRR), #
         expand('{METADIR}/{sample}.json', METADIR=config['METADIR'], sample=SRR), # metadata files
         expand('{METADIR}/merged_metadata.csv', METADIR=config['METADIR'])
 
@@ -66,6 +69,7 @@ rule all:
 ## Get metadata with `ffq`
 #############################################
 # Download metadata for each individual SRR (run) ID
+## Info: https://github.com/pachterlab/ffq
 rule get_metadata:
     output:
         METAJSON = '{METADIR}/{sample}.json'
@@ -99,22 +103,52 @@ rule merge_metadata:
 #############################################
 ## prefetch (SRA-toolkit)
 #############################################
-# Download reads as an SRA file into a temporary directory, so they can be formatted as fastq's
+# Download reads as an SRA file into a temporary directory, so they can be formatted as .fastq's
+# Data uploaded as a .bam is downloaded in the original format (.bam file) which will later be converted to .fastq
 rule prefetch:
     output:
-        SRA_tmp = temp("{TMPDIR}/{sample}.sra")
+        SRA_check = temp("{TMPDIR}/{sample}.txt")
     params:
-        TMPDIR=TMPDIR
-    shell:
-        """
-        echo "Prefetching SRA files for {wildcards.sample}"
+        # TMPDIR=TMPDIR,
+        # SRA_tmp = "{TMPDIR}/{sample}.sra",
+        SRA_BAM = '{TMPDIR}/{sample}.bam',
+        UPLOADTYPE = lambda wildcards: \
+            META.loc[[wildcards.sample in srr_id for srr_id in META['SRR.accession']],"file.format"].values[0]
+    run:
+        if params.UPLOADTYPE == "fastq":
+            shell(
+                """
+                echo "Prefetching SRA files for {wildcards.sample}"
 
-        {PREFETCH} \
-        --verify yes \
-        --max-size 999999999999 \
-        --output-directory {params.TMPDIR} \
-        {wildcards.sample}
-        """
+                {PREFETCH} \
+                --verify yes \
+                --max-size 999999999999 \
+                --output-directory {TMPDIR} \
+                {wildcards.sample} \
+                && echo fastq > {output.SRA_check}
+                """
+            )
+        elif params.UPLOADTYPE == "bam":
+            #TODO- check for/remove extra files from SRA
+            shell(
+            #Downloaded bams are not readable....
+                """
+                cd {TMPDIR}
+
+                {PREFETCH} \
+                --verify yes \
+                --max-size 999999999999 \
+                --force ALL \
+                --output-directory {TMPDIR}/{wildcards.sample} \
+                --type all \
+                {wildcards.sample}
+
+                mv $(ls -a {TMPDIR}/{wildcards.sample}/*.bam) {TMPDIR}/{wildcards.sample}.bam
+                echo bam > {output.SRA_check}
+                """
+            )
+            # --output-file {SRA_BAM} \
+            #find {TMPDIR}/{wildcards.sample} -name
 
 #############################################
 ## parallel-fastq-dump
@@ -124,50 +158,59 @@ rule prefetch:
  #TODO: handle bam files
 rule get_fastqs:
     input:
-        SRA_tmp = TMPDIR+"/{sample}.sra"
+        SRA_check = TMPDIR+"/{sample}.txt"
     output:
         R1_FQ = '{PRODIR}/data/fastqs/{sample}_1.fastq.gz',
         R2_FQ = '{PRODIR}/data/fastqs/{sample}_2.fastq.gz'
     params:
-        TMPDIR = TMPDIR,
+        # TMPDIR = TMPDIR,
+        SRA_tmp = TMPDIR+'/{sample}.sra',
+        SRA_BAM = TMPDIR+'/{sample}.bam',
+        UPLOADTYPE = lambda wildcards: \
+            META.loc[[wildcards.sample in srr_id for srr_id in META['SRR.accession']],"file.format"].values[0],
+        # UPLOADTYPE="bam", #for debugging
         OUTDIR = '{PRODIR}/data/fastqs/'
     threads:
         config["THREADS"]
-    shell:
-        """
-        echo "Converting SRA files to .fastq's for {wildcards.sample}"
+    run:
+        if params.UPLOADTYPE == "fastq":
+            shell(
+                """
+                echo "Converting SRA files to .fastq's for {wildcards.sample}"
+                {PFD} \
+                --sra-id {params.SRA_tmp} \
+                --threads {threads} \
+                --outdir {params.OUTDIR} \
+                --tmpdir {TMPDIR} \
+                --split-files \
+                --gzip && \
+                rm {params.SRA_tmp}
+                """
+            )
+        elif params.UPLOADTYPE == "bam":
+            #TODO- remove extra files in {TMPDIR}/{wildcards.sample}/...
+            shell(
+                """
+                {BAM2FQ} \
+                --nthreads {threads} \
+                --reads-per-fastq=999999999999999 \
+                {params.SRA_BAM} \
+                {TMPDIR}/{wildcards.sample}/b2f/
 
-        {PFD} \
-        --sra-id {input.SRA_tmp} \
-        --threads {threads} \
-        --outdir {params.OUTDIR} \
-        --tmpdir {params.TMPDIR} \
-        --split-files \
-        --gzip
-        """
+                zcat $(find {TMPDIR}/{wildcards.sample}/b2f/ -name *R1*.fastq.gz) > {params.OUTDIR}/{wildcards.sample}_1.fastq
+                zcat $(find {TMPDIR}/{wildcards.sample}/b2f/ -name *R2*.fastq.gz) > {params.OUTDIR}/{wildcards.sample}_2.fastq
 
-        # if UPLOADTYPE == "fastq":
-        #     shell(
-        #         """
-        #         echo "Converting SRA files to .fastq's for {wildcards.sample}"
-        #
-        #         {PFD} \
-        #         --sra-id {input.SRA_tmp} \
-        #         --threads {threads} \
-        #         --outdir {params.OUTDIR} \
-        #         --tmpdir {params.TMPDIR} \
-        #         --split-files \
-        #         --gzip
-        #         """
-        #     )
-        # elif UPLOADTYPE == "bam":
-        #     shell(
-        #         """
-        #         wget {sample$WGET_LINK}
-        #         """
-        #     )
+                pigz -p {threads} {params.OUTDIR}/{wildcards.sample}_*.fastq
+                """
+            )
 
-# Check fastq sizes, then rename/labem files for R1 & R2 (discard I1)
+# {FFQ} --ncbi {sample} \
+# | xargs curl -o {PRODIR}/data/fastqs/{sample}.bam
+
+# Other option:
+# ffq --ftp SRR7276476 | grep -Eo '"url": "[^"]*"' | grep -o '"[^"]*"$' | xargs curl -O
+
+# Check fastq sizes, then rename/label files for R1 & R2 (discard I1)
 #TODO- account for dual index (v3.1) samples!!
 rule rename_fastqs:
     input:
@@ -176,51 +219,65 @@ rule rename_fastqs:
     output:
         R1_FQ = '{PRODIR}/data/fastqs/{sample}_R1.fastq.gz',
         R2_FQ = '{PRODIR}/data/fastqs/{sample}_R2.fastq.gz'
+    params:
+        OUTDIR = '{PRODIR}/data/fastqs/',
+        UPLOADTYPE = lambda wildcards: \
+            META.loc[[wildcards.sample in srr_id for srr_id in META['SRR.accession']],"file.format"].values[0]
     run:
-        # Check for file sizes (R2 is biggest, then R1, then I2 & I1)
-        if path.exists(f'{PRODIR}/data/fastqs/{wildcards.sample}_4.fastq.gz'):
-            sra_sizes = {
-                f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz'),
-                f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz'),
-                f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz'),
-                f'{PRODIR}/data/fastqs/{wildcards.sample}_4.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_4.fastq.gz')
-            }
-            rename_dict = {
-                'R2': max(sra_sizes),
-                'R1': list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-3])],
-                'I2': list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-2])],
-                'I1': min(sra_sizes)
-            }
+        #TODO- rewrite this into a function to clean up snakemake code...
+        if params.UPLOADTYPE == "fastq":
+            # Check for file sizes (R2 is biggest, then R1, then I2 & I1)
+            if path.exists(f'{PRODIR}/data/fastqs/{wildcards.sample}_4.fastq.gz'):
+                sra_sizes = {
+                    f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz'),
+                    f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz'),
+                    f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz'),
+                    f'{PRODIR}/data/fastqs/{wildcards.sample}_4.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_4.fastq.gz')
+                }
+                rename_dict = {
+                    'R2': max(sra_sizes),
+                    'R1': list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-3])],
+                    'I2': list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-2])],
+                    'I1': min(sra_sizes)
+                }
 
-            remove(rename_dict['I2'])
-            remove(rename_dict['I1'])
-            rename(rename_dict['R1'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R1.fastq.gz')
-            rename(rename_dict['R2'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R2.fastq.gz')
-        elif path.exists(f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz'):
-            sra_sizes = {
-                f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz'),
-                f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz'),
-                f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz')
-            }
-            rename_dict = {
-                'R2': max(sra_sizes),
-                'R1': list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-2])],
-                'I1': min(sra_sizes)
-            }
+                remove(rename_dict['I2'])
+                remove(rename_dict['I1'])
+                rename(rename_dict['R1'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R1.fastq.gz')
+                rename(rename_dict['R2'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R2.fastq.gz')
+            elif path.exists(f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz'):
+                sra_sizes = {
+                    f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz'),
+                    f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz'),
+                    f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_3.fastq.gz')
+                }
+                rename_dict = {
+                    'R2': max(sra_sizes),
+                    'R1': list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-2])],
+                    'I1': min(sra_sizes)
+                }
 
-            remove(rename_dict['I1'])
-            rename(rename_dict['R1'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R1.fastq.gz')
-            rename(rename_dict['R2'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R2.fastq.gz')
-        else:
-            sra_sizes = {
-                f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz'),
-                f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz')
-            }
+                remove(rename_dict['I1'])
+                rename(rename_dict['R1'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R1.fastq.gz')
+                rename(rename_dict['R2'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R2.fastq.gz')
+            else:
+                sra_sizes = {
+                    f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_1.fastq.gz'),
+                    f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz': path.getsize(f'{PRODIR}/data/fastqs/{wildcards.sample}_2.fastq.gz')
+                }
 
-            rename_dict = {
-                'R2': max(sra_sizes),
-                'R1': min(sra_sizes)
-            }
+                rename_dict = {
+                    'R2': max(sra_sizes),
+                    'R1': min(sra_sizes)
+                }
 
-            rename(rename_dict['R1'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R1.fastq.gz')
-            rename(rename_dict['R2'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R2.fastq.gz')
+                rename(rename_dict['R1'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R1.fastq.gz')
+                rename(rename_dict['R2'], f'{PRODIR}/data/fastqs/{wildcards.sample}_R2.fastq.gz')
+        elif params.UPLOADTYPE == "bam":
+            #rename R1 & R2 files (can use R1 and R2 from file names here, not dependent on file sizes)
+            shell(
+                """
+                mv {input.R1_FQ} {output.R1_FQ}
+                mv {input.R2_FQ} {output.R2_FQ}
+                """
+            )

@@ -25,3 +25,4 @@ METADIR: /workdir/dwm269/scMuscle2/metadata_ffq # METAdata DIRectory
 FFQ: ffq
 PREFETCH: prefetch
 PFD: parallel-fastq-dump
+BAM2FQ: ~/usr/bin/bamtofastq_1.4.1
