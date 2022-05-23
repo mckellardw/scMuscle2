@@ -33,10 +33,11 @@ shell("mkdir -p {METADIR}")
 META = pd.read_csv(config['SAMPLE_SHEET'], na_filter=False)
 
 META = META[list(META['include'])] #remove undesired samples ('include'==False)
+META = META[list(META['file.format']!="ERR")]
 
 # Filter for samples with fastq's available
-META = META[list(META['file.format']=="bam")]
-META = META[list(META['tissue']=="muscle")]
+# META = META[list(META['file.format']=="bam")]
+# META = META[list(META['tissue']=="muscle")]
 
 # META = META.iloc[1:4,:] # subset to only download certain samples...
 
@@ -45,8 +46,6 @@ SRR = list(META['SRR.accession'])
 for i in range(0,len(SRR)):
     SRR[i] = SRR[i].split(";")
 SRR = list(chain(*SRR))
-
-# print(SRR[range(1,12)])
 
 ########################################################################################################
 # Executables
@@ -61,7 +60,7 @@ BAM2FQ = config["BAM2FQ"]
 rule all:
     input:
         expand('{PRODIR}/data/fastqs/{sample}_{READ}.fastq.gz', PRODIR=config['PRODIR'], sample=SRR, READ=["R1", "R2"]), # R1 fastq
-        expand('{TMPDIR}/{sample}.txt', TMPDIR=config['TMPDIR'], sample=SRR), #
+        # expand('{TMPDIR}/{sample}.txt', TMPDIR=config['TMPDIR'], sample=SRR), # **Only use for debugging**
         expand('{METADIR}/{sample}.json', METADIR=config['METADIR'], sample=SRR), # metadata files
         expand('{METADIR}/merged_metadata.csv', METADIR=config['METADIR'])
 
@@ -124,12 +123,17 @@ rule prefetch:
                 --verify yes \
                 --max-size 999999999999 \
                 --output-directory {TMPDIR} \
-                {wildcards.sample} \
-                && echo fastq > {output.SRA_check}
+                {wildcards.sample}
+
+                if test -f "{TMPDIR}/{wildcards.sample}.sra"; then
+                    echo fastq > {output.SRA_check}
+                fi
+
                 """
             )
         elif params.UPLOADTYPE == "bam":
             #TODO- check for/remove extra files from SRA
+            #*Note- `--type all` downloads the original uploaded file(s); very important that the .bam is in its original format and that it was aligned w/ cellranger
             shell(
             #Downloaded bams are not readable....
                 """
@@ -155,7 +159,6 @@ rule prefetch:
 ##      https://github.com/rvalieris/parallel-fastq-dump
 #############################################
  # Convert SRA files to fastq with parallel-fastq-dump
- #TODO: handle bam files
 rule get_fastqs:
     input:
         SRA_check = TMPDIR+"/{sample}.txt"
@@ -191,6 +194,8 @@ rule get_fastqs:
             #TODO- remove extra files in {TMPDIR}/{wildcards.sample}/...
             shell(
                 """
+                rm -rf {TMPDIR}/{wildcards.sample}/b2f/
+
                 {BAM2FQ} \
                 --nthreads {threads} \
                 --reads-per-fastq=999999999999999 \
@@ -201,6 +206,8 @@ rule get_fastqs:
                 zcat $(find {TMPDIR}/{wildcards.sample}/b2f/ -name *R2*.fastq.gz) > {params.OUTDIR}/{wildcards.sample}_2.fastq
 
                 pigz -p {threads} {params.OUTDIR}/{wildcards.sample}_*.fastq
+
+                rm -r {TMPDIR}/{wildcards.sample}/b2f/
                 """
             )
 
