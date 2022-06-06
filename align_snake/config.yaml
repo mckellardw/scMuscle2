@@ -25,7 +25,8 @@ CB_WHITELIST: resources/barcodes_10x/3M-february-2018.txt # path to cell barcode
 ########################################################################################################
 
 TMPDIR: /workdir/dwm269/scMuscle2/tmp
-OUTDIR: /workdir/dwm269/scMuscle2/data/STARsolo/GRCh38p13
+OUTDIR: /workdir/dwm269/scMuscle2/data/STARsolo/
+REFDIR: /workdir/dwm269/scMuscle2/refs/STARsolo/
 # DATADIR: /workdir/dwm269/scMuscle2/fastqs
 
 ########################################################################################################
@@ -34,24 +35,8 @@ OUTDIR: /workdir/dwm269/scMuscle2/data/STARsolo/GRCh38p13
 #TODO - add umi_tools, etc
 STAR_EXEC: /programs/STAR/STAR #v2.7.9a
 FASTQC_EXEC: fastqc
-BAM2SPLITBW: /home/dwm269/DWM_utils/seq_utils/bam2splitBigWig.sh #Custom function in DWM_utils that splits a bam file by strand and converts it into bigwig format
-FASTX_COLLAPSER: fastx_collapser
-BLASTDB: /shared_data/genome_db/BLAST_NCBI # path to where the nt BLAST database is stored
-PICARD_EXEC: /home/dwm269/miniconda3/envs/STARsolo/share/picard-2.26.10-0/picard.jar
-
-########################################################################################################
-# Resources - file paths
-########################################################################################################
-#TODO
-### Mouse ###
-# STAR_REF: /workdir/dwm269/genomes/mm39_all/STAR_GRCm39_GENCODEM28 # path to STAR-formatted reference genome
-# GENES_GTF: /workdir/dwm269/genomes/mm39_all/GENCODE_M28/gencode.vM28.chr_patch_hapl_scaff.annotation.gtf
-# STAR_MIRBASE_REF: /workdir/dwm269/genomes/mm39_all/STAR_mirbase_mirge
-# SPECIES: mouse # species passed to mirge3.0
-# MIRGE_LIB: /home/dwm269/usr/bin/miRge3_Lib
-
-### Human ###
-STAR_REF: /workdir/dwm269/genomes/GRCh38_all/GRCh38p13_STAR # path to STAR-formatted reference genome
-GENES_GTF: /workdir/dwm269/genomes/GRCh38_all/GENCODE_GRCh38p13/gencode.v38.chr_patch_hapl_scaff.annotation.gtf
-SPECIES: human # species passed to mirge3.0
-MIRGE_LIB: /home/dwm269/usr/bin/miRge3_Lib
+GGET_EXEC: gget
+# BAM2SPLITBW: /home/dwm269/DWM_utils/seq_utils/bam2splitBigWig.sh #Custom function in DWM_utils that splits a bam file by strand and converts it into bigwig format
+# FASTX_COLLAPSER: fastx_collapser
+# BLASTDB: /shared_data/genome_db/BLAST_NCBI # path to where the nt BLAST database is stored
+# PICARD_EXEC: /home/dwm269/miniconda3/envs/STARsolo/share/picard-2.26.10-0/picard.jar

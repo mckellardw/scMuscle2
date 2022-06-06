@@ -1,9 +1,9 @@
 ########################################################################################################
-# STARsolo_10x
+# align_snake
 #   Snakemake workflow to use STARsolo to align and quantify 10x Chromium datasets
 #   v1.0
 #   Written by David McKellar
-#   Last edited: 5/10/21, DWM
+#   Last edited: /  /  , DWM
 ########################################################################################################
 
 # import pdb
@@ -22,7 +22,7 @@ TMPDIR = config['TMPDIR']
 OUTDIR = config['OUTDIR']
 
 ########################################################################################################
-# Variables and references
+# Metadata
 ########################################################################################################
 META = pd.read_csv(config['SAMPLE_SHEET'], na_filter=False)
 META = META[list(META['include'])] #remove undesired samples ('include'==False)
@@ -35,43 +35,54 @@ META = META[list(META['include'])] #remove undesired samples ('include'==False)
 
 SRR = list(META['SRR.accession'])
 for i in range(0,len(SRR)):
-    SRR[i] = SRR[i].split(";")
+    SRR[i] = SRR[i].split(';')
 SRR = list(chain(*SRR))
 
 #~~~~ TODO
-SAMPLES = list(pd.read_csv(config['SAMPLE_SHEET'])['sampleID'])
+SAMPLES = META['GSM.accession'])
 
-R1_FQS = dict(zip(SAMPLES, list(pd.read_csv(config['SAMPLE_SHEET'])['fastq_R1'])))
-R2_FQS = dict(zip(SAMPLES, list(pd.read_csv(config['SAMPLE_SHEET'])['fastq_R2'])))
+# R1_FQS = dict(SAMPLES, list(zip()))
+# R2_FQS = dict(zip(SAMPLES, list(pd.read_csv(config['SAMPLE_SHEET'])['fastq_R2'])))
 
-STAR_REF = config['STAR_REF']
+########################################################################################################
+# Reference genome info
+########################################################################################################
+
+REFDIR = config['REFDIR'] #Directory for STAR references
+
+SPECIES = list(META['species']) #all lpwercase and underscores (no spaces!)
+SPECIES = [x.lower() for x in SPECIES]
+SPECIES = [x.replace(' ', '_') for x in SPECIES]
+print(SPECIES)
 
 ########################################################################################################
 # Executables
 ########################################################################################################
 STAR_EXEC = config['STAR_EXEC']
+GGET_EXEC = config['GGET']
+#TODO- samtools, fastqc, etc
 
 ########################################################################################################
 rule all:
     input:
         # expand('{OUTDIR}/{sample}/Solo.out/Gene/filtered/matrix.mtx', OUTDIR=config['OUTDIR'], sample=SAMPLES),
         # expand('{OUTDIR}/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai', OUTDIR=config['OUTDIR'], sample=SAMPLES), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
-        expand('{OUTDIR}/{sample}/Aligned.sortedByCoord.out.bam.bai', OUTDIR=config['OUTDIR'], sample=SAMPLES), #non-deduplicated .bam; used for saturation estimation
-        expand('{OUTDIR}/{sample}/preTrim_fastqc_R2_out', OUTDIR=config['OUTDIR'], sample=SAMPLES), # raw R2 fastQC results
-        expand('{OUTDIR}/{sample}/postTrim_fastqc_R2_out', OUTDIR=config['OUTDIR'], sample=SAMPLES), # adapter/polyA/ployG-trimmed R2 fastQC results
-        expand('{OUTDIR}/{sample}/postTrim_FastQC_R2_lengthFiltered', OUTDIR=config['OUTDIR'], sample=SAMPLES),
-        expand('{OUTDIR}/{sample}/cutadapt_polyA_report.txt', OUTDIR=config['OUTDIR'], sample=SAMPLES),
-        expand('{OUTDIR}/{sample}/cutadapt_polyG_report.txt', OUTDIR=config['OUTDIR'], sample=SAMPLES),
-        expand('{OUTDIR}/{sample}/qualimap_out/qualimapReport.html', OUTDIR=config['OUTDIR'], sample=SAMPLES), # alignment QC qith qualimap plotgardener)
+        # expand('{OUTDIR}/{sample}/Aligned.sortedByCoord.out.bam.bai', OUTDIR=config['OUTDIR'], sample=SAMPLES), #non-deduplicated .bam; used for saturation estimation
+        # expand('{OUTDIR}/{sample}/preTrim_fastqc_R2_out', OUTDIR=config['OUTDIR'], sample=SAMPLES), # raw R2 fastQC results
+        # expand('{OUTDIR}/{sample}/postTrim_fastqc_R2_out', OUTDIR=config['OUTDIR'], sample=SAMPLES), # adapter/polyA/ployG-trimmed R2 fastQC results
+        # expand('{OUTDIR}/{sample}/postTrim_FastQC_R2_lengthFiltered', OUTDIR=config['OUTDIR'], sample=SAMPLES),
+        # expand('{OUTDIR}/{sample}/qualimap_out/qualimapReport.html', OUTDIR=config['OUTDIR'], sample=SAMPLES), # alignment QC qith qualimap plotgardener)
 
-        expand('{OUTDIR}/{sample}/Unmapped_fastqc_out', OUTDIR=config['OUTDIR'], sample=SAMPLES), #fastQC results for unmapped reads
-        expand('{OUTDIR}/{sample}/Solo.out/Gene/filtered/matrix.mtx.gz', OUTDIR=config['OUTDIR'], sample=SAMPLES), # count mats
+        # expand('{OUTDIR}/{sample}/Unmapped_fastqc_out', OUTDIR=config['OUTDIR'], sample=SAMPLES), #fastQC results for unmapped reads
+        # expand('{OUTDIR}/{sample}/Solo.out/Gene/filtered/matrix.mtx.gz', OUTDIR=config['OUTDIR'], sample=SAMPLES), # count mats
+        expand('{REFDIR}/{SPECIES}/SAindex', REFDIR=config['REFDIR'], SPECIES=SPECIES) # Reference genomes
 
 #############################################
 ## Pre-alignment set up
 #############################################
 # Unzip the whitelist file if it hasn't been done yet
-rule gunzipWhitelist:
+#TODO Add multiple whitelists, or just manually unzip them?
+rule gunzipWhitelists:
     input:
         config['CB_WHITELIST']+'.gz'
     output:
@@ -79,6 +90,33 @@ rule gunzipWhitelist:
     shell:
         """
         gunzip {input}
+        """
+
+# Build reference genomes for STARsolo alignment/quantification
+rule build_refs:
+    input:
+        config['CB_WHITELIST']+'.gz'
+    output:
+        expand('{REFDIR}/{SPECIES}/SAindex', REFDIR=config['REFDIR'], SPECIES=SPECIES) # Reference genomes
+    params:
+        # SPECIES=SPECIES
+    shell:
+        """
+        mkdir -p {REFDIR}/{SPECIES}
+        cd {REFDIR}/{SPECIES}
+
+        {GGET_EXEC} ref \
+        --species {SPECIES} \
+        --out {REFDIR}/{SPECIES} \
+        --which gtf dna
+
+        {STAR_EXEC} \
+        --runThreadN {threads} \
+        --runMode genomeGenerate \
+        --genomeDir {REFDIR}/{SPECIES} \
+        --genomeFastaFiles $(ls - t {REFDIR}/{SPECIES}/*.fa) \
+        --sjdbGTFfile $(ls -t {REFDIR}/{SPECIES}/*.gtf) \
+        --sjdbGTFfeatureExon exon
         """
 
 #############################################
@@ -205,25 +243,6 @@ rule postTrim_FastQC_R2:
         {input.FINAL_R2_FQ}
         """
 
-rule postTrim_FastQC_R2_lengthFiltered:
-    input:
-        FINAL_R2_FQ = '{OUTDIR}/{sample}/tmp/{sample}_R2_final_filtered.fq.gz'
-    output:
-        fastqcDir = directory('{OUTDIR}/{sample}/postTrim_FastQC_R2_lengthFiltered')
-        # fastqcReport = ''
-    threads:
-        min([config['CORES'],8]) # 8 core max
-    shell:
-        """
-        mkdir -p {output.fastqcDir}
-        cd {output.fastqcDir}
-
-        fastqc \
-        --outdir {output.fastqcDir} \
-        --threads {threads} \
-        {input.FINAL_R2_FQ}
-        """
-
 #############################################
 ## Alignment
 #############################################
@@ -232,27 +251,26 @@ rule postTrim_FastQC_R2_lengthFiltered:
 
 rule STARsolo_align:
     input:
-        CB_WHITELIST = config['CB_WHITELIST'],
+        CB_WHITELIST = config['CB_WHITELIST'],#TODO- make chemistry-specific
+        expand('{REFDIR}/{SPECIES}/STAR_REF_FILE_NAME', REFDIR=config['REFDIR'], SPECIES=SPECIES), # Reference genomes
         FINAL_R1_FQ = '{OUTDIR}/{sample}/tmp/{sample}_R1_final.fq.gz',
         FINAL_R2_FQ = '{OUTDIR}/{sample}/tmp/{sample}_R2_final.fq.gz'
     output:
         SORTEDBAM = '{OUTDIR}/{sample}/Aligned.sortedByCoord.out.bam', #TODO: add temp()
         UNMAPPED1 = '{OUTDIR}/{sample}/Unmapped.out.mate1',
         UNMAPPED2 = '{OUTDIR}/{sample}/Unmapped.out.mate2',
-        GENE = directory('{OUTDIR}/{sample}/Solo.out/Gene'),
-        GENEFULL = directory('{OUTDIR}/{sample}/Solo.out/GeneFull'),
-        SJ = directory('{OUTDIR}/{sample}/Solo.out/SJ'),
-        VEL = directory('{OUTDIR}/{sample}/Solo.out/Velocyto'),
+        # GENE = directory('{OUTDIR}/{sample}/Solo.out/Gene'),
+        # GENEFULL = directory('{OUTDIR}/{sample}/Solo.out/GeneFull'),
+        # VEL = directory('{OUTDIR}/{sample}/Solo.out/Velocyto'),
         GENEMAT = '{OUTDIR}/{sample}/Solo.out/Gene/raw/matrix.mtx.gz',
         GENEFULLMAT = '{OUTDIR}/{sample}/Solo.out/GeneFull/raw/matrix.mtx.gz',
-        SJMAT = '{OUTDIR}/{sample}/Solo.out/SJ/raw/matrix.mtx.gz',
         VELMAT = '{OUTDIR}/{sample}/Solo.out/Velocyto/raw/spliced.mtx.gz'
     params:
         CHEMISTRY = lambda wildcards: \
-            META.loc[[wildcards.sample in srr_id for srr_id in META['SRR.accession']],"file.format"].values[0]
+            META.loc[[wildcards.sample in srr_id for srr_id in META['SRR.accession']],'file.format'].values[0],
         OUTDIR = config['OUTDIR'],
         STAR_EXEC = config['STAR_EXEC'],
-        STAR_REF = config['STAR_REF'],
+        STAR_REF = config['STAR_REF'],#TODO-species-specific!
         UMIlen = config['UMIlen'],
         MEMLIMIT = config['MEMLIMIT']
     threads:
@@ -286,32 +304,51 @@ rule STARsolo_align:
                 """
                 )
         elif params.CHEMISTRY == "3p_v3":
+            #TODO- check
+            shell(
+                """
+                mkdir -p {params.OUTDIR}/{wildcards.sample}
 
+                {params.STAR_EXEC} \
+                --runThreadN {threads} \
+                --outFileNamePrefix {params.OUTDIR}/{wildcards.sample}/ \
+                --outSAMtype BAM SortedByCoordinate \
+                --outSAMattributes NH HI nM AS CR UR CB UB GX GN sS sQ sM \
+                --readFilesCommand zcat \
+                --soloUMIlen {params.UMIlen} \
+                --genomeDir {params.STAR_REF} \
+                --genomeLoad LoadAndKeep \
+                --limitBAMsortRAM={params.MEMLIMIT} \
+                --readFilesIn {input.FINAL_R2_FQ} {input.FINAL_R1_FQ} \
+                --clipAdapterType CellRanger4 \
+                --outReadsUnmapped Fastx \
+                --outFilterMultimapNmax 50 \
+                --soloUMIlen 12 \
+                --soloType CB_UMI_Simple \
+                --soloCBwhitelist {input.CB_WHITELIST} \
+                --soloCellFilter EmptyDrops_CR \
+                --soloFeatures Gene GeneFull Velocyto \
+                --soloMultiMappers EM
+                """
+                )
         elif params.CHEMISTRY == "3p_v3.1":
-
+            #TODO- write...
+            print("Havent written cmd for v3.1 yet!")
         # compress outputs
-        shell(
-            """
-            gzip -qf {output.GENE}/raw/*
-            gzip -qf {output.GENE}/filtered/*
+        # shell(
+        #     """
+        #     gzip -qf {output.GENE}/raw/*
+        #     gzip -qf {output.GENE}/filtered/*
+        #
+        #     gzip -qf {output.GENEFULL}/raw/*
+        #     gzip -qf {output.GENEFULL}/filtered/*
+        #
+        #     gzip -qf {output.VEL}/raw/*
+        #     gzip -qf {output.VEL}/filtered/*
+        #     """
+        # )
 
-            gzip -qf {output.GENEFULL}/raw/*
-            gzip -qf {output.GENEFULL}/filtered/*
-
-            gzip -qf {output.SJ}/raw/*
-
-            gzip -qf {output.VEL}/raw/*
-            gzip -qf {output.VEL}/filtered/*
-            """
-        )
-
-        # --soloBarcodeReadLength 0 \
-        # --outFilterMismatchNoverLmax 0.05 \
-        # --outFilterMatchNmin 16 \
-        # --outFilterScoreMinOverLread 0 \
-        # --outFilterMatchNminOverLread 0 \
-
-
+# Index the .bam produced by STAR
 rule indexSortedBAM:
     input:
         SORTEDBAM = '{OUTDIR}/{sample}/Aligned.sortedByCoord.out.bam'
@@ -327,6 +364,7 @@ rule indexSortedBAM:
 
 # Remove reads that don't have a corrected spot/cell barcode with samtools, then remove duplicates w/ **umi-tools**
 ## High mem usage? Check here! https://umi-tools.readthedocs.io/en/latest/faq.html
+## **WARNING** this step is suuuupppppeeerrrr sloowwww. Don't run it if you don't need to!
 rule umitools_dedupBAM:
     input:
         CB_WHITELIST = config['CB_WHITELIST'],
@@ -405,7 +443,7 @@ rule qualimapQC:
         -gtf {params.GENES_GTF} \
         --sequencing-protocol strand-specific-forward \
         --sorted \
-        --java-mem-size=8G \
+        --java-mem-size=6G \
         -outdir {output.qualimapDir} \
         -outformat html
         """
@@ -414,7 +452,7 @@ rule qualimapQC:
 ## Unmapped read analyses
 #############################################
 
-# Run fastqc on unmapped reads; switch names because of STAR weirdness
+# Compress and run fastqc on unmapped reads; switch names because of STAR weirdness
 rule unmapped_fastqc:
     input:
         UNMAPPED1 = '{OUTDIR}/{sample}/Unmapped.out.mate1',
@@ -437,35 +475,4 @@ rule unmapped_fastqc:
         mkdir -p {output.FQC_DIR}
 
         {params.FASTQC_EXEC} -o {output.FQC_DIR} -t {threads} {output.UNMAPPED1_FQ} {output.UNMAPPED2_FQ}
-        """
-
-# Only BLAST R2, which contains the insert (converts .fq to .fa, then removes the .fa file)
-rule blast_unmapped:
-    input:
-        UNMAPPED2_FQ = '{OUTDIR}/{sample}/Unmapped.out.mate2.fastq.gz'
-    output:
-        BLAST_R2 = '{OUTDIR}/{sample}/Unmapped.out.mate2_blastResults.txt'
-    threads:
-        config['CORES']
-    params:
-        blastDB = config['BLASTDB'],
-        FASTX_COLLAPSER = config['FASTX_COLLAPSER'],
-        TMP_FA = '{OUTDIR}/{sample}/Unmapped.out.mate2.fa'
-    shell:
-        """
-        zcat {input.UNMAPPED2_FQ} | sed -n '1~4s/^@/>/p;2~4p' > {params.TMP_FA}
-
-        echo "Number of unmapped reads: "
-        grep -c ">" {params.TMP_FA}
-
-        vsearch --sortbysize {params.TMP_FA} --topn 1000 --output tmp.fa
-
-        blastn -db {params.blastDB}/nt \
-        -query tmp.fa \
-        -out {output.BLAST_R2} \
-        -outfmt '6 qseqid sseqid stitle pident length mismatch gapopen qstart qend sstart send evalue bitscore' \
-        -max_target_seqs 5 \
-        -num_threads {threads}
-
-        rm {params.TMP_FA}
         """
