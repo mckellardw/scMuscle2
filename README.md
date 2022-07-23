@@ -63,11 +63,16 @@ In the scMuscle project, we attempted to gain a better understanding of the cons
 - [fastqerq-dump](https://github.com/ncbi/sra-tools/wiki/HowTo:-fasterq-dump)
 - [parallel-fastq-dump](https://github.com/rvalieris/parallel-fastq-dump)
 
+## Single-cell analysis tools
+- [Cellbender](https://github.com/broadinstitute/CellBender) - Ambient RNA removal, [published](https://doi.org/10.1101/791699)
+- [Scrublet](https://github.com/swolock/scrublet) - doublet ID and removal, [published](https://www.sciencedirect.com/science/article/pii/S2405471218304745)
+- [Scanpy](TODO)
+-
 
 # **Workflow**
 1. Build reference genomes `bldrefs_snake`
 2. Download raw sequencing data for all samples `dwnldfqs_snake`
-3. Align sequencing data `solo_snake`
+3. Align sequencing data `align_snake`
 4. Perform annotation-free analysis `multiTAR`
 5. Integrate samples for each species separately (`Seurat`/`scanpy`/`Harmony`/etc)
 6. Cross-species integrative analysis (`SAMmap`)

@@ -9,12 +9,12 @@
 #       --readFilesIn Read2_Lane1.fastq.gz,Read2_Lane2.fastq.gz,Read2_Lane3.fastq.gz  Read1_Lane1.fastq.gz,Read1_Lane2.fastq.gz,Read1_Lane3.fastq.gz
 
 ## ~~~~~ sample sheets ~~~~~
-SAMPLE_SHEET: /home/dwm269/scMuscle2/scMuscle2_metadata_v1-0.csv
+SAMPLE_SHEET: /workdir/dwm269/scMuscle2/scMuscle2_metadata_v1-0.csv
 
 
 # STARsolo parameters
-CORES: 1 # how many cores to give for each process (snakemake automatically parallelizes process using "snakemake -j {numTotalCores}")
-MEMLIMIT: 50000000000 # limit in bytes
+CORES: 6 # how many cores to give for each process (snakemake automatically parallelizes process using "snakemake -j {numTotalCores}")
+MEMLIMIT: 32000000000 # limit in bytes
 UMIlen: 12 #v2=__, v3=12, visium=12
 
 ## Cell Barcode white lists
@@ -25,8 +25,8 @@ CB_WHITELIST: resources/barcodes_10x/3M-february-2018.txt # path to cell barcode
 ########################################################################################################
 
 TMPDIR: /workdir/dwm269/scMuscle2/tmp
-OUTDIR: /workdir/dwm269/scMuscle2/data/STARsolo/
-REFDIR: /workdir/dwm269/scMuscle2/refs/STARsolo/
+OUTDIR: /workdir/dwm269/scMuscle2/data/STARsolo
+REFDIR: /workdir/dwm269/scMuscle2/refs/STARsolo
 # DATADIR: /workdir/dwm269/scMuscle2/fastqs
 
 ########################################################################################################

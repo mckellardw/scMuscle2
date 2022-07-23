@@ -8,8 +8,8 @@ Preprocessing, alignment, QC, and quantification workflow for 10x Genomics data 
 - Info on sample_sheet format
 
 Dependencies & Sources:
-- `gget` [v0.0.24](https://github.com/pachterlab/gget)
-- `cutadapt` [v##]()
+- `gget` [v0.2.6](https://github.com/pachterlab/gget)
+- `cutadapt` [v3.4](https://cutadapt.readthedocs.io/en/stable/)
 - `fastqc` [v##]()
 - `STAR` [built w/ v2.7.10a](https://github.com/alexdobin/STAR)
 - `qualimap` [v.2.2.2-dev]()
