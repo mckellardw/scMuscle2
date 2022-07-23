@@ -1,14 +1,10 @@
 ########################################################################################################
 # align_snake
 #   Snakemake workflow to use STARsolo to align and quantify 10x Chromium datasets
-#   v1.0
-#   Written by David McKellar
-#   Last edited: /  /  , DWM
+#   Written by David W. McKellar
 ########################################################################################################
 
-# import pdb
 import pandas as pd
-# import glob
 
 ########################################################################################################
 # Config file
@@ -17,9 +13,10 @@ configfile:'config.yaml'
 ########################################################################################################
 # Directories and locations
 ########################################################################################################
-DATADIR = config['DATADIR']
-TMPDIR = config['TMPDIR']
-OUTDIR = config['OUTDIR']
+# DATADIR = config['DATADIR']
+TMPDIR = config['TMPDIR'] # temporary files
+OUTDIR = config['OUTDIR'] # outputs for STAR alignment, etc
+REFDIR = config['REFDIR'] # Output for reference genomes
 
 ########################################################################################################
 # Metadata
@@ -29,7 +26,7 @@ META = META[list(META['include'])] #remove undesired samples ('include'==False)
 
 # Filter for samples with fastq's available
 # META = META[list(META['file.format']=="bam")]
-# META = META[list(META['tissue']=="muscle")]
+META = META[list(META['tissue']=="muscle")]
 
 # META = META.iloc[1:4,:] # subset to only download certain samples...
 
@@ -39,7 +36,7 @@ for i in range(0,len(SRR)):
 SRR = list(chain(*SRR))
 
 #~~~~ TODO
-SAMPLES = META['GSM.accession'])
+SAMPLES = META['GSM.accession']
 
 # R1_FQS = dict(SAMPLES, list(zip()))
 # R2_FQS = dict(zip(SAMPLES, list(pd.read_csv(config['SAMPLE_SHEET'])['fastq_R2'])))
@@ -47,24 +44,23 @@ SAMPLES = META['GSM.accession'])
 ########################################################################################################
 # Reference genome info
 ########################################################################################################
-
-REFDIR = config['REFDIR'] #Directory for STAR references
-
-SPECIES = list(META['species']) #all lpwercase and underscores (no spaces!)
+SPECIES = list(META['species']) #all lowercase and underscores (no spaces!)
 SPECIES = [x.lower() for x in SPECIES]
 SPECIES = [x.replace(' ', '_') for x in SPECIES]
-print(SPECIES)
+SPECIES = pd.unique(SPECIES)
+# print(SPECIES)
 
 ########################################################################################################
 # Executables
 ########################################################################################################
 STAR_EXEC = config['STAR_EXEC']
-GGET_EXEC = config['GGET']
+GGET_EXEC = config['GGET_EXEC']
 #TODO- samtools, fastqc, etc
 
 ########################################################################################################
 rule all:
     input:
+        expand('{REFDIR}/{SPECIES}/SAindex', REFDIR=REFDIR, SPECIES=SPECIES) # Reference genomes
         # expand('{OUTDIR}/{sample}/Solo.out/Gene/filtered/matrix.mtx', OUTDIR=config['OUTDIR'], sample=SAMPLES),
         # expand('{OUTDIR}/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai', OUTDIR=config['OUTDIR'], sample=SAMPLES), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
         # expand('{OUTDIR}/{sample}/Aligned.sortedByCoord.out.bam.bai', OUTDIR=config['OUTDIR'], sample=SAMPLES), #non-deduplicated .bam; used for saturation estimation
@@ -75,49 +71,61 @@ rule all:
 
         # expand('{OUTDIR}/{sample}/Unmapped_fastqc_out', OUTDIR=config['OUTDIR'], sample=SAMPLES), #fastQC results for unmapped reads
         # expand('{OUTDIR}/{sample}/Solo.out/Gene/filtered/matrix.mtx.gz', OUTDIR=config['OUTDIR'], sample=SAMPLES), # count mats
-        expand('{REFDIR}/{SPECIES}/SAindex', REFDIR=config['REFDIR'], SPECIES=SPECIES) # Reference genomes
+
 
 #############################################
-## Pre-alignment set up
+## Generate references w/ `gget`
 #############################################
 # Unzip the whitelist file if it hasn't been done yet
-#TODO Add multiple whitelists, or just manually unzip them?
-rule gunzipWhitelists:
-    input:
-        config['CB_WHITELIST']+'.gz'
-    output:
-        config['CB_WHITELIST']
-    shell:
-        """
-        gunzip {input}
-        """
+#TODO: change to download from somehwere? maybe look for a wget link?
+#TODO: include this in `resources/chemistry_sheet.csv`
+# rule gunzipWhitelists:
+#     input:
+#         config['CB_WHITELIST']+'.gz'
+#     output:
+#         config['CB_WHITELIST']
+#     shell:
+#         """
+#         gunzip {input}
+#         """
 
 # Build reference genomes for STARsolo alignment/quantification
+#TODO: parallelize across species!
 rule build_refs:
-    input:
-        config['CB_WHITELIST']+'.gz'
     output:
-        expand('{REFDIR}/{SPECIES}/SAindex', REFDIR=config['REFDIR'], SPECIES=SPECIES) # Reference genomes
-    params:
-        # SPECIES=SPECIES
-    shell:
-        """
-        mkdir -p {REFDIR}/{SPECIES}
-        cd {REFDIR}/{SPECIES}
+        REF_METADATA = expand("{REFDIR}/{SPECIES}/metadata.json", REFDIR=config['REFDIR'], SPECIES=SPECIES),
+        REF = expand("{REFDIR}/{SPECIES}/SAindex", REFDIR=config['REFDIR'], SPECIES=SPECIES) # Reference genomes
+    run:
+        for S in SPECIES:
+            print(f"Downloading genome sequence and annotations for {S} to {REFDIR}/{S}")
+            shell(
+                f"""
+                mkdir -p {REFDIR}/{S}
+                cd {REFDIR}/{S}
 
-        {GGET_EXEC} ref \
-        --species {SPECIES} \
-        --out {REFDIR}/{SPECIES} \
-        --which gtf dna
+                {GGET_EXEC} ref \
+                --out {REFDIR}/{S}/metadata.json \
+                --which gtf,dna \
+                --download \
+                {S}
 
-        {STAR_EXEC} \
-        --runThreadN {threads} \
-        --runMode genomeGenerate \
-        --genomeDir {REFDIR}/{SPECIES} \
-        --genomeFastaFiles $(ls - t {REFDIR}/{SPECIES}/*.fa) \
-        --sjdbGTFfile $(ls -t {REFDIR}/{SPECIES}/*.gtf) \
-        --sjdbGTFfeatureExon exon
-        """
+                gunzip {REFDIR}/{S}/*.gz
+                """
+            )
+
+            # Build reference for STAR
+            print(f"Building STAR reference for {S}...\n")
+            shell(
+                f"""
+                {STAR_EXEC} \
+                --runThreadN {threads} \
+                --runMode genomeGenerate \
+                --genomeDir {REFDIR}/{S}/STAR \
+                --genomeFastaFiles $(ls - t {REFDIR}/{S}/*.fa) \
+                --sjdbGTFfile $(ls -t {REFDIR}/{S}/*.gtf) \
+                --sjdbGTFfeatureExon exon
+                """
+            )
 
 #############################################
 ## Trimming and FastQC
@@ -165,6 +173,7 @@ rule preTrim_FastQC_R2:
         {input.MERGED_R2_FQ}
         """
 
+# TSO & polyA trimming
 rule trimPolyA_R2:
     input:
         MERGED_R1_FQ = '{OUTDIR}/{sample}/tmp/{sample}_R1.fq.gz',
@@ -182,13 +191,12 @@ rule trimPolyA_R2:
         '{OUTDIR}/{sample}/cutadapt_polyA_report.txt'
     shell:
         """
-        # TSO & polyA trimming
         cutadapt \
         --minimum-length 10 \
         -A {params.THREE_PRIME_R2_POLYA} \
- 		-G {params.FIVE_PRIME_R2} \
+        -G {params.FIVE_PRIME_R2} \
         --pair-filter=any \
- 		-o {output.A_TRIMMED_R1_FQ} \
+        -o {output.A_TRIMMED_R1_FQ} \
         -p {output.A_TRIMMED_R2_FQ} \
         --cores {threads} \
         {input.MERGED_R1_FQ} {input.MERGED_R2_FQ} 1> {log}
@@ -252,9 +260,9 @@ rule postTrim_FastQC_R2:
 rule STARsolo_align:
     input:
         CB_WHITELIST = config['CB_WHITELIST'],#TODO- make chemistry-specific
-        expand('{REFDIR}/{SPECIES}/STAR_REF_FILE_NAME', REFDIR=config['REFDIR'], SPECIES=SPECIES), # Reference genomes
         FINAL_R1_FQ = '{OUTDIR}/{sample}/tmp/{sample}_R1_final.fq.gz',
-        FINAL_R2_FQ = '{OUTDIR}/{sample}/tmp/{sample}_R2_final.fq.gz'
+        FINAL_R2_FQ = '{OUTDIR}/{sample}/tmp/{sample}_R2_final.fq.gz',
+        REF_LIST = expand('{REFDIR}/{SPECIES}/STAR_REF_FILE_NAME', REFDIR=REFDIR, SPECIES=SPECIES) # Reference genomes
     output:
         SORTEDBAM = '{OUTDIR}/{sample}/Aligned.sortedByCoord.out.bam', #TODO: add temp()
         UNMAPPED1 = '{OUTDIR}/{sample}/Unmapped.out.mate1',
@@ -270,7 +278,7 @@ rule STARsolo_align:
             META.loc[[wildcards.sample in srr_id for srr_id in META['SRR.accession']],'file.format'].values[0],
         OUTDIR = config['OUTDIR'],
         STAR_EXEC = config['STAR_EXEC'],
-        STAR_REF = config['STAR_REF'],#TODO-species-specific!
+        # STAR_REF = config['STAR_REF'],#TODO-species-specific!
         UMIlen = config['UMIlen'],
         MEMLIMIT = config['MEMLIMIT']
     threads:
@@ -289,7 +297,7 @@ rule STARsolo_align:
                 --outSAMattributes NH HI nM AS CR UR CB UB GX GN sS sQ sM \
                 --readFilesCommand zcat \
                 --soloUMIlen {params.UMIlen} \
-                --genomeDir {params.STAR_REF} \
+                --genomeDir {params.REF_LIST} \
                 --genomeLoad LoadAndKeep \
                 --limitBAMsortRAM={params.MEMLIMIT} \
                 --readFilesIn {input.FINAL_R2_FQ} {input.FINAL_R1_FQ} \
@@ -429,7 +437,7 @@ rule qualimapQC:
         qualimapDir = directory('{OUTDIR}/{sample}/qualimap_out'),
         fastqcReport = '{OUTDIR}/{sample}/qualimap_out/qualimapReport.html'
     params:
-        GENES_GTF = config['GENES_GTF']
+        # GENES_GTF = config['GENES_GTF'] #TODO Pull from downloaded gget files
     threads:
         1
         # config['CORES']

@@ -25,15 +25,15 @@ CB_WHITELIST: resources/barcodes_10x/3M-february-2018.txt # path to cell barcode
 ########################################################################################################
 
 TMPDIR: /workdir/dwm269/scMuscle2/tmp
-OUTDIR: /workdir/dwm269/scMuscle2/data/STARsolo
-REFDIR: /workdir/dwm269/scMuscle2/refs/STARsolo
+OUTDIR: /workdir/dwm269/scMuscle2/data
+REFDIR: /workdir/dwm269/scMuscle2/refs
 # DATADIR: /workdir/dwm269/scMuscle2/fastqs
 
 ########################################################################################################
 # Executables - file paths
 ########################################################################################################
 #TODO - add umi_tools, etc
-STAR_EXEC: /programs/STAR/STAR #v2.7.9a
+STAR_EXEC: STAR #v2.7.10a
 FASTQC_EXEC: fastqc
 GGET_EXEC: gget
 # BAM2SPLITBW: /home/dwm269/DWM_utils/seq_utils/bam2splitBigWig.sh #Custom function in DWM_utils that splits a bam file by strand and converts it into bigwig format

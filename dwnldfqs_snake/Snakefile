@@ -75,6 +75,7 @@ rule get_metadata:
     shell:
         """
         {FFQ} -o {output.METAJSON} {wildcards.sample}
+        sleep 3
         """
 
 # Combine ffq-downloaded .json's into a big csv for parsing

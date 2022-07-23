@@ -7,7 +7,7 @@ Run snakemake from command line with total desired core usage (`-j num_threads`)
 snakemake -j 33 --latency 15 --restart-times 3
 ```
 
-I have also found that NCBI does not like when you query their databases too often, so if you get a `too many queries` error, just rerun the workflow.
+I have also found that NCBI does not like when you query their databases too often, so if you get a `too many queries` error, just rerun the Snakemake.
 
 ## Requirements
 - `parallel-fastq-dump` [link](https://github.com/rvalieris/parallel-fastq-dump)
