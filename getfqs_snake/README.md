@@ -1,4 +1,4 @@
-# `getfqs_snake`
+# `dwnldfqs_snake`
 
 ## Runtime info
 Run snakemake from command line with total desired core usage (`-j num_threads`) and increased latency wait time as well as restarts, because of delays from SRA (`--latency-wait`):

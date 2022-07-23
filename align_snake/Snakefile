@@ -95,6 +95,8 @@ rule build_refs:
     output:
         REF_METADATA = expand("{REFDIR}/{SPECIES}/metadata.json", REFDIR=config['REFDIR'], SPECIES=SPECIES),
         REF = expand("{REFDIR}/{SPECIES}/SAindex", REFDIR=config['REFDIR'], SPECIES=SPECIES) # Reference genomes
+    threads:
+        config['CORES_HI']
     run:
         for S in SPECIES:
             print(f"Downloading genome sequence and annotations for {S} to {REFDIR}/{S}")
@@ -121,9 +123,12 @@ rule build_refs:
                 --runThreadN {threads} \
                 --runMode genomeGenerate \
                 --genomeDir {REFDIR}/{S}/STAR \
-                --genomeFastaFiles $(ls - t {REFDIR}/{S}/*.fa) \
+                --genomeFastaFiles $(ls -t {REFDIR}/{S}/*.fa) \
                 --sjdbGTFfile $(ls -t {REFDIR}/{S}/*.gtf) \
                 --sjdbGTFfeatureExon exon
+
+                pigz -p {threads} $(ls -t {REFDIR}/{S}/*.fa)
+                pigz -p {threads} $(ls -t {REFDIR}/{S}/*.gtf)
                 """
             )
 
@@ -141,7 +146,7 @@ rule merge_fastqs:
         R1_FQ = lambda wildcards: R1_FQS[wildcards.sample],
         R2_FQ = lambda wildcards: R2_FQS[wildcards.sample]
     threads:
-        config['CORES']
+        config['CORES_LO']
     run:
         if len(params.R1_FQ.split(" "))==1 & len(params.R2_FQ.split(" "))==1: # shell for single fastq input
             shell("cp {params.R1_FQ} {output.MERGED_R1_FQ}")
@@ -160,8 +165,8 @@ rule preTrim_FastQC_R2:
         fastqcDir = directory('{OUTDIR}/{sample}/preTrim_fastqc_R2_out'),
         # fastqcReport = ''
     threads:
-        config['CORES']
-        # min([config['CORES'],8]) # 8 core max based on recommendations from trim_galore authors
+        config['CORES_LO']
+        # min([config['CORES_LO'],8]) # 8 core max based on recommendations from trim_galore authors
     shell:
         """
         mkdir -p {output.fastqcDir}
@@ -186,7 +191,7 @@ rule trimPolyA_R2:
         THREE_PRIME_R2_POLYA = "A"*100,
         FIVE_PRIME_R2 = "CCCATGTACTCTGCGTTGATACCACTGCTT" #10x TSO sequence
     threads:
-        config['CORES']
+        config['CORES_LO']
     log:
         '{OUTDIR}/{sample}/cutadapt_polyA_report.txt'
     shell:
@@ -215,8 +220,8 @@ rule trimPolyG_R2:
         THREE_PRIME_R2_POLYG = "G"*100,
         FIVE_PRIME_R2 = "AAGCAGTGGTATCAACGCAGAGTACATGGG" # rev-comp of 10x TSO sequence
     threads:
-        config['CORES']
-        # min([config['CORES'],8]) # 8 core max based on recommendations from trim_galore authors
+        config['CORES_LO']
+        # min([config['CORES_LO'],8]) # 8 core max based on recommendations from trim_galore authors
     log:
         log = '{OUTDIR}/{sample}/cutadapt_polyG_report.txt'
     shell:
@@ -239,7 +244,7 @@ rule postTrim_FastQC_R2:
         fastqcDir = directory('{OUTDIR}/{sample}/postTrim_fastqc_R2_out')
         # fastqcReport = ''
     threads:
-        min([config['CORES'],8]) # 8 core max
+        min([config['CORES_LO'],8]) # 8 core max
     shell:
         """
         mkdir -p {output.fastqcDir}
@@ -282,7 +287,7 @@ rule STARsolo_align:
         UMIlen = config['UMIlen'],
         MEMLIMIT = config['MEMLIMIT']
     threads:
-        config['CORES']
+        config['CORES_LO']
     run: #*NOTE* ``--soloBarcodeReadLength 0` should be removed to ensure read-length checking on BC read (R1) is performed
         # Chemistry-specific alignment w/ STARsolo
         if params.CHEMISTRY == "3p_v2":
@@ -363,7 +368,7 @@ rule indexSortedBAM:
     output:
         BAI = '{OUTDIR}/{sample}/Aligned.sortedByCoord.out.bam.bai'
     threads:
-        config['CORES']
+        config['CORES_LO']
     shell:
         """
         samtools index -@ {threads} {input.SORTEDBAM}
@@ -384,7 +389,7 @@ rule umitools_dedupBAM:
         OUTPUT_PREFIX='{OUTDIR}/{sample}/umitools_dedup/{sample}',
         # TMPBAM = '{OUTDIR}/{sample}/tmp.bam'
     threads:
-        config['CORES']
+        config['CORES_LO']
         #1
     log:
         '{OUTDIR}/{sample}/umitools_dedup/dedup.log'
@@ -419,7 +424,7 @@ rule umitools_indexDedupBAM:
     output:
         BAI = '{OUTDIR}/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai'
     threads:
-        config['CORES']
+        config['CORES_LO']
     shell:
         """
         samtools index -@ {threads} {input.SORTEDBAM}
@@ -440,7 +445,7 @@ rule qualimapQC:
         # GENES_GTF = config['GENES_GTF'] #TODO Pull from downloaded gget files
     threads:
         1
-        # config['CORES']
+        # config['CORES_LO']
     shell:
         """
         mkdir -p {output.qualimapDir}
@@ -472,7 +477,7 @@ rule unmapped_fastqc:
     params:
         FASTQC_EXEC = config['FASTQC_EXEC']
     threads:
-        config['CORES']
+        config['CORES_LO']
     shell:
         """
         mv {input.UNMAPPED1} {input.UNMAPPED2}.fastq
