@@ -24,19 +24,21 @@ CB_WHITELIST: resources/barcodes_10x/3M-february-2018.txt # path to cell barcode
 ########################################################################################################
 # Important directory file paths
 ########################################################################################################
-
+PRODIR: /workdir/dwm269/scMuscle2
 TMPDIR: /workdir/dwm269/scMuscle2/tmp
-OUTDIR: /workdir/dwm269/scMuscle2/data
+DATADIR: /workdir/dwm269/scMuscle2/data
 REFDIR: /workdir/dwm269/scMuscle2/refs
-# DATADIR: /workdir/dwm269/scMuscle2/fastqs
 
 ########################################################################################################
 # Executables - file paths
 ########################################################################################################
+# Paths to tools used in the pipeline
 #TODO - add umi_tools, etc
 STAR_EXEC: STAR #v2.7.10a
 FASTQC_EXEC: fastqc
 GGET_EXEC: gget
+TRIMGALORE_EXEC: trim_galore
+CUTADAPT_EXEC: cutadapt
 # BAM2SPLITBW: /home/dwm269/DWM_utils/seq_utils/bam2splitBigWig.sh #Custom function in DWM_utils that splits a bam file by strand and converts it into bigwig format
 # FASTX_COLLAPSER: fastx_collapser
 # BLASTDB: /shared_data/genome_db/BLAST_NCBI # path to where the nt BLAST database is stored
