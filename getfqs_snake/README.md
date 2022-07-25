@@ -17,7 +17,9 @@ conda activate getfqs_snake
 
 conda install -c bioconda gget ffq parallel-fastq-dump
 
-conda install -c conda-forge pigz pandas itertools
+conda install -c conda-forge pigz pandas
+
+conda install itertools
 ```
 
 
