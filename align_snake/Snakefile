@@ -38,12 +38,12 @@ META = META[list(META['include'])] #remove undesired SRRs ('include'==False)
 META = META[list(META['file.format']!="ERR")] #remove SRRs that didn't download properly [YET!]
 
 META = META[list(META['tissue']=="muscle")]
-META = META[list(META['species']=="Homo sapiens")]
+# META = META[list(META['species']=="Homo sapiens")]
 
 META = META[list(META['GSM.accession']!="NA")]
 META = META[list(META['GSM.accession']!="")]
 
-META = META.iloc[1:23,:] # subset to only download certain SRRs...
+# META = META.iloc[1:53,:] # subset to only download certain SRRs...
 
 # Get list of SRR IDs for fastq downloading
 SRR_LIST = list(META['SRR.accession'])
@@ -98,15 +98,15 @@ rule all:
         expand('{METADIR}/merged_metadata.csv', METADIR=config['METADIR']),
 
         expand('{REFDIR}/{SPECIES}/STAR/SAindex', REFDIR=REFDIR, SPECIES=SPECIES), # Reference genomes
-        # expand('{DATADIR}/align_out/STARsolo/{SRR}/Solo.out/Gene/filtered/matrix.mtx', DATADIR=config['DATADIR'], SRR=SRRS),
-        # expand('{DATADIR}/{SRR}/Aligned.sortedByCoord.dedup.out.bam.bai', DATADIR=config['DATADIR'], SRR=SRRS), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
-        # expand('{DATADIR}/{SRR}/Aligned.sortedByCoord.out.bam.bai', DATADIR=config['DATADIR'], SRR=SRRS), #non-deduplicated .bam; used for saturation estimation
+        # expand('{DATADIR}/align_out/STARsolo/{sample}/Solo.out/Gene/filtered/matrix.mtx', DATADIR=config['DATADIR'], sample=SAMPLES),
+        # expand('{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai', DATADIR=config['DATADIR'], sample=SAMPLES), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
+        # expand('{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam.bai', DATADIR=config['DATADIR'], sample=SAMPLES), #non-deduplicated .bam; used for saturation estimation
         expand('{DATADIR}/align_out/{sample}/preTrim_fastqc_R2_out', DATADIR=config['DATADIR'], sample=SAMPLES), # raw R2 fastQC results
         expand('{DATADIR}/align_out/{sample}/postTrim_fastqc_R2_out', DATADIR=config['DATADIR'], sample=SAMPLES) # adapter/polyA/ployG-trimmed R2 fastQC results
-        # expand('{DATADIR}/{SRR}/qualimap_out/qualimapReport.html', DATADIR=config['DATADIR'], SRR=SRRS), # alignment QC qith qualimap plotgardener)
+        # expand('{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html', DATADIR=config['DATADIR'], sample=SAMPLES), # alignment QC qith qualimap plotgardener)
 
-        # expand('{DATADIR}/{SRR}/Unmapped_fastqc_out', DATADIR=config['DATADIR'], SRR=SRRS), #fastQC results for unmapped reads
-        # expand('{DATADIR}/{SRR}/Solo.out/Gene/filtered/matrix.mtx.gz', DATADIR=config['DATADIR'], SRR=SRRS), # count mats
+        # expand('{DATADIR}/align_out/{sample}/Unmapped_fastqc_out', DATADIR=config['DATADIR'], sample=SAMPLES), #fastQC results for unmapped reads
+        # expand('{DATADIR}/align_out/{sample}/Solo.out/Gene/filtered/matrix.mtx.gz', DATADIR=config['DATADIR'], sample=SAMPLES), # count mats
 
 
 #############################################
@@ -250,7 +250,7 @@ rule get_fastqs:
                 zcat $(find {TMPDIR}/{wildcards.SRR}/b2f/ -name *R1*.fastq.gz) > {params.OUTDIR}/{wildcards.SRR}_1.fastq
                 zcat $(find {TMPDIR}/{wildcards.SRR}/b2f/ -name *R2*.fastq.gz) > {params.OUTDIR}/{wildcards.SRR}_2.fastq
 
-                pigz -p {threads} {params.OUTDIR}/{wildcards.SRR}_*.fastq
+                pigz -p{threads} {params.OUTDIR}/{wildcards.SRR}_*.fastq
 
                 rm -r {TMPDIR}/{wildcards.SRR}/b2f/
                 """
@@ -399,10 +399,10 @@ rule build_refs:
 # Merge .fastq files (in case more than one sesquencing run was performed)
 rule merge_fastqs:
     output:
-        MERGED_R1_FQ = temp('{DATADIR}/{sample}/tmp/{sample}_R1.fq.gz'),
-        MERGED_R2_FQ = temp('{DATADIR}/{sample}/tmp/{sample}_R2.fq.gz')
+        MERGED_R1_FQ = temp('{DATADIR}/align_out/{sample}/tmp/{sample}_R1.fq.gz'),
+        MERGED_R2_FQ = temp('{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz')
     params:
-        TMP_DIR = '{DATADIR}/{sample}/tmp',
+        TMP_DIR = '{DATADIR}/align_out/{sample}/tmp',
         R1_FQ = lambda wildcards: R1_FQs[wildcards.sample],
         R2_FQ = lambda wildcards: R2_FQs[wildcards.sample]
     threads:
@@ -416,12 +416,12 @@ rule merge_fastqs:
             shell("mkdir -p {params.TMP_DIR}")
             shell("zcat {params.R1_FQ} > {params.TMP_DIR}/{wildcards.sample}_R1.fq")
             shell("zcat {params.R2_FQ} > {params.TMP_DIR}/{wildcards.sample}_R2.fq")
-            shell("pigz -p {threads} {params.TMP_DIR}/*.fq")
+            shell("pigz -p{threads} {params.TMP_DIR}/{wildcards.sample}_R1.fq {params.TMP_DIR}/{wildcards.sample}_R2.fq")
 
 # Check QC of reads before trimming
 rule preTrim_FastQC_R2:
     input:
-        MERGED_R2_FQ = '{DATADIR}/{sample}/tmp/{sample}_R2.fq.gz'
+        MERGED_R2_FQ = '{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz'
     output:
         fastqcDir = directory('{DATADIR}/align_out/{sample}/preTrim_fastqc_R2_out'),
         # fastqcReport = ''
@@ -442,8 +442,8 @@ rule preTrim_FastQC_R2:
 # TSO & polyA trimming
 rule trimPolyA_R2:
     input:
-        MERGED_R1_FQ = '{DATADIR}/{sample}/tmp/{sample}_R1.fq.gz',
-        MERGED_R2_FQ = '{DATADIR}/{sample}/tmp/{sample}_R2.fq.gz'
+        MERGED_R1_FQ = '{DATADIR}/align_out/{sample}/tmp/{sample}_R1.fq.gz',
+        MERGED_R2_FQ = '{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz'
     output:
         A_TRIMMED_R1_FQ = temp('{DATADIR}/align_out/{sample}/tmp/{sample}_R1_Atrimmed.fq.gz'),
         A_TRIMMED_R2_FQ = temp('{DATADIR}/align_out/{sample}/tmp/{sample}_R2_Atrimmed.fq.gz')
@@ -591,9 +591,9 @@ rule STARsolo_align:
 # Index the .bam produced by STAR
 rule indexSortedBAM:
     input:
-        SORTEDBAM = '{DATADIR}/{sample}/Aligned.sortedByCoord.out.bam'
+        SORTEDBAM = '{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam'
     output:
-        BAI = '{DATADIR}/{sample}/Aligned.sortedByCoord.out.bam.bai'
+        BAI = '{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam.bai'
     threads:
         config['CORES_LO']
     shell:
@@ -608,18 +608,18 @@ rule indexSortedBAM:
 rule umitools_dedupBAM:
     input:
         CB_WHITELIST = config['CB_WHITELIST'],
-        SORTEDBAM = '{DATADIR}/{sample}/Aligned.sortedByCoord.out.bam'
+        SORTEDBAM = '{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam'
     output:
-        DEDUPBAM = '{DATADIR}/{sample}/Aligned.sortedByCoord.dedup.out.bam',
-        TMPBAM = temp('{DATADIR}/{sample}/tmp.bam')
+        DEDUPBAM = '{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam',
+        TMPBAM = temp('{DATADIR}/align_out/{sample}/tmp.bam')
     params:
-        OUTPUT_PREFIX='{DATADIR}/{sample}/umitools_dedup/{sample}',
-        # TMPBAM = '{DATADIR}/{sample}/tmp.bam'
+        OUTPUT_PREFIX='{DATADIR}/align_out/{sample}/umitools_dedup/{sample}',
+        # TMPBAM = '{DATADIR}/align_out/{sample}/tmp.bam'
     threads:
         config['CORES_LO']
         #1
     log:
-        '{DATADIR}/{sample}/umitools_dedup/dedup.log'
+        '{DATADIR}/align_out/{sample}/umitools_dedup/dedup.log'
     shell:
         """
         samtools view -1 -b \
@@ -647,9 +647,9 @@ rule umitools_dedupBAM:
 
 rule umitools_indexDedupBAM:
     input:
-        SORTEDBAM = '{DATADIR}/{sample}/Aligned.sortedByCoord.dedup.out.bam'
+        SORTEDBAM = '{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam'
     output:
-        BAI = '{DATADIR}/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai'
+        BAI = '{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai'
     threads:
         config['CORES_LO']
     shell:
@@ -664,10 +664,10 @@ rule umitools_indexDedupBAM:
 ## qualimap on aligned reads
 rule qualimapQC:
     input:
-        SORTEDBAM = '{DATADIR}/{sample}/Aligned.sortedByCoord.out.bam'
+        SORTEDBAM = '{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam'
     output:
-        qualimapDir = directory('{DATADIR}/{sample}/qualimap_out'),
-        fastqcReport = '{DATADIR}/{sample}/qualimap_out/qualimapReport.html'
+        qualimapDir = directory('{DATADIR}/align_out/{sample}/qualimap_out'),
+        fastqcReport = '{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html'
     params:
         # GENES_GTF = config['GENES_GTF'] #TODO Pull from downloaded gget files
     threads:
@@ -695,12 +695,12 @@ rule qualimapQC:
 # Compress and run fastqc on unmapped reads; switch names because of STAR weirdness
 rule unmapped_fastqc:
     input:
-        UNMAPPED1 = '{DATADIR}/{sample}/Unmapped.out.mate1',
-        UNMAPPED2 = '{DATADIR}/{sample}/Unmapped.out.mate2'
+        UNMAPPED1 = '{DATADIR}/align_out/{sample}/Unmapped.out.mate1',
+        UNMAPPED2 = '{DATADIR}/align_out/{sample}/Unmapped.out.mate2'
     output:
-        UNMAPPED1_FQ = '{DATADIR}/{sample}/Unmapped.out.mate1.fastq.gz',
-        UNMAPPED2_FQ = '{DATADIR}/{sample}/Unmapped.out.mate2.fastq.gz',
-        FQC_DIR = directory('{DATADIR}/{sample}/Unmapped_fastqc_out')
+        UNMAPPED1_FQ = '{DATADIR}/align_out/{sample}/Unmapped.out.mate1.fastq.gz',
+        UNMAPPED2_FQ = '{DATADIR}/align_out/{sample}/Unmapped.out.mate2.fastq.gz',
+        FQC_DIR = directory('{DATADIR}/align_out/{sample}/Unmapped_fastqc_out')
     params:
         FASTQC_EXEC = config['FASTQC_EXEC']
     threads:
