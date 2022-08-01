@@ -41,6 +41,7 @@ META = META[list(META['tissue']=="muscle")]
 # META = META[list(META['species']=="Homo sapiens")]
 
 META = META[list(META['GSM.accession']!="NA")]
+# print(META.shape)
 META = META[list(META['GSM.accession']!="")]
 
 # META = META.iloc[1:53,:] # subset to only download certain SRRs...
@@ -63,8 +64,14 @@ for GSM in SAMPLES:
     R1_FQs[GSM] = [DATADIR+"/fastqs/"+ID+"_R1.fastq.gz" for ID in TMP_SRR]
     R2_FQs[GSM] = [DATADIR+"/fastqs/"+ID+"_R2.fastq.gz" for ID in TMP_SRR]
 
-# Build dictionary of chemistries
-#TODO
+# Build dictionaries of chemistries & species to use for alignment
+CHEM_DICT = {}
+SPECIES_DICT = {}
+for i in range(0,META.shape[0]):
+    tmp_gsm = META["GSM.accesion"][i]
+    CHEM_DICT[tmp_gsm] = META[i,"chemistry"]
+    SPECIES_DICT[tmp_gsm] = META[i,"species"]
+
 
 ########################################################################################################
 # Reference genome info
@@ -124,6 +131,7 @@ rule get_metadata:
         # sleep 3
 
 # Combine ffq-downloaded .json's into a big csv for parsing
+#TODO- fix this...
 rule merge_metadata:
     input:
         expand('{METADIR}/{SRR}.json', METADIR=config['METADIR'], SRR=SRR_LIST)
@@ -351,6 +359,7 @@ rule rename_fastqs:
 
 # Build reference genomes for STARsolo alignment/quantification
 #TODO: parallelize across species!
+#TODO: add check for species files w/ gget; i.e. `gget.ref(species="NA", list_species=True)`
 rule build_refs:
     output:
         REF_METADATA = expand("{REFDIR}/{SPECIES}/STAR/metadata.json", REFDIR=config['REFDIR'], SPECIES=SPECIES),
