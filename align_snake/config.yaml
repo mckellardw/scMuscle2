@@ -14,7 +14,7 @@ SAMPLE_SHEET: /workdir/dwm269/scMuscle2/scMuscle2_metadata_v1-0.csv
 
 # STARsolo parameters
 CORES_HI: 36 # how many cores to give for each process (snakemake automatically parallelizes process using "snakemake -j  {numTotalCores}")
-CORES_LO: 8
+CORES_LO: 12
 MEMLIMIT: 99999999999 # limit in bytes
 
 ## Cell Barcode white lists
@@ -46,6 +46,10 @@ FASTQC_EXEC: fastqc
 GGET_EXEC: gget
 TRIMGALORE_EXEC: trim_galore
 CUTADAPT_EXEC: cutadapt
+SAMTOOLS_EXEC: samtools
+UMITOOLS_EXEC: umi_tools
+QUALIMAP_EXEC: qualimap
+
 # BAM2SPLITBW: /home/dwm269/DWM_utils/seq_utils/bam2splitBigWig.sh #Custom function in DWM_utils that splits a bam file by strand and converts it into bigwig format
 # FASTX_COLLAPSER: fastx_collapser
 # BLASTDB: /shared_data/genome_db/BLAST_NCBI # path to where the nt BLAST database is stored
