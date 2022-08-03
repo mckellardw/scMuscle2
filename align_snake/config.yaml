@@ -14,13 +14,12 @@ SAMPLE_SHEET: /workdir/dwm269/scMuscle2/scMuscle2_metadata_v1-0.csv
 
 # STARsolo parameters
 CORES_HI: 36 # how many cores to give for each process (snakemake automatically parallelizes process using "snakemake -j  {numTotalCores}")
-CORES_LO: 6
-MEMLIMIT: 32000000000 # limit in bytes
-UMIlen: 12 #v2=__, v3=12, visium=12
+CORES_LO: 8
+MEMLIMIT: 99999999999 # limit in bytes
 
 ## Cell Barcode white lists
 #TODO- move to chemistry sheet
-CB_WHITELIST: resources/barcodes_10x/3M-february-2018.txt # path to cell barcodes (CB) whitelist, gunzipped (without the .gz extension) - https://kb.10xgenomics.com/hc/en-us/articles/115004506263-What-is-a-barcode-whitelist-
+CHEMISTRY_SHEET: resources/chemistry_sheet.csv
 
 ########################################################################################################
 # Important directory file paths

@@ -1,6 +1,11 @@
 # **scMuscle2:** single-cell muscle transcriptomics across species
 In the first scMuscle project, we attempted to gain a better understanding of the constituent cell types of murine skeletal muscle. In this update, we aim to expand the scope, resolution, and depth of that view, and to improve the availability of our analyses to the greater muscle/single-cell communities.
 
+# How to include your data in scMuscle2
+We made a [quick google survey](https://docs.google.com/forms/d/1aueSLPLMHReFEX4Ie1K_o0WEciAznE0HAdOh4eIctVA/prefill) to simplify sharing metadata. Only publicly available data will be included in this study, so be sure to upload to GEO before you do anything else!
+
+Please send any questions to either David McKellar (dwm269@cornell.edu) or to our official scMuscle email address (scmuscle@cornell.edu).
+
 # **TODO:**
 - [ ] Finish updating sample list, including new meta data (species, etc)
   - [ ] Add the following metadata columns: age, tissue/muscle, disease/injury status
@@ -86,3 +91,18 @@ In the first scMuscle project, we attempted to gain a better understanding of th
 
 5. Integrate samples for each species separately (`Seurat`/`scanpy`/`Harmony`/etc)
 6. Cross-species integrative analysis (`SAMmap`)
+
+## "tissue" annotations
+[1] "cell line"                "joint"                   
+[3] "limb bud"                 "muscle"                  
+[5] "muscle and colon"         "organoid"                
+[7] "psc-derived"              "tendon"                  
+[9] "tumor"                    ""                        
+[11] "#TODO"                    "bone"                    
+[13] "cartilage"                "chondrocytes"            
+[15] "cranial neural crest"     "ESC"                     
+[17] "ESC-derived chondrocytes" "ligament"                
+[19] "lung"                     "MSC"                     
+[21] "peritoneum"               "skin"                    
+[23] "spinal cord"              "xenograft"               
+[25] "limb"    
