@@ -46,7 +46,7 @@ META = META[list(META['tissue']=="muscle")]
 META = META[list(META['GSM.accession']!="NA")]
 # print(META.shape)
 META = META[list(META['GSM.accession']!="")]
-META = META[list(META['chemistry']!="")]
+META = META[list(META['chemistry']=="3p_v2")]
 
 # META = META.iloc[1:3,:] # subset to only download certain SRRs...
 
@@ -91,7 +91,7 @@ SPECIES = pd.unique(SPECIES)
 ########################################################################################################
 FFQ_EXEC = config["FFQ_EXEC"]
 PREFETCH_EXEC = config["PREFETCH_EXEC"]
-PFD_EXEC = config["PFD_EXEC"]
+FQD_EXEC = config["FQD_EXEC"]
 BAM2FQ_EXEC = config["BAM2FQ_EXEC"]
 
 STAR_EXEC = config['STAR_EXEC']
@@ -107,7 +107,7 @@ QUALIMAP_EXEC = config['QUALIMAP_EXEC']
 ########################################################################################################
 rule all:
     input:
-        expand('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx.gz', DATADIR=config['DATADIR'], sample=SAMPLES),
+        expand('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx', DATADIR=config['DATADIR'], sample=SAMPLES),
         # expand('{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai', DATADIR=config['DATADIR'], sample=SAMPLES), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
         # expand('{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam.bai', DATADIR=config['DATADIR'], sample=SAMPLES), #non-deduplicated .bam; used for saturation estimation
         # expand('{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html', DATADIR=config['DATADIR'], sample=SAMPLES), # alignment QC qith qualimap plotgardener)
@@ -227,6 +227,7 @@ rule get_fastqs:
         R2_FQ = '{DATADIR}/fastqs/{SRR}_2.fastq.gz'
     params:
         # TMPDIR = TMPDIR,
+        MEMLIMIT = "4G",
         SRA_tmp = TMPDIR+'/{SRR}.sra',
         SRA_BAM = TMPDIR+'/{SRR}.bam',
         UPLOADTYPE = lambda wildcards: \
@@ -240,14 +241,16 @@ rule get_fastqs:
             shell(
                 f"""
                 echo "Converting SRA files to .fastq's for {wildcards.SRR}"
-                {PFD_EXEC} \
-                --sra-id {params.SRA_tmp} \
+                {FQD_EXEC} \
                 --threads {threads} \
+                --mem {params.MEMLIMIT} \
                 --outdir {params.OUTDIR} \
-                --tmpdir {TMPDIR} \
+                --temp {TMPDIR} \
                 --split-files \
-                --gzip && \
+                {params.SRA_tmp} && \
                 rm {params.SRA_tmp}
+
+                pigz -p {threads} {params.OUTDIR}/{wildcards.SRR}_*.fastq
                 """
             )
         elif params.UPLOADTYPE == "bam":
@@ -539,7 +542,7 @@ rule postTrim_FastQC_R2:
 #############################################
 # Make output directory, align fastqs, and generate raw/filtered feature/cell-barcode matrices
 #   Info for STARsolo command line paramaters: https://github.com/alexdobin/STAR/blob/master/docs/STARsolo.md
-
+#TODO: adjust queueing so that samples from the same species align at the same time, so that I can use `LoadAndKeep` setting for `--genomeLoad`
 rule STARsolo_align:
     input:
         FINAL_R1_FQ = '{DATADIR}/align_out/{sample}/tmp/{sample}_R1_final.fq.gz',
@@ -582,7 +585,7 @@ rule STARsolo_align:
             --outSAMattributes NH HI nM AS CR UR CB UB GX GN sS sQ sM \
             --readFilesCommand zcat \
             --genomeDir {STAR_REF} \
-            --genomeLoad LoadAndKeep \
+            --genomeLoad LoadAndRemove \
             --limitBAMsortRAM={params.MEMLIMIT} \
             --readFilesIn {input.FINAL_R2_FQ} {input.FINAL_R1_FQ} \
             --clipAdapterType CellRanger4 \
@@ -609,16 +612,18 @@ rule compress_STAR_outs:
         GENEMAT = '{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx.gz',
         GENEFULLMAT = '{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx.gz'
     params:
-        SOLODIR = '{DATADIR}/align_out/{sample}/STARsolo/Solo.out/'
-        # VELDIR = directory('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto'),
-        # GENEDIR = directory('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene'),
-        # GENEFULLDIR = directory('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull')
+        # SOLODIR = '{DATADIR}/align_out/{sample}/STARsolo/Solo.out/'
+        VELDIR = directory('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto'),
+        GENEDIR = directory('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene'),
+        GENEFULLDIR = directory('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull')
     threads:
         1
         # config['CORES_LO']
     shell:
         """
-        gzip -qf ${ls -d {params.SOLODIR}/*/*}
+        gzip -qf ${ls -d {params.VELDIR}/*}
+        gzip -qf ${ls -d {params.GENEDIR}/*}
+        gzip -qf ${ls -d {params.GENEFULLDIR}/*}
         """
             # f"""
             # gzip -qf {params.GENEDIR}/raw/*
@@ -658,6 +663,7 @@ rule umitools_dedupBAM:
         TMPBAM = temp('{DATADIR}/align_out/{sample}/tmp.bam')
     params:
         SAMTOOLS_EXEC = SAMTOOLS_EXEC,
+        UMITOOLS_EXEC = UMITOOLS_EXEC,
         OUTPUT_PREFIX='{DATADIR}/align_out/{sample}/umitools_dedup/{sample}',
         # TMPBAM = '{DATADIR}/align_out/{sample}/tmp.bam'
     threads:
@@ -677,7 +683,7 @@ rule umitools_dedupBAM:
         -@ {threads} \
         {output.TMPBAM}
 
-        umi_tools dedup \
+        {params.UMITOOLS_EXEC} dedup \
         -I {output.TMPBAM} \
         --extract-umi-method=tag \
         --umi-tag=UB \
@@ -685,10 +691,10 @@ rule umitools_dedupBAM:
         --method=unique \
         --per-cell \
         --unmapped-reads=discard \
-        --output-stats={params.OUTPUT_PREFIX} \
         --log {log} \
         -S {output.DEDUPBAM}
         """
+# --output-stats={params.OUTPUT_PREFIX} \
 
 rule umitools_indexDedupBAM:
     input:

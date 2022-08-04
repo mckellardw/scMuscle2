@@ -5,8 +5,10 @@ Preprocessing, alignment, QC, and quantification workflow for 10x Genomics singl
 #README TODO:
 - Write out pipeline details
 - Info on sample_sheet format
+- File tree for output
 
 ## **Dependencies:**
+- `sra-toolkit` [v3.0.0](https://github.com/ncbi/sra-tools/wiki/01.-Downloading-SRA-Toolkit)
 - `parallel-fastq-dump` [link](https://github.com/rvalieris/parallel-fastq-dump)
 - `ffq` [v0.2.1](https://github.com/pachterlab/ffq)
 - `bam2fastq` [v1.4.1](https://github.com/10XGenomics/bamtofastq/blob/master/README.md) ([link to download](https://github.com/10XGenomics/bamtofastq/releases))
@@ -25,7 +27,7 @@ Preprocessing, alignment, QC, and quantification workflow for 10x Genomics singl
 - `vsearch` [v#](https://github.com/torognes/vsearch)
 - `BLAST`
 
-#### Build `conda` environment
+#### **Build `conda` environment:**
 Be sure to [install conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) first!
 ```
 conda create --name align_snake
@@ -39,10 +41,10 @@ conda install  -c conda-forge pigz pandas
 conda install itertools
 ```
 
-## Pipeiline overview
+## **Pipeiline overview:**
 #TODO
 
-## Runtime info
+## **Runtime info:**
 Run snakemake from command line with total desired core usage (`-j num_threads`) and increased latency wait time as well as restarts, because of delays from SRA (`--latency-wait`):
 ```
 conda activate getfqs_snake

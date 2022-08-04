@@ -12,4 +12,4 @@ Lists, metadata, and other useful resources for aligning single-cell data
 |3p_v1    |resources/whitelists_TXG/737k-april-2014_rc.txt|#TODO          |#TODO        |#TODO         |
 
 ### `barcodes_10x`
-Cell barcode whitelists for each chemistry
+Cell barcode whitelists for each chemistry. [More info here](https://kb.10xgenomics.com/hc/en-us/articles/115004506263-What-is-a-barcode-whitelist-)

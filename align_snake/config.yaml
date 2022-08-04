@@ -37,8 +37,9 @@ REFDIR: /workdir/dwm269/scMuscle2/refs # Dir for references from each species
 #TODO - add umi_tools, etc
 
 FFQ_EXEC: ffq
-PREFETCH_EXEC: prefetch
-PFD_EXEC: parallel-fastq-dump
+PREFETCH_EXEC: /home/dwm269/usr/bin/sratoolkit.3.0.0-centos_linux64/bin/prefetch.3.0.0
+FQD_EXED: /home/dwm269/usr/bin/sratoolkit.3.0.0-centos_linux64/bin/fasterq-dump.3.0.0
+# PFD_EXEC: parallel-fastq-dump
 BAM2FQ_EXEC: ~/usr/bin/bamtofastq_1.4.1
 
 STAR_EXEC: STAR #v2.7.10a
