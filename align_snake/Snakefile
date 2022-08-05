@@ -542,6 +542,8 @@ rule postTrim_FastQC_R2:
 #############################################
 # Make output directory, align fastqs, and generate raw/filtered feature/cell-barcode matrices
 #   Info for STARsolo command line paramaters: https://github.com/alexdobin/STAR/blob/master/docs/STARsolo.md
+#  *Note:*
+#       - `--soloBarcodeReadLength 0` is included to account for files w/ R1 length > than CB+UMI
 #TODO: adjust queueing so that samples from the same species align at the same time, so that I can use `LoadAndKeep` setting for `--genomeLoad`
 rule STARsolo_align:
     input:
@@ -574,6 +576,8 @@ rule STARsolo_align:
         SOLOtype = CHEMISTRY_SHEET["STAR.soloType"][tmp_chemistry]
         CB_WHITELIST = CHEMISTRY_SHEET["whitelist"][tmp_chemistry]
 
+        tmp_MEMLIMIT = threads*int(params.MEMLIMIT)
+        print("Using up to " + str(tmp_MEMLIMIT/1000000000) + "Gb of memory...")
         shell(
             f"""
             mkdir -p {params.DATADIR}/align_out/{wildcards.sample}/STARsolo
@@ -586,7 +590,7 @@ rule STARsolo_align:
             --readFilesCommand zcat \
             --genomeDir {STAR_REF} \
             --genomeLoad LoadAndRemove \
-            --limitBAMsortRAM={params.MEMLIMIT} \
+            --limitBAMsortRAM={tmp_MEMLIMIT} \
             --readFilesIn {input.FINAL_R2_FQ} {input.FINAL_R1_FQ} \
             --clipAdapterType CellRanger4 \
             --outReadsUnmapped Fastx \
