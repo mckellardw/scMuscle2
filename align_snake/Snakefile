@@ -46,7 +46,7 @@ META = META[list(META['tissue']=="muscle")]
 META = META[list(META['GSM.accession']!="NA")]
 # print(META.shape)
 META = META[list(META['GSM.accession']!="")]
-META = META[list(META['chemistry']=="3p_v2")]
+META = META[list(META['chemistry']=="3p_v3")]
 
 # META = META.iloc[1:3,:] # subset to only download certain SRRs...
 
@@ -107,10 +107,12 @@ QUALIMAP_EXEC = config['QUALIMAP_EXEC']
 ########################################################################################################
 rule all:
     input:
-        expand('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx', DATADIR=config['DATADIR'], sample=SAMPLES),
         # expand('{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai', DATADIR=config['DATADIR'], sample=SAMPLES), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
-        # expand('{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam.bai', DATADIR=config['DATADIR'], sample=SAMPLES), #non-deduplicated .bam; used for saturation estimation
-        # expand('{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html', DATADIR=config['DATADIR'], sample=SAMPLES), # alignment QC qith qualimap plotgardener)
+        expand('{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz', DATADIR=config['DATADIR'], sample=SAMPLES), # compress unmapped reads
+        # expand('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx', DATADIR=config['DATADIR'], sample=SAMPLES), # count matrices
+
+        # expand('{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam.bai', DATADIR=config['DATADIR'], sample=SAMPLES), # index non-dedup .bam
+        # expand('{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html', DATADIR=config['DATADIR'], sample=SAMPLES), # alignment QC with qualimap)
 
         # expand('{DATADIR}/align_out/{sample}/Unmapped_fastqc_out', DATADIR=config['DATADIR'], sample=SAMPLES), #fastQC results for unmapped reads
         # expand('{DATADIR}/align_out/{sample}/Solo.out/Gene/filtered/matrix.mtx.gz', DATADIR=config['DATADIR'], sample=SAMPLES), # count mats
@@ -576,8 +578,8 @@ rule STARsolo_align:
         SOLOtype = CHEMISTRY_SHEET["STAR.soloType"][tmp_chemistry]
         CB_WHITELIST = CHEMISTRY_SHEET["whitelist"][tmp_chemistry]
 
-        tmp_MEMLIMIT = threads*int(params.MEMLIMIT)
-        print("Using up to " + str(tmp_MEMLIMIT/1000000000) + "Gb of memory...")
+        # tmp_MEMLIMIT = threads*int(params.MEMLIMIT) # tmp_MEMLIMIT/1000000000
+        print("Using up to " + str(params.MEMLIMIT) + " of memory...")
         shell(
             f"""
             mkdir -p {params.DATADIR}/align_out/{wildcards.sample}/STARsolo
@@ -589,8 +591,8 @@ rule STARsolo_align:
             --outSAMattributes NH HI nM AS CR UR CB UB GX GN sS sQ sM \
             --readFilesCommand zcat \
             --genomeDir {STAR_REF} \
-            --genomeLoad LoadAndRemove \
-            --limitBAMsortRAM={tmp_MEMLIMIT} \
+            --genomeLoad LoadAndKeep \
+            --limitBAMsortRAM={params.MEMLIMIT} \
             --readFilesIn {input.FINAL_R2_FQ} {input.FINAL_R1_FQ} \
             --clipAdapterType CellRanger4 \
             --outReadsUnmapped Fastx \
@@ -623,29 +625,31 @@ rule compress_STAR_outs:
     threads:
         1
         # config['CORES_LO']
-    shell:
-        """
-        gzip -qf ${ls -d {params.VELDIR}/*}
-        gzip -qf ${ls -d {params.GENEDIR}/*}
-        gzip -qf ${ls -d {params.GENEFULLDIR}/*}
-        """
-            # f"""
-            # gzip -qf {params.GENEDIR}/raw/*
-            # gzip -qf {params.GENEDIR}/filtered/*
-            #
-            # gzip -qf {params.GENEFULLDIR}/raw/*
-            # gzip -qf {params.GENEFULLDIR}/filtered/*
-            #
-            # gzip -qf {params.VELDIR}/raw/*
-            # gzip -qf {params.VELDIR}/filtered/*
-            # """
+    run:
+        shell(
+            f"""
+            gzip -qf {params.VELDIR}/*/*.tsv {params.VELDIR}/*/*.mtx
+            gzip -qf {params.GENEDIR}/*/*.tsv {params.GENEDIR}/*/*.mtx
+            gzip -qf {params.GENEFULLDIR}/*/*.tsv {params.GENEFULLDIR}/*/*.mtx
+            """
+        )
+        # f"""
+        # gzip -qf {params.GENEDIR}/raw/*
+        # gzip -qf {params.GENEDIR}/filtered/*
+        #
+        # gzip -qf {params.GENEFULLDIR}/raw/*
+        # gzip -qf {params.GENEFULLDIR}/filtered/*
+        #
+        # gzip -qf {params.VELDIR}/raw/*
+        # gzip -qf {params.VELDIR}/filtered/*
+        # """
 
 # Index the .bam produced by STAR
 rule indexSortedBAM:
     input:
-        SORTEDBAM = '{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam'
+        SORTEDBAM = '{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam'
     output:
-        BAI = '{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam.bai'
+        BAI = '{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam.bai'
     params:
         SAMTOOLS_EXEC = SAMTOOLS_EXEC
     threads:
@@ -655,6 +659,14 @@ rule indexSortedBAM:
         {params.SAMTOOLS_EXEC} index -@ {threads} {input.SORTEDBAM}
         """
 
+#############################################
+## Ambient RNA decontamination
+#############################################
+#TODO
+
+#############################################
+## UMI-aware .bam deduplication
+#############################################
 # Remove reads that don't have a corrected spot/cell barcode with samtools, then remove duplicates w/ **umi-tools**
 ## High mem usage? Check here! https://umi-tools.readthedocs.io/en/latest/faq.html
 ## **WARNING** this step is suuuupppppeeerrrr sloowwww. Don't run it if you don't need to!
@@ -668,36 +680,38 @@ rule umitools_dedupBAM:
     params:
         SAMTOOLS_EXEC = SAMTOOLS_EXEC,
         UMITOOLS_EXEC = UMITOOLS_EXEC,
-        OUTPUT_PREFIX='{DATADIR}/align_out/{sample}/umitools_dedup/{sample}',
+        OUTPUT_PREFIX='{DATADIR}/align_out/{sample}/umitools_dedup/{sample}'
         # TMPBAM = '{DATADIR}/align_out/{sample}/tmp.bam'
     threads:
         config['CORES_LO']
         #1
     log:
         '{DATADIR}/align_out/{sample}/umitools_dedup/dedup.log'
-    shell:
-        """
-        {params.SAMTOOLS_EXEC} view -1 -b \
-        -@ {threads} \
-        --tag-file CB:{input.CB_WHITELIST} \
-        {input.SORTEDBAM} \
-        > {output.TMPBAM}
+    run:
+        shell(
+            f"""
+            {params.SAMTOOLS_EXEC} view -1 -b \
+            -@ {threads} \
+            --tag-file CB:{input.CB_WHITELIST} \
+            {input.SORTEDBAM} \
+            > {output.TMPBAM}
 
-        {params.SAMTOOLS_EXEC} index \
-        -@ {threads} \
-        {output.TMPBAM}
+            {params.SAMTOOLS_EXEC} index \
+            -@ {threads} \
+            {output.TMPBAM}
 
-        {params.UMITOOLS_EXEC} dedup \
-        -I {output.TMPBAM} \
-        --extract-umi-method=tag \
-        --umi-tag=UB \
-        --cell-tag=CB \
-        --method=unique \
-        --per-cell \
-        --unmapped-reads=discard \
-        --log {log} \
-        -S {output.DEDUPBAM}
-        """
+            {params.UMITOOLS_EXEC} dedup \
+            -I {output.TMPBAM} \
+            --extract-umi-method=tag \
+            --umi-tag=UB \
+            --cell-tag=CB \
+            --method=unique \
+            --per-cell \
+            --unmapped-reads=discard \
+            --log {log} \
+            -S {output.DEDUPBAM} && rm {output.TMPBAM}
+            """
+        )
 # --output-stats={params.OUTPUT_PREFIX} \
 
 rule umitools_indexDedupBAM:
@@ -750,27 +764,45 @@ rule qualimapQC:
 ## Unmapped read analyses
 #############################################
 
-# Compress and run fastqc on unmapped reads; switch names because of STAR weirdness
+# Compress unmapped reads; switch names because of STAR weirdness
+rule unmapped_compress:
+    input:
+        UNMAPPED1 = '{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1',
+        UNMAPPED2 = '{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2'
+    output:
+        UNMAPPED1_FQ = '{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1.fastq.gz',
+        UNMAPPED2_FQ = '{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz'
+    threads:
+        config['CORES_LO']
+    run:
+        shell(
+            f"""
+            mv {input.UNMAPPED1} {input.UNMAPPED2}.fastq
+            mv {input.UNMAPPED2} {input.UNMAPPED1}.fastq
+
+            pigz -p {threads} {input.UNMAPPED1}.fastq {input.UNMAPPED2}.fastq
+            """
+        )
+
+# Run fastqc on unmapped reads
 rule unmapped_fastqc:
     input:
-        UNMAPPED1 = '{DATADIR}/align_out/{sample}/Unmapped.out.mate1',
-        UNMAPPED2 = '{DATADIR}/align_out/{sample}/Unmapped.out.mate2'
+        UNMAPPED1_FQ = '{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1.fastq.gz',
+        UNMAPPED2_FQ = '{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz'
     output:
-        UNMAPPED1_FQ = '{DATADIR}/align_out/{sample}/Unmapped.out.mate1.fastq.gz',
-        UNMAPPED2_FQ = '{DATADIR}/align_out/{sample}/Unmapped.out.mate2.fastq.gz',
         FQC_DIR = directory('{DATADIR}/align_out/{sample}/Unmapped_fastqc_out')
     params:
         FASTQC_EXEC = config['FASTQC_EXEC']
     threads:
         config['CORES_LO']
-    shell:
-        """
-        mv {input.UNMAPPED1} {input.UNMAPPED2}.fastq
-        mv {input.UNMAPPED2} {input.UNMAPPED1}.fastq
+    run:
+        shell(
+            f"""
+            mkdir -p {output.FQC_DIR}
 
-        pigz -p{threads} {input.UNMAPPED1}.fastq {input.UNMAPPED2}.fastq
-
-        mkdir -p {output.FQC_DIR}
-
-        {params.FASTQC_EXEC} -o {output.FQC_DIR} -t {threads} {output.UNMAPPED1_FQ} {output.UNMAPPED2_FQ}
-        """
+            {params.FASTQC_EXEC} \
+            -o {output.FQC_DIR} \
+            -t {threads} \
+            {output.UNMAPPED1_FQ} {output.UNMAPPED2_FQ}
+            """
+        )
