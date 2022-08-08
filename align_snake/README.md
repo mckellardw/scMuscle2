@@ -47,15 +47,80 @@ conda install itertools
 ## **Runtime info:**
 Run snakemake from command line with total desired core usage (`-j num_threads`) and increased latency wait time as well as restarts, because of delays from SRA (`--latency-wait`):
 ```
-conda activate getfqs_snake
-snakemake -j 33 --latency 15 --restart-times 3
+conda activate align_snake
+snakemake -j 33 --keep-going --latency 15 --restart-times 3
 ```
-I have found that NCBI does not like when you query their databases too often, so if you get a `too many queries` error, just rerun the Snakemake.
+I have found that NCBI does not like when you query their databases too often, so if you get a `too many queries` error, just rerun the Snakemake. Be sure to include the `--keep-going` or `-k` flag so that the Snakemake doesn't die after encountering the error.
 
 
 ## **Outputs:**
-#TODO: add complete `tree`
+File `tree` for `align_snake` outputs
+```
+{DATADIR}/{align_out}/{sample ID/GSM#######}
+├── cutadapt_polyA_report.txt
+├── cutadapt_polyG_report.txt
+├── postTrim_fastqc_R2_out
+│   ├── GSM2976780_R2_final_fastqc.html
+│   └── GSM2976780_R2_final_fastqc.zip
+├── preTrim_fastqc_R2_out
+│   ├── GSM2976780_R2_fastqc.html
+│   └── GSM2976780_R2_fastqc.zip
+├── STARsolo
+│   ├── Aligned.sortedByCoord.out.bam
+│   ├── Log.final.out
+│   ├── Log.out
+│   ├── Log.progress.out
+│   ├── SJ.out.tab
+│   ├── Solo.out
+│   │   ├── Barcodes.stats
+│   │   ├── Gene
+│   │   │   ├── Features.stats
+│   │   │   ├── filtered
+│   │   │   │   ├── barcodes.tsv.gz
+│   │   │   │   ├── features.tsv.gz
+│   │   │   │   └── matrix.mtx.gz
+│   │   │   ├── raw
+│   │   │   │   ├── barcodes.tsv.gz
+│   │   │   │   ├── features.tsv.gz
+│   │   │   │   ├── matrix.mtx.gz
+│   │   │   │   └── UniqueAndMult-EM.mtx.gz
+│   │   │   ├── Summary.csv
+│   │   │   └── UMIperCellSorted.txt
+│   │   ├── GeneFull
+│   │   │   ├── Features.stats
+│   │   │   ├── filtered
+│   │   │   │   ├── barcodes.tsv.gz
+│   │   │   │   ├── features.tsv.gz
+│   │   │   │   └── matrix.mtx.gz
+│   │   │   ├── raw
+│   │   │   │   ├── barcodes.tsv.gz
+│   │   │   │   ├── features.tsv.gz
+│   │   │   │   ├── matrix.mtx.gz
+│   │   │   │   └── UniqueAndMult-EM.mtx.gz
+│   │   │   ├── Summary.csv
+│   │   │   └── UMIperCellSorted.txt
+│   │   └── Velocyto
+│   │       ├── Features.stats
+│   │       ├── filtered
+│   │       │   ├── ambiguous.mtx.gz
+│   │       │   ├── barcodes.tsv.gz
+│   │       │   ├── features.tsv.gz
+│   │       │   ├── spliced.mtx.gz
+│   │       │   └── unspliced.mtx.gz
+│   │       ├── raw
+│   │       │   ├── ambiguous.mtx.gz
+│   │       │   ├── barcodes.tsv.gz
+│   │       │   ├── features.tsv.gz
+│   │       │   ├── spliced.mtx.gz
+│   │       │   └── unspliced.mtx.gz
+│   │       └── Summary.csv
+│   ├── Unmapped.out.mate1.fastq.gz
+│   └── Unmapped.out.mate2.fastq.gz
+└── tmp
+    ├── GSM2976780_R1_final.fq.gz
+    └── GSM2976780_R2_final.fq.gz
 
+```
 
 
 ## Useful resources on how to upload/download .fastq's from NCBI & other databases:

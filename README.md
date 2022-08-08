@@ -27,10 +27,12 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
     - [ ] others...
 - [ ] Single-cell analysis (~~Seurat~~ or scanpy?)
 - [ ] Benchmark integration w/ [scIB](https://github.com/theislab/scib)? Likely will take a ***LOT*** of compute
-- [ ] Figure out multi-species integration (https://github.com/atarashansky/self-assembling-manifold)
+- [ ] Pseudobulk analysis w/ [metacells](https://github.com/tanaylab/metacells)
+- [ ] Figure out multi-species integration [SAM](https://github.com/atarashansky/self-assembling-manifold)
 
 
 # Description of meta data
+#TODO: clean this up... convert to table?
 - **source.label** - shorthand for the publication from which this data was taken (first author's last name plus year final manuscript was published)
 - **sample** - sample ID, specific to each lane of a 10x Chromium run (string of characters with no spaces, no periods, and no hyphens/dashes)
 - **description** - Brief description of the sample. Not used by any pipeline.
