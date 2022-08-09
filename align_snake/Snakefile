@@ -12,18 +12,18 @@ from os import path, remove, rename
 ########################################################################################################
 # Config files
 ########################################################################################################
-configfile:'config.yaml'
+configfile:"config.yaml"
 
-CHEMISTRY_SHEET = pd.read_csv(config['CHEMISTRY_SHEET'], na_filter=False,index_col=0)#"resources/chemistry_sheet.csv"
+CHEMISTRY_SHEET = pd.read_csv(config["CHEMISTRY_SHEET"], na_filter=False,index_col=0)#"resources/chemistry_sheet.csv"
 
 ########################################################################################################
 # Directories and locations
 ########################################################################################################
-PRODIR = config['PRODIR']
-METADIR = config['METADIR']
-TMPDIR = config['TMPDIR'] # temporary files
-DATADIR = config['DATADIR'] # outputs for STAR alignment, etc
-REFDIR = config['REFDIR'] # Output for reference genomes
+PRODIR = config["PRODIR"]
+METADIR = config["METADIR"]
+TMPDIR = config["TMPDIR"] # temporary files
+DATADIR = config["DATADIR"] # outputs for STAR alignment, etc
+REFDIR = config["REFDIR"] # Output for reference genomes
 
 shell("mkdir -p {PRODIR}")
 shell("mkdir -p {TMPDIR}")
@@ -34,36 +34,36 @@ shell("mkdir -p {REFDIR}")
 ########################################################################################################
 # Metadata
 ########################################################################################################
-META = pd.read_csv(config['SAMPLE_SHEET'], na_filter=False)#sep='\t',encoding = "utf-8"
+META = pd.read_csv(config["SAMPLE_SHEET"], na_filter=False)#sep="\t",encoding = "utf-8"
 
-META = META[list(META['include'])] #remove undesired SRRs ('include'==False)
-META = META[list(META['file.format']!="ERR")] #remove SRRs that didn't download properly [YET!]
+META = META[list(META["include"])] #remove undesired SRRs ("include"==False)
+META = META[list(META["file.format"]!="ERR")] #remove SRRs that didn't download properly [YET!]
 
-META = META[list(META['tissue']=="muscle")]
-# META = META[list(META['tissue']!="")]
-# META = META[list(META['species']=="Homo sapiens")]
+META = META[list(META["tissue"]=="muscle")]
+# META = META[list(META["tissue"]!="")]
+# META = META[list(META["species"]=="Homo sapiens")]
 
-META = META[list(META['GSM.accession']!="NA")]
-# print(META.shape)
-META = META[list(META['GSM.accession']!="")]
-META = META[list(META['chemistry']=="3p_v3")]
+META = META[list(META["GSM.accession"]!="NA")]
+META = META[list(META["GSM.accession"]!="")]
+
+META = META[[x in ["3p_v2", "3p_v3", "3p_v3.1"] for x in META["chemistry"]]]
 
 # META = META.iloc[1:3,:] # subset to only download certain SRRs...
 
 # Get list of SRR IDs for fastq downloading
-SRR_LIST = list(META['SRR.accession'])
+SRR_LIST = list(META["SRR.accession"])
 for i in range(0,len(SRR_LIST)):
     SRR_LIST[i] = SRR_LIST[i].split(";")
 SRR_LIST = list(chain(*SRR_LIST))
 
 # Grab SRR IDs and their associated fastqs
-SAMPLES = META['GSM.accession'].unique()
+SAMPLES = META["GSM.accession"].unique()
 
 # Build dictionary of SRR IDs/fastq files
 R1_FQs = {}
 R2_FQs = {}
 for GSM in SAMPLES:
-    TMP_SRR = META['SRR.accession'][list(META["GSM.accession"]==GSM)].values[0]
+    TMP_SRR = META["SRR.accession"][list(META["GSM.accession"]==GSM)].values[0]
     TMP_SRR = TMP_SRR.split(";")
     R1_FQs[GSM] = [DATADIR+"/fastqs/"+ID+"_R1.fastq.gz" for ID in TMP_SRR]
     R2_FQs[GSM] = [DATADIR+"/fastqs/"+ID+"_R2.fastq.gz" for ID in TMP_SRR]
@@ -76,14 +76,14 @@ for i in range(0,META.shape[0]):
     CHEM_DICT[tmp_gsm] = list(META["chemistry"])[i]
 
     SPECIES_DICT[tmp_gsm] = list(META["species"])[i]
-    SPECIES_DICT[tmp_gsm] = SPECIES_DICT[tmp_gsm].lower().replace(' ', '_')
+    SPECIES_DICT[tmp_gsm] = SPECIES_DICT[tmp_gsm].lower().replace(" ", "_")
 
 ########################################################################################################
 # Reference genome info
 ########################################################################################################
-SPECIES = list(META['species']) #all lowercase and underscores (no spaces!)
+SPECIES = list(META["species"]) #all lowercase and underscores (no spaces!)
 SPECIES = [x.lower() for x in SPECIES]
-SPECIES = [x.replace(' ', '_') for x in SPECIES]
+SPECIES = [x.replace(" ", "_") for x in SPECIES]
 SPECIES = pd.unique(SPECIES)
 
 ########################################################################################################
@@ -94,37 +94,37 @@ PREFETCH_EXEC = config["PREFETCH_EXEC"]
 FQD_EXEC = config["FQD_EXEC"]
 BAM2FQ_EXEC = config["BAM2FQ_EXEC"]
 
-STAR_EXEC = config['STAR_EXEC']
-GGET_EXEC = config['GGET_EXEC']
-FASTQC_EXEC = config['FASTQC_EXEC']
-# TRIMGALORE_EXEC = config['TRIMGALORE_EXEC']
-CUTADAPT_EXEC = config['CUTADAPT_EXEC']
-SAMTOOLS_EXEC = config['SAMTOOLS_EXEC']
-UMITOOLS_EXEC = config['UMITOOLS_EXEC']
-QUALIMAP_EXEC = config['QUALIMAP_EXEC']
+STAR_EXEC = config["STAR_EXEC"]
+GGET_EXEC = config["GGET_EXEC"]
+FASTQC_EXEC = config["FASTQC_EXEC"]
+# TRIMGALORE_EXEC = config["TRIMGALORE_EXEC"]
+CUTADAPT_EXEC = config["CUTADAPT_EXEC"]
+SAMTOOLS_EXEC = config["SAMTOOLS_EXEC"]
+UMITOOLS_EXEC = config["UMITOOLS_EXEC"]
+QUALIMAP_EXEC = config["QUALIMAP_EXEC"]
 #TODO- samtools, etc
 
 ########################################################################################################
 rule all:
     input:
-        # expand('{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai', DATADIR=config['DATADIR'], sample=SAMPLES), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
-        expand('{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz', DATADIR=config['DATADIR'], sample=SAMPLES), # compress unmapped reads
-        # expand('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx', DATADIR=config['DATADIR'], sample=SAMPLES), # count matrices
+        # expand("{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai", DATADIR=config["DATADIR"], sample=SAMPLES), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
+        expand("{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz", DATADIR=config["DATADIR"], sample=SAMPLES), # compress unmapped reads
+        expand("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx.gz", DATADIR=config["DATADIR"], sample=SAMPLES), # compressed count matrices
 
-        # expand('{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam.bai', DATADIR=config['DATADIR'], sample=SAMPLES), # index non-dedup .bam
-        # expand('{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html', DATADIR=config['DATADIR'], sample=SAMPLES), # alignment QC with qualimap)
+        # expand("{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam.bai", DATADIR=config["DATADIR"], sample=SAMPLES), # index non-dedup .bam
+        # expand("{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html", DATADIR=config["DATADIR"], sample=SAMPLES), # alignment QC with qualimap)
 
-        # expand('{DATADIR}/align_out/{sample}/Unmapped_fastqc_out', DATADIR=config['DATADIR'], sample=SAMPLES), #fastQC results for unmapped reads
-        # expand('{DATADIR}/align_out/{sample}/Solo.out/Gene/filtered/matrix.mtx.gz', DATADIR=config['DATADIR'], sample=SAMPLES), # count mats
+        # expand("{DATADIR}/align_out/{sample}/Unmapped_fastqc_out", DATADIR=config["DATADIR"], sample=SAMPLES), #fastQC results for unmapped reads
+        # expand("{DATADIR}/align_out/{sample}/Solo.out/Gene/filtered/matrix.mtx.gz", DATADIR=config["DATADIR"], sample=SAMPLES), # count mats
 
-        expand('{DATADIR}/align_out/{sample}/preTrim_fastqc_R2_out', DATADIR=config['DATADIR'], sample=SAMPLES), # raw R2 fastQC results
-        expand('{DATADIR}/align_out/{sample}/postTrim_fastqc_R2_out', DATADIR=config['DATADIR'], sample=SAMPLES), # adapter/polyA/ployG-trimmed R2 fastQC results
+        expand("{DATADIR}/align_out/{sample}/preTrim_fastqc_R2_out", DATADIR=config["DATADIR"], sample=SAMPLES), # raw R2 fastQC results
+        expand("{DATADIR}/align_out/{sample}/postTrim_fastqc_R2_out", DATADIR=config["DATADIR"], sample=SAMPLES), # adapter/polyA/ployG-trimmed R2 fastQC results
 
-        # expand('{TMPDIR}/{SRR}.txt', TMPDIR=config['TMPDIR'], SRR=SRR), # **Only use for debugging**
-        expand('{REFDIR}/{SPECIES}/STAR/SAindex', REFDIR=REFDIR, SPECIES=SPECIES), # Reference genomes
-        expand('{METADIR}/{SRR}.json', METADIR=config['METADIR'], SRR=SRR_LIST), # metadata files
-        expand('{METADIR}/merged_metadata.csv', METADIR=config['METADIR']),
-        expand('{DATADIR}/fastqs/{SRR}_{READ}.fastq.gz', DATADIR=config['DATADIR'], SRR=SRR_LIST, READ=["R1", "R2"]) # fastqs
+        # expand("{TMPDIR}/{SRR}.txt", TMPDIR=config["TMPDIR"], SRR=SRR), # **Only use for debugging**
+        expand("{REFDIR}/{SPECIES}/STAR/SAindex", REFDIR=REFDIR, SPECIES=SPECIES), # Reference genomes
+        expand("{METADIR}/{SRR}.json", METADIR=config["METADIR"], SRR=SRR_LIST), # metadata files
+        expand("{METADIR}/merged_metadata.csv", METADIR=config["METADIR"])
+        # expand("{DATADIR}/fastqs/{SRR}_{READ}.fastq.gz", DATADIR=config["DATADIR"], SRR=SRR_LIST, READ=["R1", "R2"]) # fastqs
 
 #############################################
 ## Get metadata with `ffq`
@@ -133,27 +133,27 @@ rule all:
 ## Info: https://github.com/pachterlab/ffq
 rule get_metadata:
     output:
-        METAJSON = '{METADIR}/{SRR}.json'
+        METAJSON = "{METADIR}/{SRR}.json"
     shell:
         """
         {FFQ_EXEC} -o {output.METAJSON} {wildcards.SRR}
         """
         # sleep 3
 
-# Combine ffq-downloaded .json's into a big csv for parsing
+# Combine ffq-downloaded .json"s into a big csv for parsing
 #TODO- fix this...
 rule merge_metadata:
     input:
-        expand('{METADIR}/{SRR}.json', METADIR=config['METADIR'], SRR=SRR_LIST)
+        expand("{METADIR}/{SRR}.json", METADIR=config["METADIR"], SRR=SRR_LIST)
     output:
-        METACSV = '{METADIR}/merged_metadata.csv'
+        METACSV = "{METADIR}/merged_metadata.csv"
     run:
         df_list = list()
         for f in input: # load metadata files for each SRR
             with open(f) as data_file:
                 data = json.load(data_file)
             df = pd.json_normalize(data).T
-            tmp = df.index[0].split('.')[0] + '.' # Get SRR ID...
+            tmp = df.index[0].split(".")[0] + "." # Get SRR ID...
             df = df.rename(index = lambda x: x.strip(tmp)) # Remove SRR ID from row names
             df_list.append(df.T) # transpose so that each row is a different run
 
@@ -165,116 +165,83 @@ rule merge_metadata:
 #############################################
 ## prefetch (SRA-toolkit)
 #############################################
-# Download reads as an SRA file into a temporary directory, so they can be formatted as .fastq's
+# Download reads as an SRA file into a temporary directory, so they can be formatted as .fastq"s
 # Data uploaded as a .bam is downloaded in the original format (.bam file) which will later be converted to .fastq
 rule prefetch:
     output:
-        SRA_check = temp("{TMPDIR}/{SRR}.txt")
+        SRA = temp("{TMPDIR}/{SRR}.sra") # using this b/c of file differences between .fastq and .bam downloading
     params:
-        # TMPDIR=TMPDIR,
         # SRA_tmp = "{TMPDIR}/{SRR}.sra",
-        SRA_BAM = '{TMPDIR}/{SRR}.bam',
+        SRA_BAM = "{TMPDIR}/{SRR}.bam",
         UPLOADTYPE = lambda wildcards: \
-            META.loc[[wildcards.SRR in srr_id for srr_id in META['SRR.accession']],"file.format"].values[0]
+            META.loc[[wildcards.SRR in ID for ID in META["SRR.accession"]],"file.format"].values[0]
     run:
-        if params.UPLOADTYPE == "fastq":
             shell(
                 f"""
-                echo "Prefetching SRA files for {wildcards.SRR}"
-
                 {PREFETCH_EXEC} \
                 --verify yes \
                 --max-size 999999999999 \
-                --output-directory {TMPDIR} \
+                --output-file {output.SRA} \
                 {wildcards.SRR}
-
-                if test -f "{TMPDIR}/{wildcards.SRR}.sra"; then
-                    echo fastq > {output.SRA_check}
-                fi
                 """
             )
-        elif params.UPLOADTYPE == "bam":
-            #TODO- check for/remove extra files from SRA
-            #*Note- `--type all` downloads the original uploaded file(s); very important that the .bam is in its original format and that it was aligned w/ cellranger
-            shell(
-            #Downloaded bams are not readable....
-                f"""
-                cd {TMPDIR}
 
-                {PREFETCH_EXEC} \
-                --verify yes \
-                --max-size 999999999999 \
-                --force ALL \
-                --output-directory {TMPDIR}/{wildcards.SRR} \
-                --type all \
-                {wildcards.SRR}
-
-                mv $(ls -a {TMPDIR}/{wildcards.SRR}/*.bam) {TMPDIR}/{wildcards.SRR}.bam
-                echo bam > {output.SRA_check}
-                """
-            )
-            # --output-file {SRA_BAM} \
-            #find {TMPDIR}/{wildcards.SRR} -name
-
-#############################################
-## parallel-fastq-dump
-##      https://github.com/rvalieris/parallel-fastq-dump
-#############################################
- # Convert SRA files to fastq with parallel-fastq-dump
-rule get_fastqs:
+ # Convert SRA files to fastq with fasterq-dump
+rule convert_fastqs:
     input:
-        SRA_check = TMPDIR+"/{SRR}.txt"
+        SRA = TMPDIR+"/{SRR}.sra"
     output:
-        R1_FQ = '{DATADIR}/fastqs/{SRR}_1.fastq.gz',
-        R2_FQ = '{DATADIR}/fastqs/{SRR}_2.fastq.gz'
+        R1_FQ = temp("{DATADIR}/fastqs/{SRR}_1.fastq.gz"),
+        R2_FQ = temp("{DATADIR}/fastqs/{SRR}_2.fastq.gz")
     params:
         # TMPDIR = TMPDIR,
-        MEMLIMIT = "4G",
-        SRA_tmp = TMPDIR+'/{SRR}.sra',
-        SRA_BAM = TMPDIR+'/{SRR}.bam',
+        MEMLIMIT = "8G",
+        # SRA_tmp = "{TMPDIR}/{SRR}.sra",
+        # SRA_BAM = "{TMPDIR}/{SRR}.bam",
         UPLOADTYPE = lambda wildcards: \
-            META.loc[[wildcards.SRR in srr_id for srr_id in META['SRR.accession']],"file.format"].values[0],
-        # UPLOADTYPE="bam", #for debugging
-        OUTDIR = '{DATADIR}/fastqs/'
+            META.loc[[wildcards.SRR in ID for ID in META["SRR.accession"]],"file.format"].values[0],
+        OUTDIR = "{DATADIR}/fastqs"
     threads:
         config["CORES_LO"]
     run:
-        if params.UPLOADTYPE == "fastq":
-            shell(
-                f"""
-                echo "Converting SRA files to .fastq's for {wildcards.SRR}"
-                {FQD_EXEC} \
-                --threads {threads} \
-                --mem {params.MEMLIMIT} \
-                --outdir {params.OUTDIR} \
-                --temp {TMPDIR} \
-                --split-files \
-                {params.SRA_tmp} && \
-                rm {params.SRA_tmp}
+        # if params.UPLOADTYPE == "fastq":
+        shell(
+            f"""
+            echo "Converting SRA files to .fastq's for {wildcards.SRR}"
+            {FQD_EXEC} \
+            --threads {threads} \
+            --mem {params.MEMLIMIT} \
+            --outdir {params.OUTDIR} \
+            --temp {TMPDIR} \
+            --split-files \
+            {input.SRA}
 
-                pigz -p {threads} {params.OUTDIR}/{wildcards.SRR}_*.fastq
-                """
-            )
-        elif params.UPLOADTYPE == "bam":
-            #TODO- remove extra files in {TMPDIR}/{wildcards.SRR}/...
-            shell(
-                f"""
-                rm -rf {TMPDIR}/{wildcards.SRR}/b2f/
+            pigz -p {threads} {params.OUTDIR}/{wildcards.SRR}_*.fastq
+            """
+        )
+# && \
+# rm {params.SRA_tmp}
 
-                {BAM2FQ_EXEC} \
-                --nthreads {threads} \
-                --reads-per-fastq=999999999999999 \
-                {params.SRA_BAM} \
-                {TMPDIR}/{wildcards.SRR}/b2f/
-
-                zcat $(find {TMPDIR}/{wildcards.SRR}/b2f/ -name *R1*.fastq.gz) > {params.OUTDIR}/{wildcards.SRR}_1.fastq
-                zcat $(find {TMPDIR}/{wildcards.SRR}/b2f/ -name *R2*.fastq.gz) > {params.OUTDIR}/{wildcards.SRR}_2.fastq
-
-                pigz -p{threads} {params.OUTDIR}/{wildcards.SRR}_*.fastq
-
-                rm -r {TMPDIR}/{wildcards.SRR}/b2f/
-                """
-            )
+        # elif params.UPLOADTYPE == "bam":
+        #     #TODO- remove extra files in {TMPDIR}/{wildcards.SRR}/...
+        #     shell(
+        #         f"""
+        #         rm -rf {TMPDIR}/{wildcards.SRR}/b2f/
+        #
+        #         {BAM2FQ_EXEC} \
+        #         --nthreads {threads} \
+        #         --reads-per-fastq=999999999999999 \
+        #         {params.SRA_BAM} \
+        #         {TMPDIR}/{wildcards.SRR}/b2f/
+        #
+        #         zcat $(find {TMPDIR}/{wildcards.SRR}/b2f/ -name *R1*.fastq.gz) > {params.OUTDIR}/{wildcards.SRR}_1.fastq
+        #         zcat $(find {TMPDIR}/{wildcards.SRR}/b2f/ -name *R2*.fastq.gz) > {params.OUTDIR}/{wildcards.SRR}_2.fastq
+        #
+        #         pigz -p {threads} {params.OUTDIR}/{wildcards.SRR}_*.fastq
+        #
+        #         rm -r {TMPDIR}/{wildcards.SRR}/b2f/
+        #         """
+        #     )
 
 # {FFQ} --ncbi {SRR} \
 # | xargs curl -o {DATADIR}/fastqs/{SRR}.bam
@@ -287,96 +254,86 @@ rule get_fastqs:
 #TODO- account for paired-end samples (same R1 and R2 lengths)
 rule rename_fastqs:
     input:
-        R1_FQ = '{DATADIR}/fastqs/{SRR}_1.fastq.gz',
-        R2_FQ = '{DATADIR}/fastqs/{SRR}_2.fastq.gz'
+        R1_FQ = "{DATADIR}/fastqs/{SRR}_1.fastq.gz",
+        R2_FQ = "{DATADIR}/fastqs/{SRR}_2.fastq.gz"
     output:
-        R1_FQ = '{DATADIR}/fastqs/{SRR}_R1.fastq.gz',
-        R2_FQ = '{DATADIR}/fastqs/{SRR}_R2.fastq.gz'
+        R1_FQ = "{DATADIR}/fastqs/{SRR}_R1.fastq.gz", #TODO: add temp()
+        R2_FQ = "{DATADIR}/fastqs/{SRR}_R2.fastq.gz"  #TODO: add temp()
     params:
-        OUTDIR = '{DATADIR}/fastqs/',
+        OUTDIR = "{DATADIR}/fastqs/",
         UPLOADTYPE = lambda wildcards: \
-            META.loc[[wildcards.SRR in srr_id for srr_id in META['SRR.accession']],"file.format"].values[0]
+            META.loc[[wildcards.SRR in ID for ID in META["SRR.accession"]],"file.format"].values[0]
     run:
         #TODO- rewrite this into a function to clean up snakemake code...
-        if params.UPLOADTYPE == "fastq":
+        # if params.UPLOADTYPE == "fastq":
             # Check for file sizes (R2 is biggest, then R1, then I2 & I1)
-            if path.exists(f'{DATADIR}/fastqs/{wildcards.SRR}_4.fastq.gz'):
+            if path.exists(f"{DATADIR}/fastqs/{wildcards.SRR}_4.fastq.gz"):
                 sra_sizes = {
-                    f'{DATADIR}/fastqs/{wildcards.SRR}_1.fastq.gz': path.getsize(f'{DATADIR}/fastqs/{wildcards.SRR}_1.fastq.gz'),
-                    f'{DATADIR}/fastqs/{wildcards.SRR}_2.fastq.gz': path.getsize(f'{DATADIR}/fastqs/{wildcards.SRR}_2.fastq.gz'),
-                    f'{DATADIR}/fastqs/{wildcards.SRR}_3.fastq.gz': path.getsize(f'{DATADIR}/fastqs/{wildcards.SRR}_3.fastq.gz'),
-                    f'{DATADIR}/fastqs/{wildcards.SRR}_4.fastq.gz': path.getsize(f'{DATADIR}/fastqs/{wildcards.SRR}_4.fastq.gz')
+                    f"{DATADIR}/fastqs/{wildcards.SRR}_1.fastq.gz": path.getsize(f"{DATADIR}/fastqs/{wildcards.SRR}_1.fastq.gz"),
+                    f"{DATADIR}/fastqs/{wildcards.SRR}_2.fastq.gz": path.getsize(f"{DATADIR}/fastqs/{wildcards.SRR}_2.fastq.gz"),
+                    f"{DATADIR}/fastqs/{wildcards.SRR}_3.fastq.gz": path.getsize(f"{DATADIR}/fastqs/{wildcards.SRR}_3.fastq.gz"),
+                    f"{DATADIR}/fastqs/{wildcards.SRR}_4.fastq.gz": path.getsize(f"{DATADIR}/fastqs/{wildcards.SRR}_4.fastq.gz")
                 }
                 rename_dict = {
-                    'R2': max(sra_sizes),
-                    'R1': list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-3])],
-                    'I2': list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-2])],
-                    'I1': min(sra_sizes)
+                    "R2": max(sra_sizes),
+                    "R1": list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-3])],
+                    "I2": list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-2])],
+                    "I1": min(sra_sizes)
                 }
 
-                remove(rename_dict['I2'])
-                remove(rename_dict['I1'])
-                rename(rename_dict['R1'], f'{DATADIR}/fastqs/{wildcards.SRR}_R1.fastq.gz')
-                rename(rename_dict['R2'], f'{DATADIR}/fastqs/{wildcards.SRR}_R2.fastq.gz')
-            elif path.exists(f'{DATADIR}/fastqs/{wildcards.SRR}_3.fastq.gz'):
+                remove(rename_dict["I2"])
+                remove(rename_dict["I1"])
+                rename(rename_dict["R1"], f"{DATADIR}/fastqs/{wildcards.SRR}_R1.fastq.gz")
+                rename(rename_dict["R2"], f"{DATADIR}/fastqs/{wildcards.SRR}_R2.fastq.gz")
+            elif path.exists(f"{DATADIR}/fastqs/{wildcards.SRR}_3.fastq.gz"):
                 sra_sizes = {
-                    f'{DATADIR}/fastqs/{wildcards.SRR}_1.fastq.gz': path.getsize(f'{DATADIR}/fastqs/{wildcards.SRR}_1.fastq.gz'),
-                    f'{DATADIR}/fastqs/{wildcards.SRR}_2.fastq.gz': path.getsize(f'{DATADIR}/fastqs/{wildcards.SRR}_2.fastq.gz'),
-                    f'{DATADIR}/fastqs/{wildcards.SRR}_3.fastq.gz': path.getsize(f'{DATADIR}/fastqs/{wildcards.SRR}_3.fastq.gz')
+                    f"{DATADIR}/fastqs/{wildcards.SRR}_1.fastq.gz": path.getsize(f"{DATADIR}/fastqs/{wildcards.SRR}_1.fastq.gz"),
+                    f"{DATADIR}/fastqs/{wildcards.SRR}_2.fastq.gz": path.getsize(f"{DATADIR}/fastqs/{wildcards.SRR}_2.fastq.gz"),
+                    f"{DATADIR}/fastqs/{wildcards.SRR}_3.fastq.gz": path.getsize(f"{DATADIR}/fastqs/{wildcards.SRR}_3.fastq.gz")
                 }
                 rename_dict = {
-                    'R2': max(sra_sizes),
-                    'R1': list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-2])],
-                    'I1': min(sra_sizes)
+                    "R2": max(sra_sizes),
+                    "R1": list(sra_sizes.keys())[list(sra_sizes.values()).index(sorted(sra_sizes.values())[-2])],
+                    "I1": min(sra_sizes)
                 }
 
-                remove(rename_dict['I1'])
-                rename(rename_dict['R1'], f'{DATADIR}/fastqs/{wildcards.SRR}_R1.fastq.gz')
-                rename(rename_dict['R2'], f'{DATADIR}/fastqs/{wildcards.SRR}_R2.fastq.gz')
+                remove(rename_dict["I1"])
+                rename(rename_dict["R1"], f"{DATADIR}/fastqs/{wildcards.SRR}_R1.fastq.gz")
+                rename(rename_dict["R2"], f"{DATADIR}/fastqs/{wildcards.SRR}_R2.fastq.gz")
             else:
                 sra_sizes = {
-                    f'{DATADIR}/fastqs/{wildcards.SRR}_1.fastq.gz': path.getsize(f'{DATADIR}/fastqs/{wildcards.SRR}_1.fastq.gz'),
-                    f'{DATADIR}/fastqs/{wildcards.SRR}_2.fastq.gz': path.getsize(f'{DATADIR}/fastqs/{wildcards.SRR}_2.fastq.gz')
+                    f"{DATADIR}/fastqs/{wildcards.SRR}_1.fastq.gz": path.getsize(f"{DATADIR}/fastqs/{wildcards.SRR}_1.fastq.gz"),
+                    f"{DATADIR}/fastqs/{wildcards.SRR}_2.fastq.gz": path.getsize(f"{DATADIR}/fastqs/{wildcards.SRR}_2.fastq.gz")
                 }
 
                 rename_dict = {
-                    'R2': max(sra_sizes),
-                    'R1': min(sra_sizes)
+                    "R2": max(sra_sizes),
+                    "R1": min(sra_sizes)
                 }
 
-                rename(rename_dict['R1'], f'{DATADIR}/fastqs/{wildcards.SRR}_R1.fastq.gz')
-                rename(rename_dict['R2'], f'{DATADIR}/fastqs/{wildcards.SRR}_R2.fastq.gz')
-        elif params.UPLOADTYPE == "bam":
-            #rename R1 & R2 files (can use R1 and R2 from file names here, not dependent on file sizes)
-            shell(
-                """
-                mv {input.R1_FQ} {output.R1_FQ}
-                mv {input.R2_FQ} {output.R2_FQ}
-                """
-            )
+                rename(rename_dict["R1"], f"{DATADIR}/fastqs/{wildcards.SRR}_R1.fastq.gz")
+                rename(rename_dict["R2"], f"{DATADIR}/fastqs/{wildcards.SRR}_R2.fastq.gz")
+        # elif params.UPLOADTYPE == "bam":
+        #     #rename R1 & R2 files (can use R1 and R2 from file names here, not dependent on file sizes)
+        #     shell(
+        #         """
+        #         mv {input.R1_FQ} {output.R1_FQ}
+        #         mv {input.R2_FQ} {output.R2_FQ}
+        #         """
+        #     )
 
 #############################################
-## Generate references w/ `gget`
+## Alignment prep
 #############################################
-# Unzip the whitelist file if it hasn't been done yet
-#TODO: change to download from somehwere? maybe look for a wget link?
-#TODO: include this in `resources/chemistry_sheet.csv`
-# rule gunzipWhitelists:
-#     output:
-#         expand("{PRODIR}/resources/whitelists/{CHEM_WHITE}", CHEM_WHITE =unique(CHEM_SHEET["CB_WHITELIST"])
-#     shell:
-#         """
-#         #DOwnload & gunzip cb whitleist(s)
-#         """
 
 # Build reference genomes for STARsolo alignment/quantification
 #TODO: add check for species files w/ gget; i.e. `gget.ref(species="NA", list_species=True)`
 rule build_refs:
     output:
-        REF_METADATA = expand("{REFDIR}/{SPECIES}/STAR/metadata.json", REFDIR=config['REFDIR'], SPECIES=SPECIES),
-        REF = expand("{REFDIR}/{SPECIES}/STAR/SAindex", REFDIR=config['REFDIR'], SPECIES=SPECIES) # Reference genomes
+        REF_METADATA = expand("{REFDIR}/{SPECIES}/STAR/metadata.json", REFDIR=config["REFDIR"], SPECIES=SPECIES),
+        REF = expand("{REFDIR}/{SPECIES}/STAR/SAindex", REFDIR=config["REFDIR"], SPECIES=SPECIES) # Reference genomes
     threads:
-        config['CORES_HI']
+        config["CORES_HI"]
     run:
         for S in SPECIES:
             print(f"Downloading genome sequence and annotations for {S} to {REFDIR}/{S}")
@@ -417,15 +374,17 @@ rule build_refs:
 #############################################
 # Merge .fastq files (in case more than one sesquencing run was performed)
 rule merge_fastqs:
+    input:
+        expand("{DATADIR}/fastqs/{SRR}_{READ}.fastq.gz", DATADIR=config["DATADIR"], SRR=SRR_LIST, READ=["R1", "R2"])
     output:
-        MERGED_R1_FQ = temp('{DATADIR}/align_out/{sample}/tmp/{sample}_R1.fq.gz'),
-        MERGED_R2_FQ = temp('{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz')
+        MERGED_R1_FQ = temp("{DATADIR}/align_out/{sample}/tmp/{sample}_R1.fq.gz"),
+        MERGED_R2_FQ = temp("{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz")
     params:
-        TMP_DIR = '{DATADIR}/align_out/{sample}/tmp',
+        TMP_DIR = "{DATADIR}/align_out/{sample}/tmp",
         R1_FQ = lambda wildcards: R1_FQs[wildcards.sample],
         R2_FQ = lambda wildcards: R2_FQs[wildcards.sample]
     threads:
-        config['CORES_LO']
+        config["CORES_LO"]
     run:
         if len(params.R1_FQ)==1 & len(params.R2_FQ)==1: # shell for single fastq input
             shell("cp {params.R1_FQ} {output.MERGED_R1_FQ}")
@@ -440,42 +399,44 @@ rule merge_fastqs:
 # Check QC of reads before trimming
 rule preTrim_FastQC_R2:
     input:
-        MERGED_R2_FQ = '{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz'
+        MERGED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz"
     output:
-        fastqcDir = directory('{DATADIR}/align_out/{sample}/preTrim_fastqc_R2_out'),
-        # fastqcReport = ''
+        FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/preTrim_fastqc_R2_out"),
+        # fastqcReport = ""
     threads:
-        config['CORES_LO']
-        # min([config['CORES_LO'],8]) # 8 core max based on recommendations from trim_galore authors
-    shell:
-        """
-        mkdir -p {output.fastqcDir}
-        cd {output.fastqcDir}
+        config["CORES_LO"]
+        # min([config["CORES_LO"],8]) # 8 core max based on recommendations from trim_galore authors
+    run:
+        shell(
+            f"""
+            mkdir -p {output.FASTQC_DIR}
+            cd {output.FASTQC_DIR}
 
-        fastqc \
-        --outdir {output.fastqcDir} \
-        --threads {threads} \
-        {input.MERGED_R2_FQ}
-        """
+            {FASTQC_EXEC} \
+            --outdir {output.FASTQC_DIR} \
+            --threads {threads} \
+            {input.MERGED_R2_FQ}
+            """
+        )
 
 # TSO & polyA trimming
 rule trimPolyA_R2:
     input:
-        MERGED_R1_FQ = '{DATADIR}/align_out/{sample}/tmp/{sample}_R1.fq.gz',
-        MERGED_R2_FQ = '{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz'
+        MERGED_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1.fq.gz",
+        MERGED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz"
     output:
-        A_TRIMMED_R1_FQ = temp('{DATADIR}/align_out/{sample}/tmp/{sample}_R1_Atrimmed.fq.gz'),
-        A_TRIMMED_R2_FQ = temp('{DATADIR}/align_out/{sample}/tmp/{sample}_R2_Atrimmed.fq.gz')
+        A_TRIMMED_R1_FQ = temp("{DATADIR}/align_out/{sample}/tmp/{sample}_R1_Atrimmed.fq.gz"),
+        A_TRIMMED_R2_FQ = temp("{DATADIR}/align_out/{sample}/tmp/{sample}_R2_Atrimmed.fq.gz")
     params:
         CUTADAPT_EXEC = CUTADAPT_EXEC,
         THREE_PRIME_R2_POLYA = "A"*100, # 100 A-mer
         FIVE_PRIME_R2 = "CCCATGTACTCTGCGTTGATACCACTGCTT" #10x TSO sequence
         # FIVE_PRIME_R2 = "TTCGTCACCATAGTTGCGTCTCATGTACCC" #rev 10x TSO sequence
     threads:
-        config['CORES_LO']
-        # min([config['CORES_LO'],8]) # 8 core max based on recommendations from trim_galore authors
+        config["CORES_LO"]
+        # min([config["CORES_LO"],8]) # 8 core max based on recommendations from trim_galore authors
     log:
-        '{DATADIR}/align_out/{sample}/cutadapt_polyA_report.txt'
+        "{DATADIR}/align_out/{sample}/cutadapt_polyA_report.txt"
     shell:
         """
         {params.CUTADAPT_EXEC} \
@@ -492,20 +453,20 @@ rule trimPolyA_R2:
 #Additional trimming step, for 2-color Illumina chemistries (NextSeq, etc.)
 rule trimPolyG_R2:
     input:
-        A_TRIMMED_R1_FQ = '{DATADIR}/align_out/{sample}/tmp/{sample}_R1_Atrimmed.fq.gz',
-        A_TRIMMED_R2_FQ = '{DATADIR}/align_out/{sample}/tmp/{sample}_R2_Atrimmed.fq.gz'
+        A_TRIMMED_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1_Atrimmed.fq.gz",
+        A_TRIMMED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_Atrimmed.fq.gz"
     output:
-        FINAL_R1_FQ = '{DATADIR}/align_out/{sample}/tmp/{sample}_R1_final.fq.gz', #temp()
-        FINAL_R2_FQ = '{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz'
+        FINAL_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1_final.fq.gz", #TODO: add temp()?
+        FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz"  #TODO: add temp()?
     params:
         CUTADAPT_EXEC = CUTADAPT_EXEC,
         THREE_PRIME_R2_POLYG = "G"*100,
         FIVE_PRIME_R2 = "AAGCAGTGGTATCAACGCAGAGTACATGGG" # rev-comp of 10x TSO sequence
     threads:
-        config['CORES_LO']
-        # min([config['CORES_LO'],8]) # 8 core max based on recommendations from trim_galore authors
+        config["CORES_LO"]
+        # min([config["CORES_LO"],8]) # 8 core max based on recommendations from trim_galore authors
     log:
-        log = '{DATADIR}/align_out/{sample}/cutadapt_polyG_report.txt'
+        log = "{DATADIR}/align_out/{sample}/cutadapt_polyG_report.txt"
     shell:
         """
         {params.CUTADAPT_EXEC} \
@@ -522,22 +483,24 @@ rule trimPolyG_R2:
 # QC after read trimming
 rule postTrim_FastQC_R2:
     input:
-        FINAL_R2_FQ = '{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz'
+        FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz"
     output:
-        fastqcDir = directory('{DATADIR}/align_out/{sample}/postTrim_fastqc_R2_out')
-        # fastqcReport = ''
+        FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/postTrim_fastqc_R2_out")
+        # fastqcReport = ""
     threads:
-        min([config['CORES_LO'],8]) # 8 core max
-    shell:
-        """
-        mkdir -p {output.fastqcDir}
-        cd {output.fastqcDir}
+        min([config["CORES_LO"],8]) # 8 core max
+    run:
+        shell(
+            f"""
+            mkdir -p {output.FASTQC_DIR}
+            cd {output.FASTQC_DIR}
 
-        fastqc \
-        --outdir {output.fastqcDir} \
-        --threads {threads} \
-        {input.FINAL_R2_FQ}
-        """
+            {FASTQC_EXEC} \
+            --outdir {output.FASTQC_DIR} \
+            --threads {threads} \
+            {input.FINAL_R2_FQ}
+            """
+        )
 
 #############################################
 ## Alignment
@@ -549,25 +512,25 @@ rule postTrim_FastQC_R2:
 #TODO: adjust queueing so that samples from the same species align at the same time, so that I can use `LoadAndKeep` setting for `--genomeLoad`
 rule STARsolo_align:
     input:
-        FINAL_R1_FQ = '{DATADIR}/align_out/{sample}/tmp/{sample}_R1_final.fq.gz',
-        FINAL_R2_FQ = '{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz',
-        REF_LIST = expand('{REFDIR}/{SPECIES}/STAR/SAindex', REFDIR=REFDIR, SPECIES=SPECIES) # Reference genomes
+        FINAL_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1_final.fq.gz",
+        FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz",
+        REF_LIST = expand("{REFDIR}/{SPECIES}/STAR/SAindex", REFDIR=REFDIR, SPECIES=SPECIES) # Reference genomes
     output:
-        SORTEDBAM = '{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam', #TODO: add temp()
-        UNMAPPED1 = '{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1',
-        UNMAPPED2 = '{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2',
-        VELDIR = directory('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto'),
-        GENEDIR = directory('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene'),
-        GENEFULLDIR = directory('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull'),
-        VELMAT = '{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto/filtered/spliced.mtx',
-        GENEMAT = '{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx',
-        GENEFULLMAT = '{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx'
+        SORTEDBAM = "{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam", #TODO: add temp()
+        UNMAPPED1 = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1",
+        UNMAPPED2 = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2",
+        VELDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto"),
+        GENEDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene"),
+        GENEFULLDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull"),
+        VELMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto/filtered/spliced.mtx",
+        GENEMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx",
+        GENEFULLMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx"
     params:
-        DATADIR = config['DATADIR'],
-        STAR_EXEC = config['STAR_EXEC'],
-        MEMLIMIT = config['MEMLIMIT']
+        DATADIR = config["DATADIR"],
+        STAR_EXEC = config["STAR_EXEC"],
+        MEMLIMIT = config["MEMLIMIT"]
     threads:
-        config['CORES_LO']
+        config["CORES_LO"]
     run:
         # print(CHEM_DICT)
         tmp_chemistry = CHEM_DICT[wildcards.sample]
@@ -610,21 +573,21 @@ rule STARsolo_align:
 # compress outputs from STAR (count matrices)
 rule compress_STAR_outs:
     input:
-        VELMAT = '{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto/filtered/spliced.mtx',
-        GENEMAT = '{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx',
-        GENEFULLMAT = '{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx'
+        VELMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto/filtered/spliced.mtx",
+        GENEMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx",
+        GENEFULLMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx"
     output:
-        VELMAT = '{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto/filtered/spliced.mtx.gz',
-        GENEMAT = '{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx.gz',
-        GENEFULLMAT = '{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx.gz'
+        VELMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto/filtered/spliced.mtx.gz",
+        GENEMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx.gz",
+        GENEFULLMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx.gz"
     params:
-        # SOLODIR = '{DATADIR}/align_out/{sample}/STARsolo/Solo.out/'
-        VELDIR = directory('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto'),
-        GENEDIR = directory('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene'),
-        GENEFULLDIR = directory('{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull')
+        # SOLODIR = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/"
+        VELDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto"),
+        GENEDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene"),
+        GENEFULLDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull")
     threads:
         1
-        # config['CORES_LO']
+        # config["CORES_LO"]
     run:
         shell(
             f"""
@@ -633,27 +596,17 @@ rule compress_STAR_outs:
             gzip -qf {params.GENEFULLDIR}/*/*.tsv {params.GENEFULLDIR}/*/*.mtx
             """
         )
-        # f"""
-        # gzip -qf {params.GENEDIR}/raw/*
-        # gzip -qf {params.GENEDIR}/filtered/*
-        #
-        # gzip -qf {params.GENEFULLDIR}/raw/*
-        # gzip -qf {params.GENEFULLDIR}/filtered/*
-        #
-        # gzip -qf {params.VELDIR}/raw/*
-        # gzip -qf {params.VELDIR}/filtered/*
-        # """
 
 # Index the .bam produced by STAR
 rule indexSortedBAM:
     input:
-        SORTEDBAM = '{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam'
+        SORTEDBAM = "{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam"
     output:
-        BAI = '{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam.bai'
+        BAI = "{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam.bai"
     params:
         SAMTOOLS_EXEC = SAMTOOLS_EXEC
     threads:
-        config['CORES_LO']
+        config["CORES_LO"]
     shell:
         """
         {params.SAMTOOLS_EXEC} index -@ {threads} {input.SORTEDBAM}
@@ -673,20 +626,20 @@ rule indexSortedBAM:
 rule umitools_dedupBAM:
     input:
         CB_WHITELIST = CHEMISTRY_SHEET, #TODO: fix this...
-        SORTEDBAM = '{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam'
+        SORTEDBAM = "{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam"
     output:
-        DEDUPBAM = '{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam',
-        TMPBAM = temp('{DATADIR}/align_out/{sample}/tmp.bam')
+        DEDUPBAM = "{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam",
+        TMPBAM = temp("{DATADIR}/align_out/{sample}/tmp.bam")
     params:
         SAMTOOLS_EXEC = SAMTOOLS_EXEC,
         UMITOOLS_EXEC = UMITOOLS_EXEC,
-        OUTPUT_PREFIX='{DATADIR}/align_out/{sample}/umitools_dedup/{sample}'
-        # TMPBAM = '{DATADIR}/align_out/{sample}/tmp.bam'
+        OUTPUT_PREFIX="{DATADIR}/align_out/{sample}/umitools_dedup/{sample}"
+        # TMPBAM = "{DATADIR}/align_out/{sample}/tmp.bam"
     threads:
-        config['CORES_LO']
+        config["CORES_LO"]
         #1
     log:
-        '{DATADIR}/align_out/{sample}/umitools_dedup/dedup.log'
+        "{DATADIR}/align_out/{sample}/umitools_dedup/dedup.log"
     run:
         shell(
             f"""
@@ -716,13 +669,13 @@ rule umitools_dedupBAM:
 
 rule umitools_indexDedupBAM:
     input:
-        SORTEDBAM = '{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam'
+        SORTEDBAM = "{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam"
     output:
-        BAI = '{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai'
+        BAI = "{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai"
     params:
         SAMTOOLS_EXEC = SAMTOOLS_EXEC
     threads:
-        config['CORES_LO']
+        config["CORES_LO"]
     shell:
         """
         {params.SAMTOOLS_EXEC} index -@ {threads} {input.SORTEDBAM}
@@ -735,16 +688,16 @@ rule umitools_indexDedupBAM:
 ## qualimap on aligned reads
 rule qualimapQC:
     input:
-        SORTEDBAM = '{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam'
+        SORTEDBAM = "{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam"
     output:
-        qualimapDir = directory('{DATADIR}/align_out/{sample}/qualimap_out'),
-        fastqcReport = '{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html'
+        qualimapDir = directory("{DATADIR}/align_out/{sample}/qualimap_out"),
+        fastqcReport = "{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html"
     params:
         QUALIMAP_EXEC = QUALIMAP_EXEC
-        # GENES_GTF = config['GENES_GTF'] #TODO Pull from downloaded gget files
+        # GENES_GTF = config["GENES_GTF"] #TODO Pull from downloaded gget files
     threads:
         1
-        # config['CORES_LO']
+        # config["CORES_LO"]
     shell:
         """
         mkdir -p {output.qualimapDir}
@@ -767,13 +720,13 @@ rule qualimapQC:
 # Compress unmapped reads; switch names because of STAR weirdness
 rule unmapped_compress:
     input:
-        UNMAPPED1 = '{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1',
-        UNMAPPED2 = '{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2'
+        UNMAPPED1 = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1",
+        UNMAPPED2 = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2"
     output:
-        UNMAPPED1_FQ = '{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1.fastq.gz',
-        UNMAPPED2_FQ = '{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz'
+        UNMAPPED1_FQ = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1.fastq.gz",
+        UNMAPPED2_FQ = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz"
     threads:
-        config['CORES_LO']
+        config["CORES_LO"]
     run:
         shell(
             f"""
@@ -787,20 +740,18 @@ rule unmapped_compress:
 # Run fastqc on unmapped reads
 rule unmapped_fastqc:
     input:
-        UNMAPPED1_FQ = '{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1.fastq.gz',
-        UNMAPPED2_FQ = '{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz'
+        UNMAPPED1_FQ = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1.fastq.gz",
+        UNMAPPED2_FQ = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz"
     output:
-        FQC_DIR = directory('{DATADIR}/align_out/{sample}/Unmapped_fastqc_out')
-    params:
-        FASTQC_EXEC = config['FASTQC_EXEC']
+        FQC_DIR = directory("{DATADIR}/align_out/{sample}/Unmapped_fastqc_out")
     threads:
-        config['CORES_LO']
+        config["CORES_LO"]
     run:
         shell(
             f"""
             mkdir -p {output.FQC_DIR}
 
-            {params.FASTQC_EXEC} \
+            {FASTQC_EXEC} \
             -o {output.FQC_DIR} \
             -t {threads} \
             {output.UNMAPPED1_FQ} {output.UNMAPPED2_FQ}
