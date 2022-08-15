@@ -2,10 +2,15 @@
 Preprocessing, alignment, QC, and quantification workflow for 10x Genomics single-cell & single-nucleus RNA-seq data (Chromium, v2, v3, or v3.1)
 **by David W. McKellar**
 
+#Pipeline TODO:
+- Add Tabula dataset downloads somehow... just `wget`?
+
 #README TODO:
 - Write out pipeline details
 - Info on sample_sheet format
-- File tree for output
+
+## Data to add...
+- Tabula Microcebus raw data still not available [link](https://tabula-microcebus.ds.czbiohub.org/whereisthedata)
 
 ## **Dependencies:**
 - `sra-toolkit` [v3.0.0](https://github.com/ncbi/sra-tools/wiki/01.-Downloading-SRA-Toolkit)
@@ -48,9 +53,9 @@ conda install itertools
 Run snakemake from command line with total desired core usage (`-j num_threads`) and increased latency wait time as well as restarts, because of delays from SRA (`--latency-wait`):
 ```
 conda activate align_snake
-snakemake -j 33 --keep-going --latency 15 --restart-times 3
+snakemake -j 33 --keep-going --max-jobs-per-second 5 --latency 15 --restart-times 3
 ```
-I have found that NCBI does not like when you query their databases too often, so if you get a `too many queries` error, just rerun the Snakemake. Be sure to include the `--keep-going` or `-k` flag so that the Snakemake doesn't die after encountering the error.
+I have found that NCBI does not like when you query their databases too often... The `--max-jobs-per-second` flag should fix this and `--restart-times 3` will retry the download a couple times. If you get a `too many queries` error, just rerun the Snakemake. I also recommend the `--keep-going` or `-k` flag so that the Snakemake doesn't die after encountering the error.
 
 
 ## **Outputs:**
@@ -60,11 +65,11 @@ File `tree` for `align_snake` outputs
 ├── cutadapt_polyA_report.txt
 ├── cutadapt_polyG_report.txt
 ├── postTrim_fastqc_R2_out
-│   ├── GSM2976780_R2_final_fastqc.html
-│   └── GSM2976780_R2_final_fastqc.zip
+│   ├── GSM#######_R2_final_fastqc.html
+│   └── GSM#######_R2_final_fastqc.zip
 ├── preTrim_fastqc_R2_out
-│   ├── GSM2976780_R2_fastqc.html
-│   └── GSM2976780_R2_fastqc.zip
+│   ├── GSM#######_R2_fastqc.html
+│   └── GSM#######_R2_fastqc.zip
 ├── STARsolo
 │   ├── Aligned.sortedByCoord.out.bam
 │   ├── Log.final.out
@@ -117,12 +122,12 @@ File `tree` for `align_snake` outputs
 │   ├── Unmapped.out.mate1.fastq.gz
 │   └── Unmapped.out.mate2.fastq.gz
 └── tmp
-    ├── GSM2976780_R1_final.fq.gz
-    └── GSM2976780_R2_final.fq.gz
-
+    ├── GSM#######_R1_final.fq.gz
+    └── GSM#######_R2_final.fq.gz
 ```
 
 
 ## Useful resources on how to upload/download .fastq's from NCBI & other databases:
+- ["08. prefetch and fasterq dump", from NCBI](https://github.com/ncbi/sra-tools/wiki/08.-prefetch-and-fasterq-dump)
 - ["Downloading SRA data via GCP", by Tim Stuart](https://timoast.github.io/blog/downloading-sra-data-via-gcp/)
 - ["How to use NCBI SRA Toolkit effectively?", by Renesh Bedre](https://www.reneshbedre.com/blog/ncbi_sra_toolkit.html)

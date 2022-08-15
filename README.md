@@ -22,12 +22,23 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
   - [ ] Add kallisto for comparison?
 - [ ] Add ambient RNA decontamination into `align_snake`
   - Tools to try:
-    - [ ] SoupX
-    - [ ] Cellbender
+    - [ ] SoupX [github]() [manuscript]()
+    - [ ] Cellbender [github](https://github.com/broadinstitute/CellBender) [docs](https://cellbender.readthedocs.io/en/latest/) [`remove-background` vignette](https://cellbender.readthedocs.io/en/latest/usage/index.html)
+      - Command line tool & GPU-enabled!
+      - BUT, requires a cellranger-generated `.h5` file... LAME. [Convert dataframe to .h5 w/ pandas](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_hdf.html)
+      - If implemented, would require adding:
+        1. Convert raw mat to `.h5`
+        2. Run `remove-background`
+        3. Extract cell barcodes from scrubbed matrix
+        4. Subset original count mat then convert to `.h5` for easy loading/comparison
+    - [ ] DecontX [github](https://github.com/campbio/celda/blob/master/vignettes/decontX.Rmd) [manuscript](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-1950-6)
+      - R-based, but not compatible w/ Seurat...
     - [ ] others...
 - [ ] Single-cell analysis (~~Seurat~~ or scanpy?)
 - [ ] Benchmark integration w/ [scIB](https://github.com/theislab/scib)? Likely will take a ***LOT*** of compute
-- [ ] Pseudobulk analysis w/ [metacells](https://github.com/tanaylab/metacells)
+- [ ] Pseudobulk/metacell analysis
+  - [ ] w/ [metacells](https://github.com/tanaylab/metacells)?
+  - [ ] or [SuperCell](https://github.com/GfellerLab/SuperCell)?
 - [ ] Figure out multi-species integration [SAM](https://github.com/atarashansky/self-assembling-manifold)
 
 
