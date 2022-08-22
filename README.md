@@ -1,10 +1,22 @@
 # **scMuscle2:** single-cell muscle transcriptomics across species
 In the first scMuscle project, we attempted to gain a better understanding of the constituent cell types of murine skeletal muscle. In this update, we aim to expand the scope, resolution, and depth of that view, and to improve the availability of our analyses to the greater muscle/single-cell communities.
 
+<!---toc start-->
+  * [Include your data](#how-to-include-your-data-in-scMuscle2)
+  * [TODO](#todo)
+  * [Description of meta data](#description-of-meta-data)
+  * [Workflow](#workflow)
+  * []()
+  * [Citation info](#citation-info)
+
+<!---toc end-->
+
 # How to include your data in scMuscle2
-We made a [quick google survey](https://docs.google.com/forms/d/1aueSLPLMHReFEX4Ie1K_o0WEciAznE0HAdOh4eIctVA/prefill) to simplify sharing metadata. Only publicly available data will be included in this study, so be sure to upload to GEO before you do anything else!
+We made a [quick google survey](https://forms.gle/rm6R9hbTAtrpm8rcA) to simplify sharing metadata. Only publicly available data will be included in this study, so be sure to upload to GEO before you do anything else!
 
 Please send any questions to either David McKellar (dwm269@cornell.edu) or to our official scMuscle email address (scmuscle@cornell.edu).
+
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdj9LvuAW4ywiUbweEZyRpL20oOr9rh96nkNKP-0AfjyPyFQA/viewform?embedded=true" width="640" height="2339" frameborder="0" marginheight="0" marginwidth="0">Loading</iframe>
 
 # **TODO:**
 - [ ] Finish updating sample list, including new meta data (species, etc)
@@ -36,6 +48,7 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
     - [ ] others...
 - [ ] Single-cell analysis (~~Seurat~~ or scanpy?)
 - [ ] Benchmark integration w/ [scIB](https://github.com/theislab/scib)? Likely will take a ***LOT*** of compute
+  - [ ] scDREAMER [github](https://github.com/Zafar-Lab/scDREAMER)
 - [ ] Pseudobulk/metacell analysis
   - [ ] w/ [metacells](https://github.com/tanaylab/metacells)?
   - [ ] or [SuperCell](https://github.com/GfellerLab/SuperCell)?
