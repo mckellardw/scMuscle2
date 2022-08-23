@@ -40,3 +40,8 @@ Yamada 2022,Spatial_MI_day1_1,,heart,myocardial infarction,,TRUE,Mus musculus,GS
 Yamada 2022,Spatial_MI_day14_1,,heart,myocardial infarction,,TRUE,Mus musculus,GSE176092,GSM5355668,visium_v1,fastq,SRR14716323,,,,,,,,,,,,,
 Yamada 2022,Spatial_MI_day7_1,,heart,myocardial infarction,,TRUE,Mus musculus,GSE176092,GSM5355666,visium_v1,fastq,SRR14716321,,,,,,,,,,,,,
 Yamada 2022,Spatial_Sham,,heart,myocardial infarction,,TRUE,Mus musculus,GSE176092,GSM5355663,visium_v1,fastq,SRR14716318,,,,,,,,,,,,,
+Cui 2021,P1MID7,,heart,myocardial infarction,,TRUE,Mus musculus,GSE163629,GSM4983123,visium_v1,bam,SRR13281533,,,,,,,,,,,,,
+Cui 2021,P1ShamD3,,heart,myocardial infarction,,TRUE,Mus musculus,GSE163629,GSM5268644,visium_v1,bam,SRR14343879,,,,,,,,,,,,,
+Cui 2021,P1ShamD7,,heart,myocardial infarction,,TRUE,Mus musculus,GSE163629,GSM5268645,visium_v1,bam,SRR14343880,,,,,,,,,,,,,
+Cui 2021,P1MID3,,heart,myocardial infarction,,TRUE,Mus musculus,GSE163629,GSM5268646,visium_v1,bam,SRR14343881,,,,,,,,,,,,,
+Cui 2021,P1MID7_rep2,,heart,myocardial infarction,,TRUE,Mus musculus,GSE163629,GSM5268647,visium_v1,bam,SRR14343882,,,,,,,,,,,,,

@@ -16,8 +16,6 @@ We made a [quick google survey](https://forms.gle/rm6R9hbTAtrpm8rcA) to simplify
 
 Please send any questions to either David McKellar (dwm269@cornell.edu) or to our official scMuscle email address (scmuscle@cornell.edu).
 
-<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdj9LvuAW4ywiUbweEZyRpL20oOr9rh96nkNKP-0AfjyPyFQA/viewform?embedded=true" width="640" height="2339" frameborder="0" marginheight="0" marginwidth="0">Loading</iframe>
-
 # **TODO:**
 - [ ] Finish updating sample list, including new meta data (species, etc)
   - [ ] Add the following metadata columns: age, tissue/muscle, disease/injury status
@@ -91,6 +89,7 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
 - [Svensson et al Database](http://www.nxn.se/single-cell-studies/gui)
 - [Single-Cell Expression Atlas](https://www.ebi.ac.uk/gxa/sc/home)
 - [Human Cell Atlas Data Portal](https://data.humancellatlas.org/explore/projects)
+- [AWS page for Tabula Muris](https://s3.console.aws.amazon.com/s3/buckets/czb-tabula-muris-senis?region=us-west-2&prefix=10x/FASTQs/&showversions=false)
 
 ## Other useful tools for exploring sequencing data
 - [ffq](https://github.com/pachterlab/ffq) - used to clarify metadata, fill out accession info. Incorporated into the `align_snake` pipeline
