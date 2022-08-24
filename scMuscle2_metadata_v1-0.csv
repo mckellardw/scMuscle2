@@ -915,3 +915,6 @@
 "Emechebe 2021","Heart Endothelial 24 mo rep1",,"heart","endothelial cells",,TRUE,"Mus musculus","GSE163822","GSM4987954","3p_v2","bam","SRR13302418",,,,,,,,,,,,,
 "Emechebe 2021","Heart Endothelial 24 mo rep2",,"heart","endothelial cells",,TRUE,"Mus musculus","GSE163822","GSM4987955","3p_v2","bam","SRR13302419",,,,,,,,,,,,,
 "Emechebe 2021","Heart Endothelial 24 mo rep3",,"heart","endothelial cells",,TRUE,"Mus musculus","GSE163822","GSM4987956","3p_v2","bam","SRR13302420",,,,,,,,,,,,,
+"Fly Cell Atlas 2021","body",,"whole","body",,FALSE,"Drosophila melanogaster","NA","NA","NA","NA","NA",,,,,,,,"Fly Cell Atlas, bioRxiv, 2021","https://doi.org/10.1101/2021.07.04.451050",,,,
+"Fly Cell Atlas 2021","leg",,"whole","leg",,FALSE,"Drosophila melanogaster","NA","NA","NA","NA","NA",,,,,,,,"Fly Cell Atlas, bioRxiv, 2021","https://doi.org/10.1101/2021.07.04.451050",,,,
+"Qiu 2020","Qiu 2020",,"muscle",,,FALSE,"Sus domesticus","NA","NA","NA","NA","NA",,,,,,,,"Qiu et al, Cells, 2020",,"https://pubmed.ncbi.nlm.nih.gov/32331484/",,,
