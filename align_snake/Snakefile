@@ -36,12 +36,14 @@ shell("mkdir -p {REFDIR}")
 ########################################################################################################
 META = pd.read_csv(config["SAMPLE_SHEET"], na_filter=False)#sep="\t",encoding = "utf-8"
 
-META = META[list(META["include"])] #remove undesired SRRs ("include"==False)
-META = META[list(META["file.format"]!="ERR")] #remove SRRs that didn't download properly [YET!]
+META = META[list(META["include"])] #remove undesired samples ("include"==False)
+META = META[list(META["file.format"]!="ERR")] #remove samples with file format issues (#TODO: deprecated?)
 
-META = META[list(META["tissue"]=="muscle")]
+# META = META[list(META["tissue"]=="muscle")]
+META = META[[x in ["muscle", "tendon", "limb"] for x in META["tissue"]]]
 # META = META[list(META["tissue"]!="")]
 # META = META[list(META["species"]=="Homo sapiens")]
+# META = META[[x in ["Homo sapiens", "Mus musculus"] for x in META["species"]]]
 
 META = META[list(META["GSM.accession"]!="NA")]
 META = META[list(META["GSM.accession"]!="")]
@@ -124,6 +126,7 @@ rule all:
         expand("{REFDIR}/{SPECIES}/STAR/SAindex", REFDIR=REFDIR, SPECIES=SPECIES), # Reference genomes
         expand("{METADIR}/{SRR}.json", METADIR=config["METADIR"], SRR=SRR_LIST), # metadata files
         expand("{METADIR}/merged_metadata.csv", METADIR=config["METADIR"])
+
         # expand("{DATADIR}/fastqs/{SRR}_{READ}.fastq.gz", DATADIR=config["DATADIR"], SRR=SRR_LIST, READ=["R1", "R2"]) # fastqs
 
 #############################################
@@ -176,15 +179,16 @@ rule prefetch:
         UPLOADTYPE = lambda wildcards: \
             META.loc[[wildcards.SRR in ID for ID in META["SRR.accession"]],"file.format"].values[0]
     run:
-            shell(
-                f"""
-                {PREFETCH_EXEC} \
-                --verify yes \
-                --max-size 999999999999 \
-                --output-file {output.SRA} \
-                {wildcards.SRR}
-                """
-            )
+        shell(
+        f"""
+        {PREFETCH_EXEC} \
+        --verify yes \
+        --type sra \
+        --max-size 999G \
+        --output-file {output.SRA} \
+        {wildcards.SRR}
+        """
+        )
 
  # Convert SRA files to fastq with fasterq-dump
 rule convert_fastqs:
@@ -195,7 +199,7 @@ rule convert_fastqs:
         R2_FQ = temp("{DATADIR}/fastqs/{SRR}_2.fastq.gz")
     params:
         # TMPDIR = TMPDIR,
-        MEMLIMIT = "8G",
+        MEMLIMIT = "4G",
         # SRA_tmp = "{TMPDIR}/{SRR}.sra",
         # SRA_BAM = "{TMPDIR}/{SRR}.bam",
         UPLOADTYPE = lambda wildcards: \
@@ -204,44 +208,23 @@ rule convert_fastqs:
     threads:
         config["CORES_LO"]
     run:
-        # if params.UPLOADTYPE == "fastq":
         shell(
-            f"""
-            echo "Converting SRA files to .fastq's for {wildcards.SRR}"
-            {FQD_EXEC} \
-            --threads {threads} \
-            --mem {params.MEMLIMIT} \
-            --outdir {params.OUTDIR} \
-            --temp {TMPDIR} \
-            --split-files \
-            {input.SRA}
+        f"""
+        {FQD_EXEC} \
+        --threads {threads} \
+        --mem {params.MEMLIMIT} \
+        --outdir {params.OUTDIR} \
+        --temp {TMPDIR} \
+        --split-files \
+        --include-technical \
+        {input.SRA}
 
-            pigz -p {threads} {params.OUTDIR}/{wildcards.SRR}_*.fastq
-            """
+        pigz -p{threads} --force {params.OUTDIR}/{wildcards.SRR}_*.fastq
+        """
         )
 # && \
 # rm {params.SRA_tmp}
 
-        # elif params.UPLOADTYPE == "bam":
-        #     #TODO- remove extra files in {TMPDIR}/{wildcards.SRR}/...
-        #     shell(
-        #         f"""
-        #         rm -rf {TMPDIR}/{wildcards.SRR}/b2f/
-        #
-        #         {BAM2FQ_EXEC} \
-        #         --nthreads {threads} \
-        #         --reads-per-fastq=999999999999999 \
-        #         {params.SRA_BAM} \
-        #         {TMPDIR}/{wildcards.SRR}/b2f/
-        #
-        #         zcat $(find {TMPDIR}/{wildcards.SRR}/b2f/ -name *R1*.fastq.gz) > {params.OUTDIR}/{wildcards.SRR}_1.fastq
-        #         zcat $(find {TMPDIR}/{wildcards.SRR}/b2f/ -name *R2*.fastq.gz) > {params.OUTDIR}/{wildcards.SRR}_2.fastq
-        #
-        #         pigz -p {threads} {params.OUTDIR}/{wildcards.SRR}_*.fastq
-        #
-        #         rm -r {TMPDIR}/{wildcards.SRR}/b2f/
-        #         """
-        #     )
 
 # {FFQ} --ncbi {SRR} \
 # | xargs curl -o {DATADIR}/fastqs/{SRR}.bam
@@ -509,7 +492,7 @@ rule postTrim_FastQC_R2:
 #   Info for STARsolo command line paramaters: https://github.com/alexdobin/STAR/blob/master/docs/STARsolo.md
 #  *Note:*
 #       - `--soloBarcodeReadLength 0` is included to account for files w/ R1 length > than CB+UMI
-#TODO: adjust queueing so that samples from the same species align at the same time, so that I can use `LoadAndKeep` setting for `--genomeLoad`
+#       - `priority` should be set higher to ensure
 rule STARsolo_align:
     input:
         FINAL_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1_final.fq.gz",
@@ -530,7 +513,9 @@ rule STARsolo_align:
         STAR_EXEC = config["STAR_EXEC"],
         MEMLIMIT = config["MEMLIMIT"]
     threads:
-        config["CORES_LO"]
+        config["CORES_MID"]
+    priority:
+        42
     run:
         # print(CHEM_DICT)
         tmp_chemistry = CHEM_DICT[wildcards.sample]
@@ -596,6 +581,10 @@ rule compress_STAR_outs:
             gzip -qf {params.GENEFULLDIR}/*/*.tsv {params.GENEFULLDIR}/*/*.mtx
             """
         )
+
+#TODO convert `mtx` to `h5`
+#https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_hdf.html
+
 
 # Index the .bam produced by STAR
 rule indexSortedBAM:
