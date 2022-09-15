@@ -40,15 +40,15 @@ META = META[list(META["include"])] #remove undesired samples ("include"==False)
 META = META[list(META["file.format"]!="ERR")] #remove samples with file format issues (#TODO: deprecated?)
 
 # META = META[list(META["tissue"]=="muscle")]
-META = META[[x in ["muscle", "tendon", "limb", "ligament", "cartilage", "heart"] for x in META["tissue"]]]
+META = META[[x in ["muscle", "tendon"] for x in META["tissue"]]] # , "limb", "ligament", "cartilage", "heart"
 # META = META[list(META["tissue"]!="")]
-# META = META[list(META["species"]=="Homo sapiens")]
+META = META[list(META["species"]=="Homo sapiens")]
 # META = META[[x in ["Homo sapiens", "Mus musculus"] for x in META["species"]]]
 
 META = META[list(META["GSM.accession"]!="NA")]
 META = META[list(META["GSM.accession"]!="")]
 
-META = META[[x in ["3p_v2", "3p_v3", "3p_v3.1"] for x in META["chemistry"]]]
+META = META[[x in ["3p_v2", "3p_v3", "3p_v3.1", "5p_v1"] for x in META["chemistry"]]]
 
 # META = META.iloc[1:3,:] # subset to only download certain SRRs...
 
@@ -358,29 +358,31 @@ rule build_refs:
 ## Trimming and FastQC
 #############################################
 # Merge .fastq files (in case more than one sesquencing run was performed)
+#     expand("{DATADIR}/fastqs/{SRR}_{READ}.fastq.gz", DATADIR=config["DATADIR"], SRR=SRR_LIST, READ=["R1", "R2"])
 rule merge_fastqs:
-#    input:
-#        expand("{DATADIR}/fastqs/{SRR}_{READ}.fastq.gz", DATADIR=config["DATADIR"], SRR=SRR_LIST, READ=["R1", "R2"])
+    input:
+       R1_FQ = lambda wildcards: R1_FQs[wildcards.sample],
+       R2_FQ = lambda wildcards: R2_FQs[wildcards.sample]
     output:
         MERGED_R1_FQ = temp("{DATADIR}/align_out/{sample}/tmp/{sample}_R1.fq.gz"),
         MERGED_R2_FQ = temp("{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz")
     params:
-        TMP_DIR = "{DATADIR}/align_out/{sample}/tmp",
-        R1_FQ = lambda wildcards: R1_FQs[wildcards.sample],
-        R2_FQ = lambda wildcards: R2_FQs[wildcards.sample]
+        TMP_DIR = "{DATADIR}/align_out/{sample}/tmp"
+# R1_FQ = lambda wildcards: R1_FQs[wildcards.sample],
+# R2_FQ = lambda wildcards: R2_FQs[wildcards.sample]
     priority:
         2
     threads:
         config["CORES_LO"]
     run:
-        if len(params.R1_FQ)==1 & len(params.R2_FQ)==1: # shell for single fastq input
-            shell("cp {params.R1_FQ} {output.MERGED_R1_FQ}")
-            shell("cp {params.R2_FQ} {output.MERGED_R2_FQ}")
+        if len(input.R1_FQ)==1 & len(input.R2_FQ)==1: # shell for single fastq input
+            shell("cp {input.R1_FQ} {output.MERGED_R1_FQ}")
+            shell("cp {input.R2_FQ} {output.MERGED_R2_FQ}")
         else: # shell enablinging multi-fast input; concatenate inputs
-            print("Concatenating",len(params.R1_FQ), ".fastq's for", wildcards.sample)
+            print("Concatenating",len(input.R1_FQ), ".fastq's for", wildcards.sample)
             shell("mkdir -p {params.TMP_DIR}")
-            shell("zcat {params.R1_FQ} > {params.TMP_DIR}/{wildcards.sample}_R1.fq")
-            shell("zcat {params.R2_FQ} > {params.TMP_DIR}/{wildcards.sample}_R2.fq")
+            shell("zcat {input.R1_FQ} > {params.TMP_DIR}/{wildcards.sample}_R1.fq")
+            shell("zcat {input.R2_FQ} > {params.TMP_DIR}/{wildcards.sample}_R2.fq")
             shell("pigz -p{threads} {params.TMP_DIR}/{wildcards.sample}_R1.fq {params.TMP_DIR}/{wildcards.sample}_R2.fq")
 
 # Check QC of reads before trimming
@@ -406,66 +408,70 @@ rule preTrim_FastQC_R2:
             """
         )
 
-# TSO & polyA trimming
-rule trimPolyA_R2:
+# TSO, polyA, and polyG trimming
+rule cutadapt_R2:
     input:
         MERGED_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1.fq.gz",
         MERGED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz"
-    output:
-        A_TRIMMED_R1_FQ = temp("{DATADIR}/align_out/{sample}/tmp/{sample}_R1_Atrimmed.fq.gz"),
-        A_TRIMMED_R2_FQ = temp("{DATADIR}/align_out/{sample}/tmp/{sample}_R2_Atrimmed.fq.gz")
-    params:
-        CUTADAPT_EXEC = CUTADAPT_EXEC,
-        THREE_PRIME_R2_POLYA = "A"*100, # 100 A-mer
-        FIVE_PRIME_R2 = "CCCATGTACTCTGCGTTGATACCACTGCTT" #10x TSO sequence
-        # FIVE_PRIME_R2 = "TTCGTCACCATAGTTGCGTCTCATGTACCC" #rev 10x TSO sequence
-    threads:
-        config["CORES_LO"]
-        # min([config["CORES_LO"],8]) # 8 core max based on recommendations from trim_galore authors
-    log:
-        "{DATADIR}/align_out/{sample}/cutadapt_polyA_report.txt"
-    shell:
-        """
-        {params.CUTADAPT_EXEC} \
-        --minimum-length 18 \
-        -A {params.THREE_PRIME_R2_POLYA} \
- 		-G {params.FIVE_PRIME_R2} \
-        --pair-filter=any \
- 		-o {output.A_TRIMMED_R1_FQ} \
-        -p {output.A_TRIMMED_R2_FQ} \
-        --cores {threads} \
-        {input.MERGED_R1_FQ} {input.MERGED_R2_FQ} 1> {log}
-        """
-
-#Additional trimming step, for 2-color Illumina chemistries (NextSeq, etc.)
-rule trimPolyG_R2:
-    input:
-        A_TRIMMED_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1_Atrimmed.fq.gz",
-        A_TRIMMED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_Atrimmed.fq.gz"
     output:
         FINAL_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1_final.fq.gz", #TODO: add temp()?
         FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz"  #TODO: add temp()?
     params:
         CUTADAPT_EXEC = CUTADAPT_EXEC,
-        THREE_PRIME_R2_POLYG = "G"*100,
-        FIVE_PRIME_R2 = "AAGCAGTGGTATCAACGCAGAGTACATGGG" # rev-comp of 10x TSO sequence
+        THREE_PRIME_R2_POLYA = "A"*100, # 100 A-mer
+        THREE_PRIME_R2_POLYG = "G"*100, # 100 G-mer
+        FIVE_PRIME_R2_TSO = "CCCATGTACTCTGCGTTGATACCACTGCTT", #10x TSO sequence
+        FIVE_PRIME_R2_rcTSO = "AAGCAGTGGTATCAACGCAGAGTACATGGG" # rev-comp of 10x TSO sequence
+        # FIVE_PRIME_R2 = "TTCGTCACCATAGTTGCGTCTCATGTACCC" #rev 10x TSO sequence
     threads:
         config["CORES_LO"]
         # min([config["CORES_LO"],8]) # 8 core max based on recommendations from trim_galore authors
     log:
-        log = "{DATADIR}/align_out/{sample}/cutadapt_polyG_report.txt"
+        "{DATADIR}/align_out/{sample}/cutadapt.log"
     shell:
         """
         {params.CUTADAPT_EXEC} \
         --minimum-length 18 \
+        -A {params.THREE_PRIME_R2_POLYA} \
         -A {params.THREE_PRIME_R2_POLYG} \
- 		-G {params.FIVE_PRIME_R2} \
+ 		-G {params.FIVE_PRIME_R2_TSO} \
+ 		-G {params.FIVE_PRIME_R2_rcTSO} \
         --pair-filter=any \
  		-o {output.FINAL_R1_FQ} \
         -p {output.FINAL_R2_FQ} \
         --cores {threads} \
-        {input.A_TRIMMED_R1_FQ} {input.A_TRIMMED_R2_FQ} 1> {log.log}
+        {input.MERGED_R1_FQ} {input.MERGED_R2_FQ} 1> {log}
         """
+
+#Additional trimming step, for 2-color Illumina chemistries (NextSeq, etc.)
+# rule trimPolyG_R2:
+#     input:
+#         A_TRIMMED_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1_Atrimmed.fq.gz",
+#         A_TRIMMED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_Atrimmed.fq.gz"
+#     output:
+#         FINAL_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1_final.fq.gz", #TODO: add temp()?
+#         FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz"  #TODO: add temp()?
+#     params:
+#         CUTADAPT_EXEC = CUTADAPT_EXEC,
+#         THREE_PRIME_R2_POLYG = "G"*100,
+#         FIVE_PRIME_R2 = "AAGCAGTGGTATCAACGCAGAGTACATGGG" # rev-comp of 10x TSO sequence
+#     threads:
+#         config["CORES_LO"]
+#         # min([config["CORES_LO"],8]) # 8 core max based on recommendations from trim_galore authors
+#     log:
+#         log = "{DATADIR}/align_out/{sample}/cutadapt_polyG_report.txt"
+#     shell:
+#         """
+#         {params.CUTADAPT_EXEC} \
+#         --minimum-length 18 \
+#         -A {params.THREE_PRIME_R2_POLYG} \
+#  		-G {params.FIVE_PRIME_R2} \
+#         --pair-filter=any \
+#  		-o {output.FINAL_R1_FQ} \
+#         -p {output.FINAL_R2_FQ} \
+#         --cores {threads} \
+#         {input.A_TRIMMED_R1_FQ} {input.A_TRIMMED_R2_FQ} 1> {log.log}
+#         """
 
 # QC after read trimming
 rule postTrim_FastQC_R2:
@@ -543,7 +549,6 @@ rule STARsolo_align:
             --outSAMattributes NH HI nM AS CR UR CB UB GX GN sS sQ sM \
             --readFilesCommand zcat \
             --genomeDir {STAR_REF} \
-            --genomeLoad LoadAndKeep \
             --limitBAMsortRAM={params.MEMLIMIT} \
             --readFilesIn {input.FINAL_R2_FQ} {input.FINAL_R1_FQ} \
             --clipAdapterType CellRanger4 \
@@ -558,6 +563,7 @@ rule STARsolo_align:
             --soloMultiMappers EM
             """
         )
+        # --genomeLoad LoadAndRemove \
 
 # compress outputs from STAR (count matrices)
 rule compress_STAR_outs:
