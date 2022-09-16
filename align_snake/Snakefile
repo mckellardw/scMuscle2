@@ -3,7 +3,6 @@
 #   Snakemake workflow to  download fastq files and associated metadata from SRA, then use STARsolo to align and quantify 10x Chromium datasets, and finally perform simple preprocessing so that data are ready for downstream analysis
 #   Written by David W. McKellar
 ########################################################################################################
-
 import pandas as pd
 from itertools import chain
 from functools import reduce
@@ -17,7 +16,25 @@ configfile:"config.yaml"
 CHEMISTRY_SHEET = pd.read_csv(config["CHEMISTRY_SHEET"], na_filter=False,index_col=0)#"resources/chemistry_sheet.csv"
 
 ########################################################################################################
-# Directories and locations
+# Executables
+########################################################################################################
+FFQ_EXEC = config["FFQ_EXEC"]
+PREFETCH_EXEC = config["PREFETCH_EXEC"]
+FQD_EXEC = config["FQD_EXEC"]
+BAM2FQ_EXEC = config["BAM2FQ_EXEC"]
+
+STAR_EXEC = config["STAR_EXEC"]
+GGET_EXEC = config["GGET_EXEC"]
+FASTQC_EXEC = config["FASTQC_EXEC"]
+# TRIMGALORE_EXEC = config["TRIMGALORE_EXEC"]
+CUTADAPT_EXEC = config["CUTADAPT_EXEC"]
+SAMTOOLS_EXEC = config["SAMTOOLS_EXEC"]
+UMITOOLS_EXEC = config["UMITOOLS_EXEC"]
+QUALIMAP_EXEC = config["QUALIMAP_EXEC"]
+#TODO- samtools, etc
+
+########################################################################################################
+# Directories
 ########################################################################################################
 PRODIR = config["PRODIR"]
 METADIR = config["METADIR"]
@@ -40,9 +57,9 @@ META = META[list(META["include"])] #remove undesired samples ("include"==False)
 META = META[list(META["file.format"]!="ERR")] #remove samples with file format issues (#TODO: deprecated?)
 
 # META = META[list(META["tissue"]=="muscle")]
-META = META[[x in ["muscle", "tendon"] for x in META["tissue"]]] # , "limb", "ligament", "cartilage", "heart"
+META = META[[x in ["muscle", "tendon","limb", "ligament", "cartilage", "heart"] for x in META["tissue"]]] # ,
 # META = META[list(META["tissue"]!="")]
-META = META[list(META["species"]=="Homo sapiens")]
+# META = META[list(META["species"]=="Homo sapiens")]
 # META = META[[x in ["Homo sapiens", "Mus musculus"] for x in META["species"]]]
 
 META = META[list(META["GSM.accession"]!="NA")]
@@ -52,6 +69,9 @@ META = META[[x in ["3p_v2", "3p_v3", "3p_v3.1", "5p_v1"] for x in META["chemistr
 
 # META = META.iloc[1:3,:] # subset to only download certain SRRs...
 
+########################################################################################################
+# Pre-snake metadata prep
+########################################################################################################
 # Get list of SRR IDs for fastq downloading
 SRR_LIST = list(META["SRR.accession"])
 for i in range(0,len(SRR_LIST)):
@@ -89,23 +109,7 @@ SPECIES = [x.replace(" ", "_") for x in SPECIES]
 SPECIES = pd.unique(SPECIES)
 
 ########################################################################################################
-# Executables
-########################################################################################################
-FFQ_EXEC = config["FFQ_EXEC"]
-PREFETCH_EXEC = config["PREFETCH_EXEC"]
-FQD_EXEC = config["FQD_EXEC"]
-BAM2FQ_EXEC = config["BAM2FQ_EXEC"]
-
-STAR_EXEC = config["STAR_EXEC"]
-GGET_EXEC = config["GGET_EXEC"]
-FASTQC_EXEC = config["FASTQC_EXEC"]
-# TRIMGALORE_EXEC = config["TRIMGALORE_EXEC"]
-CUTADAPT_EXEC = config["CUTADAPT_EXEC"]
-SAMTOOLS_EXEC = config["SAMTOOLS_EXEC"]
-UMITOOLS_EXEC = config["UMITOOLS_EXEC"]
-QUALIMAP_EXEC = config["QUALIMAP_EXEC"]
-#TODO- samtools, etc
-
+# Snakemake
 ########################################################################################################
 rule all:
     input:
@@ -414,8 +418,8 @@ rule cutadapt_R2:
         MERGED_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1.fq.gz",
         MERGED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz"
     output:
-        FINAL_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1_final.fq.gz", #TODO: add temp()?
-        FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz"  #TODO: add temp()?
+        FINAL_R1_FQ = temp("{DATADIR}/align_out/{sample}/tmp/{sample}_R1_final.fq.gz"),
+        FINAL_R2_FQ = temp("{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz")
     params:
         CUTADAPT_EXEC = CUTADAPT_EXEC,
         THREE_PRIME_R2_POLYA = "A"*100, # 100 A-mer
@@ -442,36 +446,6 @@ rule cutadapt_R2:
         --cores {threads} \
         {input.MERGED_R1_FQ} {input.MERGED_R2_FQ} 1> {log}
         """
-
-#Additional trimming step, for 2-color Illumina chemistries (NextSeq, etc.)
-# rule trimPolyG_R2:
-#     input:
-#         A_TRIMMED_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1_Atrimmed.fq.gz",
-#         A_TRIMMED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_Atrimmed.fq.gz"
-#     output:
-#         FINAL_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1_final.fq.gz", #TODO: add temp()?
-#         FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz"  #TODO: add temp()?
-#     params:
-#         CUTADAPT_EXEC = CUTADAPT_EXEC,
-#         THREE_PRIME_R2_POLYG = "G"*100,
-#         FIVE_PRIME_R2 = "AAGCAGTGGTATCAACGCAGAGTACATGGG" # rev-comp of 10x TSO sequence
-#     threads:
-#         config["CORES_LO"]
-#         # min([config["CORES_LO"],8]) # 8 core max based on recommendations from trim_galore authors
-#     log:
-#         log = "{DATADIR}/align_out/{sample}/cutadapt_polyG_report.txt"
-#     shell:
-#         """
-#         {params.CUTADAPT_EXEC} \
-#         --minimum-length 18 \
-#         -A {params.THREE_PRIME_R2_POLYG} \
-#  		-G {params.FIVE_PRIME_R2} \
-#         --pair-filter=any \
-#  		-o {output.FINAL_R1_FQ} \
-#         -p {output.FINAL_R2_FQ} \
-#         --cores {threads} \
-#         {input.A_TRIMMED_R1_FQ} {input.A_TRIMMED_R2_FQ} 1> {log.log}
-#         """
 
 # QC after read trimming
 rule postTrim_FastQC_R2:

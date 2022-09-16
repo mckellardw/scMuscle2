@@ -13,14 +13,14 @@ SAMPLE_SHEET: /workdir/dwm269/scMuscle2/scMuscle2_metadata_v1-0.csv
 
 
 # STARsolo parameters
-CORES_HI: 36 # how many cores to give for each process (snakemake automatically parallelizes process using "snakemake -j  {numTotalCores}")
-CORES_LO: 15
-MEMLIMIT: 252657461480 # Number of bytes to use per core - 
-  #4000000000 - 4Gb per core
+CORES_HI: 20 # how many cores to give for each process (snakemake automatically parallelizes process using "snakemake -j  {numTotalCores}")
+CORES_MID: 18
+CORES_LO: 3
+MEMLIMIT: 250000000000 # Number of bytes to use per core -252657461480
+
 #195000000000 # limit in bytes - 195gb
 
-## Cell Barcode white lists
-#TODO- move to chemistry sheet
+## Chemistry details (whitelists, barcode/UMI design, etc.)
 CHEMISTRY_SHEET: resources/chemistry_sheet.csv
 
 ########################################################################################################
@@ -44,14 +44,15 @@ FQD_EXEC: /home/dwm269/usr/bin/sratoolkit.3.0.0-centos_linux64/bin/fasterq-dump.
 # PFD_EXEC: parallel-fastq-dump
 BAM2FQ_EXEC: ~/usr/bin/bamtofastq_1.4.1
 
-STAR_EXEC: STAR #v2.7.10a
-FASTQC_EXEC: fastqc
-GGET_EXEC: gget
+STAR_EXEC: /programs/STAR/STAR #STAR #v2.7.10a
+FASTQC_EXEC: fastqc #v0.11.9
+GGET_EXEC: gget #v0.2.6
 TRIMGALORE_EXEC: trim_galore
-CUTADAPT_EXEC: cutadapt
-SAMTOOLS_EXEC: samtools
-UMITOOLS_EXEC: umi_tools
-QUALIMAP_EXEC: qualimap
+CUTADAPT_EXEC: cutadapt #v4.1
+SAMTOOLS_EXEC: samtools #v1.16
+
+UMITOOLS_EXEC: umi_tools #v
+QUALIMAP_EXEC: qualimap #v
 
 # BAM2SPLITBW: /home/dwm269/DWM_utils/seq_utils/bam2splitBigWig.sh #Custom function in DWM_utils that splits a bam file by strand and converts it into bigwig format
 # FASTX_COLLAPSER: fastx_collapser
