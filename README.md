@@ -17,19 +17,6 @@ We made a [quick google survey](https://forms.gle/rm6R9hbTAtrpm8rcA) to simplify
 Please send any questions to either David McKellar (dwm269@cornell.edu) or to our official scMuscle email address (scmuscle@cornell.edu).
 
 # **TODO:**
-- [ ] Finish updating sample list, including new meta data (species, etc)
-  - [ ] Add the following metadata columns: age, tissue/muscle, disease/injury status
-  - Add HCA data
-- [ ] Download fastqs
-- [X] Build reference genomes (w/ GENCODE) AND a list of commonly used transgenes
-  - [X] Mouse
-  - [X] Human
-  - [X] ZF
-  - [X] rat
-  - [X] pig
-  - [X] ~~others...~~ Automated this based on the sample metadata! Shout out `gget`
-- [ ] Run STARsolo
-  - [ ] Add kallisto for comparison?
 - [ ] Add ambient RNA decontamination into `align_snake`
   - Tools to try:
     - [ ] SoupX [github]() [manuscript]()
@@ -54,7 +41,7 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
 
 
 # Description of meta data
-#TODO: clean this up... convert to table?
+#TODO: clean this up/convert to table
 - **source.label** - shorthand for the publication from which this data was taken (first author's last name plus year final manuscript was published)
 - **sample** - sample ID, specific to each lane of a 10x Chromium run (string of characters with no spaces, no periods, and no hyphens/dashes)
 - **description** - Brief description of the sample. Not used by any pipeline.
@@ -74,7 +61,7 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
 - **tissue** - #TODO
 - **subtissue** - #TODO
 
-## Sources used to find samples
+## Sources & keywords used to find samples
 - [NCBI/GEO](https://www.ncbi.nlm.nih.gov/geo/) - keywords used:
   - (muscle) AND (single-cell)
   - (tendon) AND (single-cell)
@@ -109,7 +96,7 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
 2. Build reference genomes (`gget`, `STAR`)
 3. Align sequencing data (`STAR`, `kallisto`?)  
 
-
+#TODO
 `TAR-scRNA-seq`- annotation-free analysis of scRNAseq data [link](https://github.com/fw262/TAR-scRNA-seq)
 4. Perform annotation-free analysis `multiTAR` (**#TODO**)
 
@@ -118,16 +105,13 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
 6. Cross-species integrative analysis (`SAMmap`)
 
 ## "tissue" annotations
-[1] "cell line"                "joint"                   
-[3] "limb bud"                 "muscle"                  
-[5] "muscle and colon"         "organoid"                
-[7] "psc-derived"              "tendon"                  
-[9] "tumor"                    ""                        
-[11] "#TODO"                    "bone"                    
-[13] "cartilage"                "chondrocytes"            
-[15] "cranial neural crest"     "ESC"                     
-[17] "ESC-derived chondrocytes" "ligament"                
-[19] "lung"                     "MSC"                     
-[21] "peritoneum"               "skin"                    
-[23] "spinal cord"              "xenograft"               
-[25] "limb"    
+- Using tiered tissue annotations:
+  - Muscle
+    - Hindlimb
+    - Tibialis Anterior
+    - Quadriceps
+    - 
+  - Tendon
+    -
+  - Cartilage
+    -

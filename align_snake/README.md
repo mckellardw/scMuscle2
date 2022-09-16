@@ -3,7 +3,7 @@ Preprocessing, alignment, QC, and quantification workflow for 10x Genomics singl
 **by David W. McKellar**
 
 #Pipeline TODO:
-- Add Tabula dataset downloads somehow... just `wget`?
+- Add Tabula dataset downloads... just `wget` from AWS?
 
 #README TODO:
 - Write out pipeline details
@@ -23,7 +23,7 @@ Preprocessing, alignment, QC, and quantification workflow for 10x Genomics singl
 
 - `gget` [v0.2.6](https://github.com/pachterlab/gget)
 - `cutadapt` [v4.1](https://cutadapt.readthedocs.io/en/stable/)
-<!-- - `trim-galore` [v0.6.2](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/) -->
+- ~~`trim-galore` [v0.6.2](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/)~~
 - `fastqc` [v0.11.8](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 - `STAR` [v2.7.10a](https://github.com/alexdobin/STAR)
 - `qualimap` [v.2.2.2a](http://qualimap.conesalab.org/)
@@ -61,7 +61,7 @@ I have found that NCBI does not like when you query their databases too often...
 ## **Outputs:**
 File `tree` for `align_snake` outputs
 ```
-{DATADIR}/{align_out}/{sample ID/GSM#######}
+{DATADIR}/{align_out}/{GSM#######}
 ├── cutadapt_polyA_report.txt
 ├── cutadapt_polyG_report.txt
 ├── postTrim_fastqc_R2_out
