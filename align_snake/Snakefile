@@ -372,8 +372,6 @@ rule merge_fastqs:
         MERGED_R2_FQ = temp("{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz")
     params:
         TMP_DIR = "{DATADIR}/align_out/{sample}/tmp"
-# R1_FQ = lambda wildcards: R1_FQs[wildcards.sample],
-# R2_FQ = lambda wildcards: R2_FQs[wildcards.sample]
     priority:
         2
     threads:
@@ -501,7 +499,6 @@ rule STARsolo_align:
     priority:
         42
     run:
-        # print(CHEM_DICT)
         tmp_chemistry = CHEM_DICT[wildcards.sample]
         species = SPECIES_DICT[wildcards.sample]
 
@@ -613,32 +610,10 @@ rule umitools_dedupBAM:
         #1
     log:
         "{DATADIR}/align_out/{sample}/umitools_dedup/dedup.log"
-    run:
-        shell(
-            f"""
-            {params.SAMTOOLS_EXEC} view -1 -b \
-            -@ {threads} \
-            --tag-file CB:{input.CB_WHITELIST} \
-            {input.SORTEDBAM} \
-            > {output.TMPBAM}
-
-            {params.SAMTOOLS_EXEC} index \
-            -@ {threads} \
-            {output.TMPBAM}
-
-            {params.UMITOOLS_EXEC} dedup \
-            -I {output.TMPBAM} \
-            --extract-umi-method=tag \
-            --umi-tag=UB \
-            --cell-tag=CB \
-            --method=unique \
-            --per-cell \
-            --unmapped-reads=discard \
-            --log {log} \
-            -S {output.DEDUPBAM} && rm {output.TMPBAM}
-            """
-        )
-# --output-stats={params.OUTPUT_PREFIX} \
+    shell:
+        """
+        TODO
+        """
 
 rule umitools_indexDedupBAM:
     input:
