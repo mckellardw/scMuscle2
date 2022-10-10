@@ -10,14 +10,14 @@ In the first scMuscle project, we attempted to gain a better understanding of th
 <!---toc end-->
 
 # How to include your data in scMuscle2
-We made a [quick google survey](https://forms.gle/rm6R9hbTAtrpm8rcA) to simplify sharing metadata. Only publicly available data will be included in this study, so be sure to upload to GEO before you do anything else!
+We made a [quick google survey](https://forms.gle/rm6R9hbTAtrpm8rcA) to simplify sharing metadata. Only publicly available data will be included in this study, so please to upload to GEO/SRA!
 
 Please send any questions to either David McKellar (dwm269@cornell.edu) or to our official scMuscle email address (scmuscle@cornell.edu).
 
 ## **TODO:**
 - [ ] Add ambient RNA decontamination into `align_snake`
   - Tools to try:
-    - [ ] SoupX [github]() [manuscript]()
+    - [X] SoupX [github]() [manuscript]()
     - [ ] Cellbender [github](https://github.com/broadinstitute/CellBender) [docs](https://cellbender.readthedocs.io/en/latest/) [`remove-background` vignette](https://cellbender.readthedocs.io/en/latest/usage/index.html)
       - Command line tool & GPU-enabled!
       - BUT, requires a cellranger-generated `.h5` file... LAME. [Convert dataframe to .h5 w/ pandas](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_hdf.html)
@@ -29,7 +29,11 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
     - [ ] DecontX [github](https://github.com/campbio/celda/blob/master/vignettes/decontX.Rmd) [manuscript](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-1950-6)
       - R-based, but not compatible w/ Seurat...
     - [ ] others...
-- [ ] Benchmark integration w/ [scIB](https://github.com/theislab/scib)? Likely will take a ***LOT*** of compute
+- [ ] Doublet removal
+  - [ ] DoubletDetection [[link](https://github.com/JonathanShor/DoubletDetection)] [[docs](https://doubletdetection.readthedocs.io/en/stable/index.html)]
+  - [ ] scrublet [[link](https://github.com/swolock/scrublet)]
+- [ ] Benchmark integration.
+  - [ ] [scIB](https://github.com/theislab/scib)? [documentation](https://scib.readthedocs.io/en/latest/)
   - [ ] scDREAMER [github](https://github.com/Zafar-Lab/scDREAMER)
 - [ ] Pseudobulk/metacell analysis
   - [ ] w/ [metacells](https://github.com/tanaylab/metacells)?
