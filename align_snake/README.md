@@ -3,10 +3,13 @@ Preprocessing, alignment, QC, and quantification workflow for 10x Genomics singl
 **by David W. McKellar**
 
 #Pipeline TODO:
-- Add Tabula dataset downloads... just `wget` from AWS?
+- Increase data access functionalities
+  - Add `aws`/`wget` as a download option
+    - Tabula dataset downloads... just `wget` from AWS?
+  - Add `local` as a download option under `meta$file.format`
+- Add `multiqc` [[link](https://multiqc.info/)] rule to aggregate QC info on alignment/etc.
 
 #README TODO:
-- Write out pipeline details
 - Info on sample_sheet format
 
 ## Data to add...
@@ -27,6 +30,7 @@ Preprocessing, alignment, QC, and quantification workflow for 10x Genomics singl
 - `fastqc` [v0.11.8](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 - `STAR` [v2.7.10a](https://github.com/alexdobin/STAR)
 - `qualimap` [v.2.2.2a](http://qualimap.conesalab.org/)
+- `multiqc` [v1.13](https://multiqc.info/)
 
 *Maybe include*:
 - `vsearch` [v#](https://github.com/torognes/vsearch)
@@ -39,7 +43,7 @@ conda create --name align_snake
 
 conda activate align_snake
 
-conda install -c bioconda ffq parallel-fastq-dump gget fastqc cutadapt star
+conda install -c bioconda ffq parallel-fastq-dump gget fastqc cutadapt star multiqc
 
 conda install  -c conda-forge pigz pandas
 
