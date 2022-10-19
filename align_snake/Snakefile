@@ -55,7 +55,7 @@ META = pd.read_csv(config["SAMPLE_SHEET"], na_filter=False)#sep="\t",encoding = 
 
 META = META[list(META["include"])] #remove undesired samples ("include"==False)
 META = META[list(META["file.format"]!="ERR")] #remove samples with file format issues
-META = META[list(META["file.format"]!="bam")] #remove samples with file format issues
+# META = META[list(META["file.format"]!="bam")] #remove samples with file format issues
 
 ## Tissue filtering
 # META = META[list(META["tissue"]=="muscle")]
@@ -63,7 +63,7 @@ META = META[list(META["file.format"]!="bam")] #remove samples with file format i
 META = META[list(META["tissue"]!="")]
 
 ## Species filtering
-# META = META[list(META["species"]=="Homo sapiens")]
+META = META[list(META["species"]=="Ciona intestinalis")]
 # META = META[[x in ["Homo sapiens", "Mus musculus", "Danio rerio"] for x in META["species"]]]
 
 META = META[list(META["GSM.accession"]!="NA")]
@@ -133,60 +133,29 @@ rule all:
         expand("{DATADIR}/align_out/{sample}/preTrim_fastqc_R2_out", DATADIR=config["DATADIR"], sample=SAMPLES), # raw R2 fastQC results
         expand("{DATADIR}/align_out/{sample}/postTrim_fastqc_R2_out", DATADIR=config["DATADIR"], sample=SAMPLES), # adapter/polyA/ployG-trimmed R2 fastQC results
 
-        # expand("{TMPDIR}/{SRR}.txt", TMPDIR=config["TMPDIR"], SRR=SRR), # **Only use for debugging**
         expand("{REFDIR}/{SPECIES}/STAR/SAindex", REFDIR=REFDIR, SPECIES=SPECIES), # Reference genomes
         expand("{METADIR}/{SRR}.json", METADIR=config["METADIR"], SRR=SRR_LIST), # metadata files
         expand("{METADIR}/merged_metadata.csv", METADIR=config["METADIR"])
 
         # expand("{DATADIR}/fastqs/{SRR}_{READ}.fastq.gz", DATADIR=config["DATADIR"], SRR=SRR_LIST, READ=["R1", "R2"]) # fastqs
 
+# Metadata wrangling, aggregation
 include: "rules/get_metadata.smk"
+
+# Downloading, aggregating, and QCing raw read data
 include: "rules/get_fqs.smk"
 include: "rules/merge_fqs.smk"
 include: "rules/trimQC.smk"
+
+# Alignment, post-alignment clean-up, and QC with STARsolo
 include: "rules/build_ref.smk"
 include: "rules/star_align.smk"
-
 include: "rules/dedup.smk"
 include: "rules/star_unmapped.smk"
 include: "rules/qualimap.smk"
 
+# Counts preprocessing
+# include: "rules/soupx.smk"
 
-
-#############################################
-## Ambient RNA decontamination
-#############################################
-# rule ambient_rna_decon:
-#     input:
-#         GENEFULL_FILT_MAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx.gz",
-#         FILT_CELLS = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/barcodes.tsv.gz",
-#         FILT_FEATS = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/barcodes.tsv.gz",
-#         GENEFULL_RAW_MAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/raw/matrix.mtx.gz",
-#         RAW_CELLS = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/raw/barcodes.tsv.gz",
-#         RAW_FEATS = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/raw/barcodes.tsv.gz"
-#     output:
-#         SOUPX_MAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/matrix.mtx.gz",
-#         SOUPX_CELLS = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/raw/barcodes.tsv.gz",
-#         SOUPX_FEATS = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/raw/barcodes.tsv.gz"
-#     params:
-#     threads:
-#         config["CORES_MID"]
-#     script:
-#         """
-#
-#         """
-
-
-
-#############################################
-## Aggregate QC information with multiQC
-#############################################
-
-# rule multiqc_final:
-#     input:
-#         expand()
-#     output:
-#         MQC_DIR = directory("{DATADIR}/multiqc_out/")
-#     threads:
-#         config["CORES_HI"]
-#     run:
+# Final QC
+# include: "rules/multiqc.smk"

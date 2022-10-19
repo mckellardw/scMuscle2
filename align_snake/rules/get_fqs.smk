@@ -34,6 +34,8 @@ rule convert_fastqs:
         OUTDIR = "{DATADIR}/fastqs"
     threads:
         config["CORES_LO"]
+    priority:
+        42
     run:
         # FORMAT = FORMAT_DICT[wildcards.sample]
         shell(
