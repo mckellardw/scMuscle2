@@ -1,0 +1,165 @@
+# starsolo_soupx.R
+## R script to perform ambient RNA removal on STARsolo count matrices with SoupX
+
+# Get command line arguments
+args=(commandArgs(TRUE))
+
+
+# Load libraries  & helper functions ----
+library(Matrix)
+library(dplyr)
+library(Seurat)
+# library(future) #TODO add multicore for Seurat w/ `future` for `getClusterIDs()`
+
+library(SoupX)
+
+# write_sparse requirements
+library(utils)
+library(R.utils)
+
+# source("~/DWM_utils/sc_utils/seurat_helpers/seutils.R")
+
+SOLO_DIR = args[1] # Directory to either `Gene` or `GeneFull` matrix outputs
+NCORES = args[2]
+
+# Helper function(s) ----
+## Quick function to find clusters
+getClusterIDs <- function(toc, verbose=F){
+  seu <- CreateSeuratObject(toc)
+  seu <- seu %>%
+    NormalizeData(verbose=verbose)%>%
+    ScaleData(verbose=verbose) %>%
+    FindVariableFeatures(verbose=verbose)%>%
+    RunPCA(verbose=verbose) %>%
+    FindNeighbors(verbose=verbose) %>%
+    FindClusters(verbose=verbose)
+
+  return(
+    setNames(Idents(seu), Cells(seu))
+  )
+}
+
+# Borrowed/adapted from the Marioni Lab, DropletUtils package (https://rdrr.io/github/MarioniLab/DropletUtils/src/R/write10xCounts.R)
+#   (Had R version issues getting it to work as a dependency)
+#' @importFrom utils write.table
+#' @importFrom Matrix writeMM
+#' @importFrom R.utils gzip
+write_sparse <- function(
+    path, # name of new directory
+    x, # matrix to write as sparse
+    barcodes=NULL, # cell IDs, colnames
+    features=NULL, # gene IDs, rownames
+    overwrite=F,
+    verbose=F
+){
+  require(utils,quietly = T)
+  require(Matrix,quietly = T)
+  require(R.utils,quietly = T)
+  
+  if(!dir.exists(path)){
+    dir.create(
+      path,
+      showWarnings=verbose,
+      recursive = T
+    )
+  }
+  
+  if(is.null(barcodes)){
+    barcodes=colnames(x)
+  }
+  if(is.null(features)){
+    features=rownames(x)
+  }
+  # gene.info <- data.frame(gene.id, gene.symbol, stringsAsFactors=FALSE)
+  
+  # gene.info$gene.type <- rep(gene.type, length.out=nrow(gene.info))
+  mhandle <- file.path(path, "matrix.mtx")
+  bhandle <- gzfile(file.path(path, "barcodes.tsv.gz"), open="wb")
+  fhandle <- gzfile(file.path(path, "features.tsv.gz"), open="wb")
+  on.exit({
+    close(bhandle)
+    close(fhandle)
+  })
+  
+  if(overwrite){
+    if(verbose){message("Overwriting old files if they exist...")}
+    
+    if(file.exists(paste0(mhandle,".gz"))){
+      file.remove(paste0(mhandle,".gz"))
+    }
+    if(file.exists(bhandle)){
+      file.remove(bhandle)
+    }
+    if(file.exists(fhandle)){
+      file.remove(fhandle)
+    }
+  }
+  
+  writeMM(x, file=mhandle)
+  write(
+    barcodes, 
+    file=bhandle
+  )
+  write.table(
+    features, 
+    file=fhandle, 
+    row.names=FALSE, 
+    col.names=FALSE, 
+    quote=FALSE, 
+    sep="\t"
+  )
+  
+  # Annoyingly, writeMM doesn't take connection objects.
+  gzip(mhandle)
+  
+  return(NULL)
+}
+
+# Read in raw and filtered matrices ----
+tod = Seurat::Read10X(paste0(DIR,'raw')) #droplets
+toc = Seurat::Read10X(paste0(DIR,'filtered')) # cells
+
+#     SoupX ----
+# https://github.com/constantAmateur/SoupX
+
+#initialize soup objects from STARsolo outputs
+soup <- SoupChannel(
+  tod=tod, # table_of_droplets
+  toc=toc  # table_of_counts
+)
+
+# set cluster IDs for cells before soup estimations
+## quick preprocessing/clustering to get cluster IDs for cells
+tmp.clusters <- getClusterIDs(toc=sc$toc)
+
+soup <- setClusters(
+  sc,
+  tmp.clusters
+)
+
+soup.est <- autoEstCont(sc)
+adj.mat <- adjustCounts(sc)
+
+
+# Save adjusted matrices to disk ----
+if(!is.null(adj.mat)){
+  cat(paste0("Writing matrix for ", meta$sample[i],"...\n"))
+  write_sparse(
+    path=paste0(SOLO_DIR,"/soupx"), # name of new directory
+    x=adj.mat, # matrix to write as sparse
+    barcodes=NULL, # cell IDs, colnames
+    features=NULL, # gene IDs, rownames
+    overwrite=T,
+    verbose=T
+  )
+}else{
+  message(paste0("Adjusted matrix is NULL...\n"))
+}
+
+
+# save Rho values
+# rhos <- list()
+# for(i in 1:length(soup.list.est)){
+#   rhos[[i]] <- mean(soup.list.est[[i]]$metaData$rho)
+# }
+# rhos <- do.call(rbind,rhos)

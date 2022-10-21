@@ -58,13 +58,13 @@ META = META[list(META["file.format"]!="ERR")] #remove samples with file format i
 # META = META[list(META["file.format"]!="bam")] #remove samples with file format issues
 
 ## Tissue filtering
-# META = META[list(META["tissue"]=="muscle")]
+META = META[list(META["tissue"]=="muscle")]
 # META = META[[x in ["muscle", "tendon","limb", "ligament", "cartilage", "heart"] for x in META["tissue"]]] # ,
 META = META[list(META["tissue"]!="")]
 
 ## Species filtering
-META = META[list(META["species"]=="Ciona intestinalis")]
-# META = META[[x in ["Homo sapiens", "Mus musculus", "Danio rerio"] for x in META["species"]]]
+# META = META[list(META["species"]=="Ciona intestinalis")]
+META = META[[x in ["Homo sapiens", "Mus musculus", "Danio rerio"] for x in META["species"]]]
 
 META = META[list(META["GSM.accession"]!="NA")]
 META = META[list(META["GSM.accession"]!="")]
@@ -155,7 +155,9 @@ include: "rules/star_unmapped.smk"
 include: "rules/qualimap.smk"
 
 # Counts preprocessing
-# include: "rules/soupx.smk"
+include: "rules/soupx.smk"
+# include: "rules/scanpy_init.smk"
+# include: "rules/scanpy_QCfilter.smk"
 
 # Final QC
 # include: "rules/multiqc.smk"
