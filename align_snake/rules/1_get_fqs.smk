@@ -1,22 +1,38 @@
 #############################################
 ## prefetch (SRA-toolkit)
 #############################################
-# Download reads as an SRA file into a temporary directory, so they can be formatted as .fastq"s
+# Download reads as an SRA file into a temporary directory, so they can be formatted as .fastq's
+#TODO- add back bam/fastq if statement... :(
 rule prefetch:
     output:
         SRA = temp("{TMPDIR}/{SRR}.sra")
     run:
-        # FORMAT = FORMAT_DICT[wildcards.sample]
-        shell(
-            f"""
-            {PREFETCH_EXEC} \
-            --verify yes \
-            --type sra \
-            --max-size 999G \
-            --output-file {output.SRA} \
-            {wildcards.SRR}
-            """
-        )
+        FORMAT = FORMAT_DICT[wildcards.sample]
+
+        if FORMAT == "fastq":
+            shell(
+                f"""
+                {PREFETCH_EXEC} \
+                --verify yes \
+                --type sra \
+                --max-size 999G \
+                --output-file {output.SRA} \
+                {wildcards.SRR}
+                """
+            )
+        elif FORMAT == "bam":
+            shell(
+                f"""
+                 {PREFETCH_EXEC} \
+                --verify yes \
+                --max-size 999999999999 \
+                --force ALL \
+                --output-directory {TMPDIR}/{wildcards.SRR} \
+                --type all \
+                --output-file {output.SRA} \
+                {wildcards.SRR}
+                """
+            )
 # [SRR for SRR in SRR_LIST if FORMAT_DICT[SRR] in ["fastq","bam"]]
 
  # Convert SRA files to fastq with fasterq-dump
@@ -37,21 +53,29 @@ rule convert_fastqs:
     priority:
         42
     run:
-        # FORMAT = FORMAT_DICT[wildcards.sample]
-        shell(
-            f"""
-            {FQD_EXEC} \
-            --threads {threads} \
-            --mem {params.MEMLIMIT} \
-            --outdir {params.OUTDIR} \
-            --temp {TMPDIR} \
-            --split-files \
-            --include-technical \
-            {input.SRA}
+        FORMAT = FORMAT_DICT[wildcards.sample]
 
-            pigz -p{threads} --force {params.OUTDIR}/{wildcards.SRR}_*.fastq
-            """
-        )
+        if FORMAT == "fastq":
+            shell(
+                f"""
+                {FQD_EXEC} \
+                --threads {threads} \
+                --mem {params.MEMLIMIT} \
+                --outdir {params.OUTDIR} \
+                --temp {TMPDIR} \
+                --split-files \
+                --include-technical \
+                {input.SRA}
+
+                pigz -p{threads} --force {params.OUTDIR}/{wildcards.SRR}_*.fastq
+                """
+            )
+        elif FORMAT == "bam":
+            shell(
+                f"""
+                
+                """
+            )
 
 # {FFQ} --ncbi {SRR} \
 # | xargs curl -o {DATADIR}/fastqs/{SRR}.bam

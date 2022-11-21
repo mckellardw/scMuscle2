@@ -33,9 +33,8 @@ UMITOOLS_EXEC = config["UMITOOLS_EXEC"]
 QUALIMAP_EXEC = config["QUALIMAP_EXEC"]
 MULTIQC_EXEC = config["MULTIQC_EXEC"]
 
-########################################################################################################
-# Directories
-########################################################################################################
+
+########## Directories ##########
 PRODIR = config["PRODIR"]
 METADIR = config["METADIR"]
 TMPDIR = config["TMPDIR"] # temporary files
@@ -48,9 +47,8 @@ shell("mkdir -p {METADIR}")
 shell("mkdir -p {DATADIR}")
 shell("mkdir -p {REFDIR}")
 
-########################################################################################################
-# Metadata
-########################################################################################################
+
+########## Metadata ##########
 META = pd.read_csv(config["SAMPLE_SHEET"], na_filter=False)#sep="\t",encoding = "utf-8"
 
 META = META[list(META["include"])] #remove undesired samples ("include"==False)
@@ -73,9 +71,9 @@ META = META[[x in ["3p_v2", "3p_v3", "3p_v3.1", "5p_v1"] for x in META["chemistr
 
 # META = META.iloc[1:40,:] # subset to only download certain SRRs...
 
-########################################################################################################
-# Pre-snake metadata prep
-########################################################################################################
+
+########## Pre-snake metadata prep ##########
+
 # Get list of SRR IDs for fastq downloading
 SRR_LIST = list(META["SRR.accession"])
 for i in range(0,len(SRR_LIST)):
@@ -107,17 +105,13 @@ for i in range(0,META.shape[0]):
     SPECIES_DICT[tmp_gsm] = list(META["species"])[i]
     SPECIES_DICT[tmp_gsm] = SPECIES_DICT[tmp_gsm].lower().replace(" ", "_")
 
-########################################################################################################
-# Reference genome info
-########################################################################################################
+########## Reference genome info ##########
 SPECIES = list(META["species"]) #all lowercase and underscores (no spaces!)
 SPECIES = [x.lower() for x in SPECIES]
 SPECIES = [x.replace(" ", "_") for x in SPECIES]
 SPECIES = pd.unique(SPECIES)
 
-########################################################################################################
-# Snakemake
-########################################################################################################
+########## Snakemake ##########
 rule all:
     input:
         # expand("{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai", DATADIR=config["DATADIR"], sample=SAMPLES), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
@@ -139,20 +133,20 @@ rule all:
 
         # expand("{DATADIR}/fastqs/{SRR}_{READ}.fastq.gz", DATADIR=config["DATADIR"], SRR=SRR_LIST, READ=["R1", "R2"]) # fastqs
 
-# Metadata wrangling, aggregation
-include: "rules/get_metadata.smk"
+# Download metadata and raw data
+include: "rules/1_get_metadata.smk"
+include: "rules/1_get_fqs.smk"
 
-# Downloading, aggregating, and QCing raw read data
-include: "rules/get_fqs.smk"
-include: "rules/merge_fqs.smk"
-include: "rules/trimQC.smk"
+# Aggregate and preprocess raw read data
+include: "rules/2_merge_fqs.smk"
+include: "rules/2_trimQC.smk"
 
 # Alignment, post-alignment clean-up, and QC with STARsolo
-include: "rules/build_ref.smk"
-include: "rules/star_align.smk"
-include: "rules/dedup.smk"
-include: "rules/star_unmapped.smk"
-include: "rules/qualimap.smk"
+include: "rules/3_build_ref.smk"
+include: "rules/3_star_align.smk"
+include: "rules/3_dedup.smk"
+include: "rules/3_star_unmapped.smk" #TODO- necessary
+include: "rules/3_qualimap.smk"
 
 # Counts preprocessing
 include: "rules/soupx.smk"
