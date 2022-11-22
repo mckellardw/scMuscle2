@@ -8,16 +8,11 @@ from itertools import chain
 from functools import reduce
 from os import path, remove, rename
 
-########################################################################################################
-# Config files
-########################################################################################################
+########## Config files ##########
 configfile:"config.yaml"
-
 CHEMISTRY_SHEET = pd.read_csv(config["CHEMISTRY_SHEET"], na_filter=False,index_col=0)#"resources/chemistry_sheet.csv"
 
-########################################################################################################
-# Executables
-########################################################################################################
+########## Executables ##########
 FFQ_EXEC = config["FFQ_EXEC"]
 PREFETCH_EXEC = config["PREFETCH_EXEC"]
 FQD_EXEC = config["FQD_EXEC"]
@@ -40,12 +35,14 @@ METADIR = config["METADIR"]
 TMPDIR = config["TMPDIR"] # temporary files
 DATADIR = config["DATADIR"] # outputs for STAR alignment, etc
 REFDIR = config["REFDIR"] # Output for reference genomes
+CACHEDIR = config["CACHEDIR"] #
 
 shell("mkdir -p {PRODIR}")
 shell("mkdir -p {TMPDIR}")
 shell("mkdir -p {METADIR}")
 shell("mkdir -p {DATADIR}")
 shell("mkdir -p {REFDIR}")
+shell("mkdir -p {CACHEDIR}")
 
 
 ########## Metadata ##########
@@ -53,7 +50,7 @@ META = pd.read_csv(config["SAMPLE_SHEET"], na_filter=False)#sep="\t",encoding = 
 
 META = META[list(META["include"])] #remove undesired samples ("include"==False)
 META = META[list(META["file.format"]!="ERR")] #remove samples with file format issues
-# META = META[list(META["file.format"]!="bam")] #remove samples with file format issues
+META = META[list(META["file.format"]!="bam")] #remove samples with file format issues
 
 ## Tissue filtering
 META = META[list(META["tissue"]=="muscle")]
@@ -114,30 +111,32 @@ SPECIES = pd.unique(SPECIES)
 ########## Snakemake ##########
 rule all:
     input:
+        expand("{CACHEDIR}/{sample}.h5ad", CACHEDIR=config["CACHEDIR"], sample=SAMPLES),
         # expand("{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai", DATADIR=config["DATADIR"], sample=SAMPLES), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
+        # expand("{DATADIR}/align_out/{sample}/Unmapped_fastqc_out", DATADIR=config["DATADIR"], sample=SAMPLES), #fastQC results for unmapped reads
         expand("{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz", DATADIR=config["DATADIR"], sample=SAMPLES), # compress unmapped reads
         expand("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx.gz", DATADIR=config["DATADIR"], sample=SAMPLES), # compressed count matrices
+        expand("{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam.bai", DATADIR=config["DATADIR"], sample=SAMPLES), # index non-dedup .bam
 
-        # expand("{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam.bai", DATADIR=config["DATADIR"], sample=SAMPLES), # index non-dedup .bam
         # expand("{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html", DATADIR=config["DATADIR"], sample=SAMPLES), # alignment QC with qualimap)
-
-        # expand("{DATADIR}/align_out/{sample}/Unmapped_fastqc_out", DATADIR=config["DATADIR"], sample=SAMPLES), #fastQC results for unmapped reads
-        # expand("{DATADIR}/align_out/{sample}/Solo.out/Gene/filtered/matrix.mtx.gz", DATADIR=config["DATADIR"], sample=SAMPLES), # count mats
 
         expand("{DATADIR}/align_out/{sample}/preTrim_fastqc_R2_out", DATADIR=config["DATADIR"], sample=SAMPLES), # raw R2 fastQC results
         expand("{DATADIR}/align_out/{sample}/postTrim_fastqc_R2_out", DATADIR=config["DATADIR"], sample=SAMPLES), # adapter/polyA/ployG-trimmed R2 fastQC results
 
-        expand("{REFDIR}/{SPECIES}/STAR/SAindex", REFDIR=REFDIR, SPECIES=SPECIES), # Reference genomes
+        expand("{REFDIR}/{SPECIES}/STAR/SA", REFDIR=REFDIR, SPECIES=SPECIES), # Reference genomes
         expand("{METADIR}/{SRR}.json", METADIR=config["METADIR"], SRR=SRR_LIST), # metadata files
         expand("{METADIR}/merged_metadata.csv", METADIR=config["METADIR"])
 
         # expand("{DATADIR}/fastqs/{SRR}_{READ}.fastq.gz", DATADIR=config["DATADIR"], SRR=SRR_LIST, READ=["R1", "R2"]) # fastqs
 
+# Target rule
+# include: "rules/target_all.smk" # entire workflow
+
 # Download metadata and raw data
 include: "rules/1_get_metadata.smk"
 include: "rules/1_get_fqs.smk"
 
-# Aggregate and preprocess raw read data
+# Aggregate and trim raw read data
 include: "rules/2_merge_fqs.smk"
 include: "rules/2_trimQC.smk"
 
@@ -149,9 +148,9 @@ include: "rules/3_star_unmapped.smk" #TODO- necessary
 include: "rules/3_qualimap.smk"
 
 # Counts preprocessing
-include: "rules/soupx.smk"
-# include: "rules/scanpy_init.smk"
-# include: "rules/scanpy_QCfilter.smk"
+include: "rules/4_soupx.smk"
+include: "rules/4_scanpy_init.smk"
+# include: "rules/4_scanpy_QCfilter.smk"
 
 # Final QC
-# include: "rules/multiqc.smk"
+# include: "rules/5_multiqc.smk"

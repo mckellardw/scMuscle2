@@ -7,5 +7,5 @@ Example code for writing the .yml files:
 ```
 # cd /path/to/scMuscle2/align_snake
 conda env export > envs/align_snake-builds.yml
-conda env export --no-builds > envs/align_snake.yml
+conda env export --no-builds > envs/align_snake-versions.yml
 ```

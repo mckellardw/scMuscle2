@@ -73,7 +73,7 @@ rule convert_fastqs:
         elif FORMAT == "bam":
             shell(
                 f"""
-                
+
                 """
             )
 
@@ -82,6 +82,37 @@ rule convert_fastqs:
 
 # Other option:
 # ffq --ftp SRR7276476 | grep -Eo '"url": "[^"]*"' | grep -o '"[^"]*"$' | xargs curl -O
+
+
+# Rule to download fastq files for fastqs hosted on AWS
+# rule get_aws_fastqs:
+#     output:
+#         expand(
+#             "{DATADIR}/fastqs/{AWS_FQs}",
+#             DATADIR=DATADIR,
+#             AWS_FQs = TODO
+#         )
+#     params:
+#         OUTDIR = "{DATADIR}/fastqs/"
+#     priority:
+#         1
+#     run:
+#         #TODO
+
+# Rule to download fastq files for fastqs already on the local machine
+# rule get_local_fastqs:
+#     output:
+#         expand(
+#             "{DATADIR}/fastqs/{local_FQs}",
+#             DATADIR=DATADIR,
+#             local_FQs = TODO
+#         )
+#     params:
+#         OUTDIR = "{DATADIR}/fastqs/"
+#     priority:
+#         1
+#     run:
+#         TODO
 
 # Check fastq sizes, then rename/label files for R1 & R2 (discard I1)
 #TODO- account for dual index (v3.1) SRRs!!
@@ -155,33 +186,3 @@ rule rename_SRR_fastqs:
         #         mv {input.R2_FQ} {output.R2_FQ}
         #         """
         #     )
-
-# Rule to download fastq files for fastqs hosted on AWS
-# rule get_aws_fastqs:
-#     output:
-#         expand(
-#             "{DATADIR}/fastqs/{AWS_FQs}",
-#             DATADIR=DATADIR,
-#             AWS_FQs = TODO
-#         )
-#     params:
-#         OUTDIR = "{DATADIR}/fastqs/"
-#     priority:
-#         1
-#     run:
-#         TODO
-
-# Rule to download fastq files for fastqs already on the local machine
-# rule get_local_fastqs:
-#     output:
-#         expand(
-#             "{DATADIR}/fastqs/{local_FQs}",
-#             DATADIR=DATADIR,
-#             local_FQs = TODO
-#         )
-#     params:
-#         OUTDIR = "{DATADIR}/fastqs/"
-#     priority:
-#         1
-#     run:
-#         TODO

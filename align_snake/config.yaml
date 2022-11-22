@@ -32,6 +32,7 @@ PRODIR: /workdir/dwm269/scMuscle2 # PROject DIRectory
 TMPDIR: /workdir/dwm269/scMuscle2/tmp # DIRectory for TeMPorary files
 METADIR: /workdir/dwm269/scMuscle2/metadata_ffq # METAdata DIRectory
 DATADIR: /workdir/dwm269/scMuscle2/data # Directory for bigger data files (fastq's, STAR outputs, etc)
+CACHEDIR: /workdir/dwm269/scMuscle2/data/cache # Dir for caching h5ad files for each sample
 REFDIR: /workdir/dwm269/scMuscle2/refs # Dir for references from each species
 
 ########################################################################################################
@@ -51,7 +52,7 @@ FASTQC_EXEC: fastqc #v0.11.9
 GGET_EXEC: gget #v0.2.6
 TRIMGALORE_EXEC: trim_galore
 CUTADAPT_EXEC: cutadapt #v4.1
-SAMTOOLS_EXEC: samtools #v1.16
+SAMTOOLS_EXEC: /programs/samtools-1.15.1/bin/samtools #samtools #v1.16
 
 UMITOOLS_EXEC: umi_tools #v
 QUALIMAP_EXEC: qualimap #v
