@@ -3,16 +3,20 @@
 rule build_refs:
     output:
         # REF_METADATA = expand("{REFDIR}/{SPECIES}/STAR/metadata.json", REFDIR=config["REFDIR"], SPECIES=SPECIES),
-        REF = expand("{REFDIR}/{SPECIES}/STAR/SAindex", REFDIR=config["REFDIR"], SPECIES=SPECIES) # Reference genomes
+        REF = expand("{REFDIR}/{SPECIES}/STAR/SA", REFDIR=config["REFDIR"], SPECIES=SPECIES) # Reference genomes
     threads:
         config["CORES_HI"]
     run:
-        from gget import ref
+        #TODO- import error from gget python module, although the command line tool works? Seems like it is a
+        # from gget import ref
+        # available_species = ref(species="NA", list_species=True)
 
-        available_species = ref(species="NA", list_species=True)
+        from pandas import read_csv
+        available_species = read_csv("resources/gget_species.txt",header=None)[0].values.tolist()
+
         for S in SPECIES:
             if S in available_species:
-                if path.isfile(f"{REFDIR}/{S}/STAR/SAindex"):
+                if path.isfile(f"{REFDIR}/{S}/STAR/SA"):
                     print(f"Downloading genome sequence and annotations for {S} to {REFDIR}/{S}")
 
                     shell(
