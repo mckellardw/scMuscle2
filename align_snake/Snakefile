@@ -66,7 +66,7 @@ META = META[list(META["GSM.accession"]!="")]
 
 META = META[[x in ["3p_v2", "3p_v3", "3p_v3.1", "5p_v1"] for x in META["chemistry"]]]
 
-# META = META.iloc[1:40,:] # subset to only download certain SRRs...
+META = META.iloc[1:4,:] # subset to only download certain SRRs...
 
 
 ########## Pre-snake metadata prep ##########
@@ -141,10 +141,10 @@ include: "rules/2_merge_fqs.smk"
 include: "rules/2_trimQC.smk"
 
 # Alignment, post-alignment clean-up, and QC with STARsolo
-include: "rules/3_build_ref.smk"
+include: "rules/3_star_build_ref.smk"
 include: "rules/3_star_align.smk"
 include: "rules/3_dedup.smk"
-include: "rules/3_star_unmapped.smk" #TODO- necessary
+include: "rules/3_star_unmapped.smk" #TODO- necessary?
 include: "rules/3_qualimap.smk"
 
 # Counts preprocessing

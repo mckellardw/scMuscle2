@@ -8,14 +8,19 @@ rule cache_h5ad:
         1
         # config["CORES_LO"]
     run:
-        # from scanpy import read_10x_mtx#, settings
-        import scanpy
-        # settings.cachedir = CACHEDIR
-        adata = scanpy.read_10x_mtx(
-            path="{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered",
-            var_names='gene_symbols',
-            make_unique=True,
-            cache=False
+        shell(
+            f"""
+            python scripts/cache_h5ad.py {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/filtered {output.H5AD}
+            """
         )
-
-        adata.write(output.H5AD)
+        # from scanpy import read_10x_mtx#, settings
+        # import scanpy
+        # settings.cachedir = CACHEDIR
+        # adata = scanpy.read_10x_mtx(
+        #     path="{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered",
+        #     var_names='gene_symbols',
+        #     make_unique=True,
+        #     cache=False
+        # )
+        #
+        # adata.write(output.H5AD)

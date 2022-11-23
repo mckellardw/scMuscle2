@@ -10,6 +10,7 @@ rule build_refs:
         #TODO- import error from gget python module, although the command line tool works? Seems like it is a
         # from gget import ref
         # available_species = ref(species="NA", list_species=True)
+        shell("gget ref -l > resources/gget_species.txt")
 
         from pandas import read_csv
         available_species = read_csv("resources/gget_species.txt",header=None)[0].values.tolist()
