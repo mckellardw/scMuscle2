@@ -17,7 +17,6 @@ FFQ_EXEC = config["FFQ_EXEC"]
 PREFETCH_EXEC = config["PREFETCH_EXEC"]
 FQD_EXEC = config["FQD_EXEC"]
 BAM2FQ_EXEC = config["BAM2FQ_EXEC"]
-
 STAR_EXEC = config["STAR_EXEC"]
 GGET_EXEC = config["GGET_EXEC"]
 FASTQC_EXEC = config["FASTQC_EXEC"]
@@ -30,19 +29,12 @@ MULTIQC_EXEC = config["MULTIQC_EXEC"]
 
 
 ########## Directories ##########
-PRODIR = config["PRODIR"]
-METADIR = config["METADIR"]
-TMPDIR = config["TMPDIR"] # temporary files
-DATADIR = config["DATADIR"] # outputs for STAR alignment, etc
-REFDIR = config["REFDIR"] # Output for reference genomes
-CACHEDIR = config["CACHEDIR"] #
-
-shell("mkdir -p {PRODIR}")
-shell("mkdir -p {TMPDIR}")
-shell("mkdir -p {METADIR}")
-shell("mkdir -p {DATADIR}")
-shell("mkdir -p {REFDIR}")
-shell("mkdir -p {CACHEDIR}")
+PRODIR = config["PRODIR"] #Project parent directory - `.../scMuscle2`
+METADIR = config["METADIR"] # Metadata directory - `.../scMuscle2/meta`
+TMPDIR = config["TMPDIR"] # temporary files - `.../scMuscle2/tmp`
+DATADIR = config["DATADIR"] # outputs for STAR alignment, etc - `.../scMuscle2/data`
+REFDIR = config["REFDIR"] # Output for reference genomes - `.../scMuscle2/refs`
+CACHEDIR = config["CACHEDIR"] # Directory for cached h5ad files - `.../scMuscle2/cache`
 
 
 ########## Metadata ##########
@@ -50,7 +42,7 @@ META = pd.read_csv(config["SAMPLE_SHEET"], na_filter=False)#sep="\t",encoding = 
 
 META = META[list(META["include"])] #remove undesired samples ("include"==False)
 META = META[list(META["file.format"]!="ERR")] #remove samples with file format issues
-META = META[list(META["file.format"]!="bam")] #remove samples with file format issues
+META = META[list(META["file.format"]=="bam")] #remove samples with file format issues
 
 ## Tissue filtering
 META = META[list(META["tissue"]=="muscle")]
@@ -70,37 +62,40 @@ META = META.iloc[1:4,:] # subset to only download certain SRRs...
 
 
 ########## Pre-snake metadata prep ##########
-
+## Prep for each **SRR** ID ~~~
 # Get list of SRR IDs for fastq downloading
 SRR_LIST = list(META["SRR.accession"])
 for i in range(0,len(SRR_LIST)):
     SRR_LIST[i] = SRR_LIST[i].split(";")
 SRR_LIST = list(chain(*SRR_LIST))
 
+## Prep for each **GSM** ID ~~~
 # Grab SRR IDs and their associated fastqs
 SAMPLES = META["GSM.accession"].unique()
 
 # Build dictionary of SRR IDs/fastq files
 #TODO: add non-SRA sample functionality
-R1_FQs = {}
-R2_FQs = {}
-for GSM in SAMPLES:
-    TMP_SRR = META["SRR.accession"][list(META["GSM.accession"]==GSM)].values[0]
-    TMP_SRR = TMP_SRR.split(";")
-    R1_FQs[GSM] = [DATADIR+"/fastqs/"+ID+"_R1.fastq.gz" for ID in TMP_SRR]
-    R2_FQs[GSM] = [DATADIR+"/fastqs/"+ID+"_R2.fastq.gz" for ID in TMP_SRR]
 
 # Build dictionaries of chemistries & species to use for alignment
+# R1_FQs_DICT = {}
+# R2_FQs_DICT = {}
+SRR_DICT = {}
 CHEM_DICT = {}
 FORMAT_DICT = {}
 SPECIES_DICT = {}
 for i in range(0,META.shape[0]):
-    tmp_gsm = list(META["GSM.accession"])[i]
-    CHEM_DICT[tmp_gsm] = list(META["chemistry"])[i]
-    FORMAT_DICT[tmp_gsm] = list(META["file.format"])[i]
+    GSM = list(META["GSM.accession"])[i]
 
-    SPECIES_DICT[tmp_gsm] = list(META["species"])[i]
-    SPECIES_DICT[tmp_gsm] = SPECIES_DICT[tmp_gsm].lower().replace(" ", "_")
+    TMP_SRR = META["SRR.accession"][list(META["GSM.accession"]==GSM)].values[0]
+    SRR_DICT[GSM] = TMP_SRR.split(";") #Might need to change
+    # R1_FQs_DICT[GSM] = [f"{DATADIR}/fastqs/{ID}_R1.fastq.gz" for ID in TMP_SRR]
+    # R2_FQs_DICT[GSM] = [f"{DATADIR}/fastqs/{ID}_R2.fastq.gz"  for ID in TMP_SRR]
+
+    CHEM_DICT[GSM] = list(META["chemistry"])[i]
+    FORMAT_DICT[GSM] = list(META["file.format"])[i]
+
+    SPECIES_DICT[GSM] = list(META["species"])[i]
+    SPECIES_DICT[GSM] = SPECIES_DICT[GSM].lower().replace(" ", "_")
 
 ########## Reference genome info ##########
 SPECIES = list(META["species"]) #all lowercase and underscores (no spaces!)
@@ -111,7 +106,7 @@ SPECIES = pd.unique(SPECIES)
 ########## Snakemake ##########
 rule all:
     input:
-        expand("{CACHEDIR}/{sample}.h5ad", CACHEDIR=config["CACHEDIR"], sample=SAMPLES),
+        expand("{CACHEDIR}/raw/{sample}.h5ad", CACHEDIR=config["CACHEDIR"], sample=SAMPLES),
         # expand("{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai", DATADIR=config["DATADIR"], sample=SAMPLES), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
         # expand("{DATADIR}/align_out/{sample}/Unmapped_fastqc_out", DATADIR=config["DATADIR"], sample=SAMPLES), #fastQC results for unmapped reads
         expand("{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz", DATADIR=config["DATADIR"], sample=SAMPLES), # compress unmapped reads
@@ -123,7 +118,7 @@ rule all:
         expand("{DATADIR}/align_out/{sample}/preTrim_fastqc_R2_out", DATADIR=config["DATADIR"], sample=SAMPLES), # raw R2 fastQC results
         expand("{DATADIR}/align_out/{sample}/postTrim_fastqc_R2_out", DATADIR=config["DATADIR"], sample=SAMPLES), # adapter/polyA/ployG-trimmed R2 fastQC results
 
-        expand("{REFDIR}/{SPECIES}/STAR/SA", REFDIR=REFDIR, SPECIES=SPECIES), # Reference genomes
+        expand("{REFDIR}/{SPECIES}/STAR/Genome", REFDIR=REFDIR, SPECIES=SPECIES), # Reference genomes
         expand("{METADIR}/{SRR}.json", METADIR=config["METADIR"], SRR=SRR_LIST), # metadata files
         expand("{METADIR}/merged_metadata.csv", METADIR=config["METADIR"])
 
@@ -132,12 +127,16 @@ rule all:
 # Target rule
 # include: "rules/target_all.smk" # entire workflow
 
+# Check for/make directories
+# include: "rules/0_mkdirs.smk"
+
 # Download metadata and raw data
+include: "rules/1_write_SRR_list.smk"
 include: "rules/1_get_metadata.smk"
-include: "rules/1_get_fqs.smk"
+include: "rules/1_get_fqs_v2.smk"
 
 # Aggregate and trim raw read data
-include: "rules/2_merge_fqs.smk"
+# include: "rules/2_merge_fqs.smk"
 include: "rules/2_trimQC.smk"
 
 # Alignment, post-alignment clean-up, and QC with STARsolo
@@ -148,9 +147,9 @@ include: "rules/3_star_unmapped.smk" #TODO- necessary?
 include: "rules/3_qualimap.smk"
 
 # Counts preprocessing
-include: "rules/4_soupx.smk"
-include: "rules/4_scanpy_init.smk"
-# include: "rules/4_scanpy_QCfilter.smk"
+# include: "rules/4_soupx.smk" #TODO- replace with a python-based tool?
+include: "rules/4_scanpy_init.smk" #TODO- incorporate ambient RNA-decontaminated data
+# include: "rules/4_scanpy_QCfilter.smk" #TODO- finish doublet filtering
 
 # Final QC
 # include: "rules/5_multiqc.smk"

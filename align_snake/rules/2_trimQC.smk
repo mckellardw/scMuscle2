@@ -4,7 +4,7 @@
 # Check QC of reads before trimming
 rule preTrim_FastQC_R2:
     input:
-        MERGED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz"
+        MERGED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2.fq.gz"
     output:
         FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/preTrim_fastqc_R2_out"),
         # fastqcReport = ""
@@ -27,11 +27,11 @@ rule preTrim_FastQC_R2:
 # TSO, polyA, and polyG trimming
 rule cutadapt_R2:
     input:
-        MERGED_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1.fq.gz",
-        MERGED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2.fq.gz"
+        MERGED_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R1.fq.gz",
+        MERGED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2.fq.gz"
     output:
-        FINAL_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1_final.fq.gz", #temp()
-        FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz" #temp()
+        FINAL_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R1_final.fq.gz", #temp()
+        FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2_final.fq.gz" #temp()
     params:
         CUTADAPT_EXEC = CUTADAPT_EXEC,
         THREE_PRIME_R2_POLYA = "A"*100, # 100 A-mer
@@ -50,10 +50,10 @@ rule cutadapt_R2:
         --minimum-length 18 \
         -A {params.THREE_PRIME_R2_POLYA} \
         -A {params.THREE_PRIME_R2_POLYG} \
- 		-G {params.FIVE_PRIME_R2_TSO} \
- 		-G {params.FIVE_PRIME_R2_rcTSO} \
+        -G {params.FIVE_PRIME_R2_TSO} \
+        -G {params.FIVE_PRIME_R2_rcTSO} \
         --pair-filter=any \
- 		-o {output.FINAL_R1_FQ} \
+        -o {output.FINAL_R1_FQ} \
         -p {output.FINAL_R2_FQ} \
         --cores {threads} \
         {input.MERGED_R1_FQ} {input.MERGED_R2_FQ} 1> {log}
