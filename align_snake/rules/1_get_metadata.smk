@@ -6,6 +6,8 @@
 rule get_metadata:
     output:
         METAJSON = "{METADIR}/{SRR}.json"
+    threads:
+        config["CORES_MID"] #Limit number of concurrent 
     shell:
         """
         {FFQ_EXEC} -o {output.METAJSON} {wildcards.SRR}

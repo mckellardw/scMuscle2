@@ -7,7 +7,8 @@ rule preTrim_FastQC_R2:
         MERGED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2.fq.gz"
     output:
         FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/preTrim_fastqc_R2_out"),
-        # fastqcReport = ""
+    params:
+        adapters = config['FASTQC_ADAPTERS']
     threads:
         config["CORES_LO"]
         # min([config["CORES_LO"],8]) # 8 core max based on recommendations from trim_galore authors
@@ -20,6 +21,7 @@ rule preTrim_FastQC_R2:
             {FASTQC_EXEC} \
             --outdir {output.FASTQC_DIR} \
             --threads {threads} \
+            -a {params.adapters} \
             {input.MERGED_R2_FQ}
             """
         )
@@ -65,7 +67,8 @@ rule postTrim_FastQC_R2:
         FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz"
     output:
         FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/postTrim_fastqc_R2_out")
-        # fastqcReport = ""
+    params:
+        adapters = config['FASTQC_ADAPTERS']
     threads:
         min([config["CORES_LO"],8]) # 8 core max
     run:
@@ -77,6 +80,7 @@ rule postTrim_FastQC_R2:
             {FASTQC_EXEC} \
             --outdir {output.FASTQC_DIR} \
             --threads {threads} \
+            -a {params.adapters} \
             {input.FINAL_R2_FQ}
             """
         )

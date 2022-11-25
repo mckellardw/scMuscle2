@@ -1,5 +1,5 @@
 # Save the list of SRR ids for each sample as a .txt file
-rule get_metadata:
+rule write_SRR_list:
     output:
         SRR_LIST = "{DATADIR}/align_out/{sample}/SRR_list.txt"
     run:

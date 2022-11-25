@@ -55,6 +55,7 @@ catharus_ustulatus
 cavia_aperea
 cavia_porcellus
 cebus_capucinus
+cebus_imitator
 cercocebus_atys
 cervus_hanglu_yarkandensis
 chelonoidis_abingdonii
@@ -79,7 +80,6 @@ cyanistes_caeruleus
 cyclopterus_lumpus
 cynoglossus_semilaevis
 cyprinodon_variegatus
-cyprinus_carpio
 cyprinus_carpio_carpio
 cyprinus_carpio_germanmirror
 cyprinus_carpio_hebaored
