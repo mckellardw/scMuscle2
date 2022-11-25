@@ -24,6 +24,7 @@ MEMLIMIT_LO: 8G
 
 ## Chemistry details (whitelists, barcode/UMI design, etc.)
 CHEMISTRY_SHEET: resources/chemistry_sheet.csv
+FASTQC_ADAPTERS: resources/fastqc_adapters.txt
 
 ########################################################################################################
 # Important directory file paths
@@ -47,7 +48,7 @@ FQD_EXEC: /home/dwm269/usr/bin/sratoolkit.3.0.0-centos_linux64/bin/fasterq-dump.
 # PFD_EXEC: parallel-fastq-dump
 BAM2FQ_EXEC: ~/usr/bin/bamtofastq_1.4.1
 
-STAR_EXEC: /programs/STAR/STAR #STAR #v2.7.10a
+STAR_EXEC: /programs/STAR-2.7.10a/STAR #STAR #v2.7.10a
 FASTQC_EXEC: fastqc #v0.11.9
 GGET_EXEC: gget #v0.2.6
 TRIMGALORE_EXEC: trim_galore

@@ -17,37 +17,38 @@ rule build_refs:
 
         for S in SPECIES:
             if S in available_species:
-                if path.isfile(f"{REFDIR}/{S}/STAR/Genome"):
+                print(f"{REFDIR}/{S}/STAR/Genome")
+                if not path.exists(f"{REFDIR}/{S}/STAR/Genome"):
                     print(f"Downloading genome sequence and annotations for {S} to {REFDIR}/{S}")
                     shell(
                         f"""
-                        mkdir -p {REFDIR}/{wildcards.SPECIES}
-                        cd {REFDIR}/{wildcards.SPECIES}
+                        mkdir -p {REFDIR}/{S}
+                        cd {REFDIR}/{S}
 
                         {GGET_EXEC} ref \
-                        --out {REFDIR}/{wildcards.SPECIES}/metadata.json \
+                        --out {REFDIR}/{S}/metadata.json \
                         --which gtf,dna \
                         --download \
-                        {wildcards.SPECIES}
+                        {S}
 
-                        gunzip {REFDIR}/{wildcards.SPECIES}/*.gz
+                        gunzip {REFDIR}/{S}/*.gz
                         """
                     )
 
                     # Build reference for STAR
-                    print(f"Building STAR reference for {wildcards.SPECIES}...\n")
+                    print(f"Building STAR reference for {S}...\n")
                     shell(
                         f"""
                         {STAR_EXEC} \
                         --runThreadN {threads} \
                         --runMode genomeGenerate \
-                        --genomeDir {REFDIR}/{wildcards.SPECIES}/STAR \
-                        --genomeFastaFiles $(ls -t {REFDIR}/{wildcards.SPECIES}/*.fa) \
-                        --sjdbGTFfile $(ls -t {REFDIR}/{wildcards.SPECIES}/*.gtf) \
+                        --genomeDir {REFDIR}/{S}/STAR \
+                        --genomeFastaFiles $(ls -t {REFDIR}/{S}/*.fa) \
+                        --sjdbGTFfile $(ls -t {REFDIR}/{S}/*.gtf) \
                         --sjdbGTFfeatureExon exon
 
-                        pigz -p {threads} $(ls -t {REFDIR}/{wildcards.SPECIES}/*.fa)
-                        pigz -p {threads} $(ls -t {REFDIR}/{wildcards.SPECIES}/*.gtf)
+                        pigz -p {threads} $(ls -t {REFDIR}/{S}/*.fa)
+                        pigz -p {threads} $(ls -t {REFDIR}/{S}/*.gtf)
                         """
                     )
                 else:

@@ -4,5 +4,5 @@ rule write_SRR_list:
         SRR_LIST = "{DATADIR}/align_out/{sample}/SRR_list.txt"
     run:
         SRR_list = SRR_DICT[wildcards.sample]
-        with open('tmp.txt', 'w') as f:
+        with open(output.SRR_LIST, "w") as f:
             f.write('\n'.join(SRR_list))

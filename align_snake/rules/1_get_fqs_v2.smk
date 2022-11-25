@@ -23,16 +23,17 @@ rule get_fastqs:
 
         if FORMAT == "fastq":
             shell(
-            """
-            cd {DATADIR}/align_out/{sample}
-            python scripts/get_sra_fq.py {PREFETCH_EXEC} {FQD_EXEC} {threads} {params.MEMLIMT}
+            f"""
+            cd {DATADIR}/align_out/{wildcards.sample}
+            python {PRODIR}/align_snake/scripts/get_sra_fq.py {PREFETCH_EXEC} {FQD_EXEC} {threads} {params.MEMLIMIT}
             """
             )
         elif FORMAT == "bam":
             # pull .bam file
             shell(
                 f"""
-                bash scripts/get_sra_bam.sh {PREFETCH_EXEC} {BAM2FQ_EXEC} {threads} {wildcards.sample}
+                cd {DATADIR}/align_out/{wildcards.sample}
+                bash {PRODIR}/align_snake/scripts/get_sra_bam.sh {PREFETCH_EXEC} {BAM2FQ_EXEC} {threads} {wildcards.sample}
                 """
             )
         elif FORMAT == "aws":
