@@ -17,7 +17,6 @@ SRR_list = data.split("\n")
 SRR_file.close()
 
 SRR_list = [i for i in SRR_list if i] #remove empty lines
-print(SRR_list)
 
 for SRR in SRR_list:
     system(
@@ -60,7 +59,6 @@ for SRR in SRR_list:
     for fq_file in fq_files:
         sra_sizes[fq_file] = path.getsize(fq_file)
 
-    print(sra_sizes)
     rename_dict = {
         "R2": max(sra_sizes),
         "R1": min(sra_sizes)
@@ -73,8 +71,8 @@ for SRR in SRR_list:
 # merge fastqs into GSM####.fastq, then remove individual fastq's
 system(
     f"""
-    cat tmp/*_R1.fastq > tmp/merged_R1.fastq
-    cat tmp/*_R2.fastq > tmp/merged_R2.fastq
+    cat tmp/*_R1.fastq > tmp/merged_R1.fq
+    cat tmp/*_R2.fastq > tmp/merged_R2.fq
 
     rm tmp/SRR*.fastq
     """
@@ -83,6 +81,6 @@ system(
 # compress
 system(
     f"""
-    pigz -p{THREADS} --force tmp/merged_R*.fastq
+    pigz -p{THREADS} --force tmp/merged_R*.fq
     """
 )
