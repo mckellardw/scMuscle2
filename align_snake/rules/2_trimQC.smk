@@ -64,7 +64,7 @@ rule cutadapt_R2:
 # QC after read trimming
 rule postTrim_FastQC_R2:
     input:
-        FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz"
+        FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2_final.fq.gz"
     output:
         FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/postTrim_fastqc_R2_out")
     params:

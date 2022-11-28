@@ -13,9 +13,9 @@ SAMPLE_SHEET: /workdir/dwm269/scMuscle2/scMuscle2_metadata_v1-0.csv
 
 
 # STARsolo parameters
-CORES_HI: 20 # how many cores to give for each process (snakemake automatically parallelizes process using "snakemake -j  {numTotalCores}")
+CORES_HI: 24 # how many cores to give for each process (snakemake automatically parallelizes process using "snakemake -j  {numTotalCores}")
 CORES_MID: 12
-CORES_LO: 5
+CORES_LO: 4
 
 MEMLIMIT_HI: 256G # Number of bytes to use per core -252657461480
 MEMLIMIT_LO: 8G

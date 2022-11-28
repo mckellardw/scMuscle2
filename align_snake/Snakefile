@@ -58,7 +58,7 @@ META = META[list(META["GSM.accession"]!="")]
 
 META = META[[x in ["3p_v2", "3p_v3", "3p_v3.1", "5p_v1"] for x in META["chemistry"]]]
 
-META = META.iloc[1:40,:] # subset to only download certain SRRs...
+# META = META.iloc[1:4,:] # subset to only download certain SRRs...
 
 
 ########## Pre-snake metadata prep ##########
@@ -110,7 +110,7 @@ rule all:
         # expand("{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam.bai", DATADIR=config["DATADIR"], sample=SAMPLES), # index non-dedup .bam
         # expand("{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html", DATADIR=config["DATADIR"], sample=SAMPLES), # alignment QC with qualimap)
         expand("{DATADIR}/align_out/{sample}/preTrim_fastqc_R2_out", DATADIR=config["DATADIR"], sample=SAMPLES), # raw R2 fastQC results
-        # expand("{DATADIR}/align_out/{sample}/postTrim_fastqc_R2_out", DATADIR=config["DATADIR"], sample=SAMPLES), # adapter/polyA/ployG-trimmed R2 fastQC results
+        expand("{DATADIR}/align_out/{sample}/postTrim_fastqc_R2_out", DATADIR=config["DATADIR"], sample=SAMPLES), # adapter/polyA/ployG-trimmed R2 fastQC results
         expand("{REFDIR}/{SPECIES}/STAR/Genome", REFDIR=REFDIR, SPECIES=SPECIES), # Reference genomes
         expand("{METADIR}/{SRR}.json", METADIR=config["METADIR"], SRR=SRR_LIST) # metadata files
         # expand("{METADIR}/merged_metadata.csv", METADIR=config["METADIR"])

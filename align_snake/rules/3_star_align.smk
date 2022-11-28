@@ -5,8 +5,8 @@
 #       - `priority` should be set higher to ensure
 rule STARsolo_align:
     input:
-        FINAL_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R1_final.fq.gz",
-        FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/{sample}_R2_final.fq.gz",
+        FINAL_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R1_final.fq.gz",
+        FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2_final.fq.gz",
         REF_LIST = expand("{REFDIR}/{SPECIES}/STAR/SA", REFDIR=REFDIR, SPECIES=SPECIES) # Reference genomes
     output:
         SORTEDBAM = "{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam", #TODO: add temp()
