@@ -40,6 +40,11 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
   - [ ] or [SuperCell](https://github.com/GfellerLab/SuperCell)?
 - [ ] Figure out multi-species integration [SAM](https://github.com/atarashansky/self-assembling-manifold)
 
+## Datasets to add:
+- Saleh et al, iScience, 2022
+  - https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE213925
+  - https://www.cell.com/iscience/fulltext/S2589-0042(22)01687-X?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS258900422201687X%3Fshowall%3Dtrue
+
 
 ## Description of meta data
 #### Source/citation info:
