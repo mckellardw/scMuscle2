@@ -6,17 +6,15 @@ rule preTrim_FastQC_R2:
     input:
         MERGED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2.fq.gz"
     output:
-        FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/preTrim_fastqc_R2_out"),
+        FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/fastqc_preTrim_R2"),
     params:
         adapters = config['FASTQC_ADAPTERS']
     threads:
         config["CORES_LO"]
-        # min([config["CORES_LO"],8]) # 8 core max based on recommendations from trim_galore authors
     run:
         shell(
             f"""
             mkdir -p {output.FASTQC_DIR}
-            cd {output.FASTQC_DIR}
 
             {FASTQC_EXEC} \
             --outdir {output.FASTQC_DIR} \
@@ -43,30 +41,31 @@ rule cutadapt_R2:
         # FIVE_PRIME_R2 = "TTCGTCACCATAGTTGCGTCTCATGTACCC" #rev 10x TSO sequence
     threads:
         config["CORES_LO"]
-        # min([config["CORES_LO"],8]) # 8 core max based on recommendations from trim_galore authors
     log:
         "{DATADIR}/align_out/{sample}/cutadapt.log"
-    shell:
-        """
-        {params.CUTADAPT_EXEC} \
-        --minimum-length 18 \
-        -A {params.THREE_PRIME_R2_POLYA} \
-        -A {params.THREE_PRIME_R2_POLYG} \
-        -G {params.FIVE_PRIME_R2_TSO} \
-        -G {params.FIVE_PRIME_R2_rcTSO} \
-        --pair-filter=any \
-        -o {output.FINAL_R1_FQ} \
-        -p {output.FINAL_R2_FQ} \
-        --cores {threads} \
-        {input.MERGED_R1_FQ} {input.MERGED_R2_FQ} 1> {log}
-        """
+    run:
+        shell(
+            f"""
+            {params.CUTADAPT_EXEC} \
+            --minimum-length 18 \
+            -A {params.THREE_PRIME_R2_POLYA} \
+            -A {params.THREE_PRIME_R2_POLYG} \
+            -G {params.FIVE_PRIME_R2_TSO} \
+            -G {params.FIVE_PRIME_R2_rcTSO} \
+            --pair-filter=any \
+            -o {output.FINAL_R1_FQ} \
+            -p {output.FINAL_R2_FQ} \
+            --cores {threads} \
+            {input.MERGED_R1_FQ} {input.MERGED_R2_FQ} 1> {log}
+            """
+        )
 
 # QC after read trimming
 rule postTrim_FastQC_R2:
     input:
         FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2_final.fq.gz"
     output:
-        FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/postTrim_fastqc_R2_out")
+        FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/fastqc_postTrim_R2")
     params:
         adapters = config['FASTQC_ADAPTERS']
     threads:
@@ -75,7 +74,6 @@ rule postTrim_FastQC_R2:
         shell(
             f"""
             mkdir -p {output.FASTQC_DIR}
-            cd {output.FASTQC_DIR}
 
             {FASTQC_EXEC} \
             --outdir {output.FASTQC_DIR} \
