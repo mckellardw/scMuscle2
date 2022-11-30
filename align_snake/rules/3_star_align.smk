@@ -7,7 +7,7 @@ rule STARsolo_align:
     input:
         FINAL_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R1_final.fq.gz",
         FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2_final.fq.gz",
-        REF_LIST = expand("{REFDIR}/{SPECIES}/STAR/SA", REFDIR=REFDIR, SPECIES=SPECIES) # Reference genomes
+        REF_LIST = expand("{REFDIR}/{SPECIES}/STAR/Genome", REFDIR=REFDIR, SPECIES=SPECIES) # Reference genomes
     output:
         SORTEDBAM = "{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam", #TODO: add temp()
         UNMAPPED1 = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1",
@@ -19,8 +19,6 @@ rule STARsolo_align:
         GENEMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx",
         GENEFULLMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx"
     params:
-        DATADIR = config["DATADIR"],
-        STAR_EXEC = config["STAR_EXEC"],
         MEMLIMIT = config["MEMLIMIT_HI"]
     threads:
         config["CORES_MID"]
@@ -38,11 +36,11 @@ rule STARsolo_align:
         print("Using up to " + str(params.MEMLIMIT) + " of memory...")
         shell(
             f"""
-            mkdir -p {params.DATADIR}/align_out/{wildcards.sample}/STARsolo
+            mkdir -p {DATADIR}/align_out/{wildcards.sample}/STARsolo
 
-            {params.STAR_EXEC} \
+            {STAR_EXEC} \
             --runThreadN {threads} \
-            --outFileNamePrefix {params.DATADIR}/align_out/{wildcards.sample}/STARsolo/ \
+            --outFileNamePrefix {DATADIR}/align_out/{wildcards.sample}/STARsolo/ \
             --outSAMtype BAM SortedByCoordinate \
             --outSAMattributes NH HI nM AS CR UR CB UB GX GN sS sQ sM \
             --readFilesCommand zcat \
@@ -78,9 +76,10 @@ rule compress_STAR_outs:
         VELDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto"),
         GENEDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene"),
         GENEFULLDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull")
+    priority:
+        42
     threads:
         1
-        # config["CORES_LO"]
     run:
         shell(
             f"""
