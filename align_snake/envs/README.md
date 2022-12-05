@@ -9,3 +9,8 @@ Example code for writing the .yml files:
 conda env export > envs/align_snake-builds.yml
 conda env export --no-builds > envs/align_snake-versions.yml
 ```
+
+To build the conda environment from scratch, try the following command:
+```
+conda env create --file envs/align_snake-versions.yml
+```
