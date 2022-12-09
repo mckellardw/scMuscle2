@@ -36,14 +36,14 @@ N_FQs=$(find b2f/ -name *R1*.fastq.gz | wc -l)
 # Check if the number of matching files is greater than 0
 if [[ ${N_FQs} -gt 1 ]]; then
     #Rename fastqs
-    zcat $(find b2f/ -name *R1*.fastq.gz) > merged_R1.fastq
-    zcat $(find b2f/ -name *R2*.fastq.gz) > merged_R2.fastq
+    zcat $(find b2f/ -name *R1*.fastq.gz) > merged_R1.fq
+    zcat $(find b2f/ -name *R2*.fastq.gz) > merged_R2.fq
 
     # Compress
-    pigz -p${THREADS} merged_*.fastq
+    pigz -p${THREADS} merged_*.fq
 else
-    mv b2f/*/*R1*.fastq.gz merged_R1.fastq.gz
-    mv b2f/*/*R2*.fastq.gz merged_R2.fastq.gz
+    mv b2f/*/*R1*.fastq.gz merged_R1.fq.gz
+    mv b2f/*/*R2*.fastq.gz merged_R2.fq.gz
 fi
 
 # Clean up bam2fastq garbage

@@ -15,7 +15,7 @@ SAMPLE_SHEET: /workdir/dwm269/scMuscle2/scMuscle2_metadata_v1-0.csv
 # STARsolo parameters
 CORES_HI: 24 # how many cores to give for each process (snakemake automatically parallelizes process using "snakemake -j  {numTotalCores}")
 CORES_MID: 12
-CORES_LO: 4
+CORES_LO: 6
 
 MEMLIMIT_HI: 256G # Number of bytes to use per core -252657461480
 MEMLIMIT_LO: 8G
@@ -43,12 +43,12 @@ REFDIR: /workdir/dwm269/scMuscle2/refs # Dir for references from each species
 #TODO - add umi_tools, etc
 
 FFQ_EXEC: ffq
-PREFETCH_EXEC: /home/dwm269/usr/bin/sratoolkit.3.0.0-centos_linux64/bin/prefetch.3.0.0
-FQD_EXEC: /home/dwm269/usr/bin/sratoolkit.3.0.0-centos_linux64/bin/fasterq-dump.3.0.0
+PREFETCH_EXEC: ~/usr/bin/sratoolkit.3.0.0-centos_linux64/bin/prefetch.3.0.0
+FQD_EXEC: ~/usr/bin/sratoolkit.3.0.0-centos_linux64/bin/fasterq-dump.3.0.0
 # PFD_EXEC: parallel-fastq-dump
 BAM2FQ_EXEC: ~/usr/bin/bamtofastq_1.4.1
 
-STAR_EXEC: /programs/STAR-2.7.10a/STAR #STAR #v2.7.10a
+STAR_EXEC: STAR #v2.7.10a
 FASTQC_EXEC: fastqc #v0.11.9
 GGET_EXEC: gget #v0.2.6
 TRIMGALORE_EXEC: trim_galore
@@ -59,7 +59,7 @@ UMITOOLS_EXEC: umi_tools #v
 QUALIMAP_EXEC: qualimap #v
 MULTIQC_EXEC: mutliqc
 
-# BAM2SPLITBW: /home/dwm269/DWM_utils/seq_utils/bam2splitBigWig.sh #Custom function in DWM_utils that splits a bam file by strand and converts it into bigwig format
+# BAM2SPLITBW: ~/DWM_utils/seq_utils/bam2splitBigWig.sh #Custom function in DWM_utils that splits a bam file by strand and converts it into bigwig format
 # FASTX_COLLAPSER: fastx_collapser
 # BLASTDB: /shared_data/genome_db/BLAST_NCBI # path to where the nt BLAST database is stored
-# PICARD_EXEC: /home/dwm269/miniconda3/envs/STARsolo/share/picard-2.26.10-0/picard.jar
+# PICARD_EXEC: ~/miniconda3/envs/STARsolo/share/picard-2.26.10-0/picard.jar
