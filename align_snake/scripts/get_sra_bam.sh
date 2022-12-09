@@ -3,46 +3,49 @@
 PREFETCH_EXEC=$1
 BAM2FQ_EXEC=$2
 THREADS=$3
-SRR=$4
+SAMPLE=$4
+SRR=$(cat ./SRR_list.txt)
+
+cd tmp
 
 # Fetch .bam file
 ${PREFETCH_EXEC} \
 --verify yes \
 --max-size 999999999999 \
 --force ALL \
---output-directory tmp/ \
 --type all \
- ${SRR}
+${SRR}
 
-# ./SRR_list.txt
-# --output-file ${SRR}.bam \
+# --output-directory tmp/ \
+# $(cat ./SRR_list.txt)
+# --output-file ${SAMPLE}.bam \
 
 # Convert .bam to .fastq's
-mkdir -p tmp/b2f/
-rm -rf tmp/b2f/
+mkdir -p b2f/
+rm -rf b2f/
 
 ${BAM2FQ_EXEC} \
 --nthreads ${THREADS} \
 --reads-per-fastq=999999999999999 \
 ${SRR}/*.bam \
-tmp/b2f/
+b2f/
 
 # Search for files matching the regex pattern
-num_fqs=$(find tmp/b2f/ -name *R1*.fastq.gz | wc -l)
+N_FQs=$(find b2f/ -name *R1*.fastq.gz | wc -l)
 
 # Check if the number of matching files is greater than 0
-if [[ ${num_fqs} -gt 1 ]]; then
+if [[ ${N_FQs} -gt 1 ]]; then
     #Rename fastqs
-    zcat $(find tmp/b2f/ -name *R1*.fastq.gz) > tmp/merged_1.fastq
-    zcat $(find tmp/b2f/ -name *R2*.fastq.gz) > tmp/merged_2.fastq
+    zcat $(find b2f/ -name *R1*.fastq.gz) > merged_R1.fastq
+    zcat $(find b2f/ -name *R2*.fastq.gz) > merged_R2.fastq
 
     # Compress
-    pigz -p${THREADS} tmp/${SRR}_*.fastq
+    pigz -p${THREADS} merged_*.fastq
 else
-    mv tmp/b2f/*/*R1*.fastq.gz tmp/merged_1.fastq.gz
-    mv tmp/b2f/*/*R2*.fastq.gz tmp/merged_2.fastq.gz
+    mv b2f/*/*R1*.fastq.gz merged_R1.fastq.gz
+    mv b2f/*/*R2*.fastq.gz merged_R2.fastq.gz
 fi
 
 # Clean up bam2fastq garbage
-rm -r tmp/b2f/
-rm -r tmp/${SRR}/
+rm -r b2f/
+rm -r ${SRR}/

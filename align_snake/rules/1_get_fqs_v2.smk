@@ -36,15 +36,29 @@ rule get_fastqs:
                 bash {PRODIR}/align_snake/scripts/get_sra_bam.sh {PREFETCH_EXEC} {BAM2FQ_EXEC} {threads} {wildcards.sample}
                 """
             )
-        elif FORMAT == "aws":
-            print("TODO")
-            # download with wget
-            # merge into GSM####.fastq
-            # compress
-        elif FORMAT == "local":
-            print("TODO")
-            # merge into GSM####.fastq
-            # compress
+        elif FORMAT == "aws": #TODO
+            LINKS = str()
+            shell(
+                f"""
+                cd {DATADIR}/align_out/{wildcards.sample}
+                mkdir -p tmp/pulled_fqs
+                wget tmp/pulled_fqs {LINKS}
+                zcat tmp/pulled_fqs/*R1*.fastq.gz > tmp/merged_R1.fq
+                zcat tmp/pulled_fqs/*R2*.fastq.gz > tmp/merged_R2.fq
+                pigz -p{threads} tmp/*.fq
+                """
+            )
+        elif FORMAT == "local": #TODO
+            R1_LIST = str()
+            R2_LIST = str()
+            shell(
+                f"""
+                cd {DATADIR}/align_out/{wildcards.sample}
+                zcat {R1_LIST} > tmp/merged_R1.fq
+                zcat {R2_LIST} > tmp/merged_R2.fq
+                pigz -p{threads} tmp/*.fq
+                """
+            )
 
 # {FFQ} --ncbi {SRR} \
 # | xargs curl -o {DATADIR}/fastqs/{SRR}.bam
