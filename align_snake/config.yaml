@@ -17,7 +17,7 @@ CORES_HI: 24 # how many cores to give for each process (snakemake automatically 
 CORES_MID: 12
 CORES_LO: 6
 
-MEMLIMIT_HI: 256G # Number of bytes to use per core -252657461480
+MEMLIMIT_HI: 252657461480 # Number of bytes to use per core -252657461480
 MEMLIMIT_LO: 8G
 
 #195000000000 # limit in bytes - 195gb

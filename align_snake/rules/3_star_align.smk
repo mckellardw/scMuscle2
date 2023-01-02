@@ -77,7 +77,7 @@ rule compress_STAR_outs:
         GENEDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene"),
         GENEFULLDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull")
     priority:
-        42
+        43
     threads:
         1
     run:

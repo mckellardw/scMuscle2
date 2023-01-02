@@ -5,7 +5,7 @@
 ## qualimap on aligned reads
 rule qualimapQC:
     input:
-        SORTEDBAM = "{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam"
+        SORTEDBAM = "{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam"
     output:
         qualimapDir = directory("{DATADIR}/align_out/{sample}/qualimap_out"),
         fastqcReport = "{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html"
@@ -17,6 +17,7 @@ rule qualimapQC:
         1
         # config["CORES_LO"]
     shell:
+        #TODO- fix genes_gtf
         """
         mkdir -p {output.qualimapDir}
         cd {output.qualimapDir}
