@@ -14,3 +14,12 @@ To build the conda environment from scratch, try the following command:
 ```
 conda env create --file envs/align_snake-versions.yml
 ```
+
+Or to do it a bit quicker...
+```
+conda  create --name scm2 -c bioconda star==2.7.10b cutadapt==4.1 gget ffq 
+
+conda activate scm2
+conda install -c conda-forge pigz pandas itertools scanpy
+conda install -c bioconda fastqc multiqc qualimap 
+```

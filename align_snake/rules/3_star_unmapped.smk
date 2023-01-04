@@ -2,7 +2,7 @@
 ## Unmapped read analyses
 #############################################
 
-# Compress unmapped reads; switch names because of STAR weirdness
+# Compress unmapped reads; switch names and add `.fastq` file extension because of STAR weirdness
 rule unmapped_compress:
     input:
         UNMAPPED1 = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1",

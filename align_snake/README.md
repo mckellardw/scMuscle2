@@ -28,7 +28,7 @@ Preprocessing, alignment, QC, and quantification workflow for 10x Genomics singl
 - `cutadapt` [v4.1](https://cutadapt.readthedocs.io/en/stable/)
 - ~~`trim-galore` [v0.6.2](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/)~~
 - `fastqc` [v0.11.8](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
-- `STAR` [v2.7.10a](https://github.com/alexdobin/STAR)
+- `STAR` [v2.7.10b](https://github.com/alexdobin/STAR)
 - `qualimap` [v.2.2.2a](http://qualimap.conesalab.org/)
 - `multiqc` [v1.13](https://multiqc.info/)
 
