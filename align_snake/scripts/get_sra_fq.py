@@ -17,6 +17,7 @@ SRR_list = data.split("\n")
 SRR_file.close()
 
 SRR_list = [i for i in SRR_list if i] #remove empty lines
+SRR_list = [i.replace(" ","") for i in SRR_list]# remove space characters
 
 for SRR in SRR_list:
     system(

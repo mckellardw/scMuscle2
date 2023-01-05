@@ -53,7 +53,7 @@ FASTQC_EXEC: fastqc #v0.11.9
 GGET_EXEC: gget #v0.2.6
 TRIMGALORE_EXEC: trim_galore
 CUTADAPT_EXEC: cutadapt #v4.1
-SAMTOOLS_EXEC: /programs/samtools-1.15.1/bin/samtools #samtools #v1.16
+SAMTOOLS_EXEC: samtools #samtools #v1.3.1 (just used for indexing .bam files)
 
 UMITOOLS_EXEC: umi_tools #v
 QUALIMAP_EXEC: qualimap #v
