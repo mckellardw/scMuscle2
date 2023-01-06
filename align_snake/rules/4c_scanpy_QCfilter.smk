@@ -1,9 +1,9 @@
 # Doublet & UMI count filtering
 rule cache_h5ad:
     input:
-        H5AD = "{CACHEDIR}/raw/{sample}.h5ad"
+        H5AD = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/decon.h5ad"
     output:
-        H5AD = "{CACHEDIR}/qc/{sample}.h5ad"
+        H5AD = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/deconQC.h5ad"
     params:
         min_genes = 500,
         min_counts = 1000,

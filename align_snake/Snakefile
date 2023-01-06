@@ -102,7 +102,7 @@ SPECIES = pd.unique(SPECIES)
 ########## Snakemake ##########
 rule all:
     input:
-        # expand("{CACHEDIR}/raw/{sample}.h5ad", CACHEDIR=config["CACHEDIR"], sample=SAMPLES),
+        # expand("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/deconQC.h5ad", CACHEDIR=config["CACHEDIR"], sample=SAMPLES),
         # expand("{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai", DATADIR=config["DATADIR"], sample=SAMPLES), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
         # expand("{DATADIR}/align_out/{sample}/Unmapped_fastqc_out", DATADIR=config["DATADIR"], sample=SAMPLES), #fastQC results for unmapped reads
         expand("{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz", DATADIR=config["DATADIR"], sample=SAMPLES), # compress unmapped reads
@@ -138,9 +138,10 @@ include: "rules/3_star_unmapped.smk" #TODO- necessary?
 include: "rules/3_qualimap.smk"
 
 # Counts preprocessing
-# include: "rules/4_soupx.smk" #TODO- replace with a python-based tool?
-include: "rules/4_scanpy_init.smk" #TODO- incorporate ambient RNA-decontaminated data
-# include: "rules/4_scanpy_QCfilter.smk" #TODO- finish doublet filtering
+include: "rules/4a_scanpy_init.smk" #TODO- incorporate ambient RNA-decontaminated data
+# include: "rules/4b_soupx.smk" #TODO- replace with a python-based tool?
+# include: "rules/4b_cellbender.smk" #TODO
+# include: "rules/4c_scanpy_QCfilter.smk" #TODO- finish doublet filtering
 
 # Final QC
 # include: "rules/5_multiqc.smk"
