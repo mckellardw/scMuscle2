@@ -46,7 +46,7 @@ META = META[list(META["file.format"]!="ERR")] #remove samples with file format i
 
 ## Tissue filtering
 # META = META[list(META["tissue"]=="muscle")]
-META = META[[x in ["muscle", "tendon","limb", "ligament", "cartilage", "heart"] for x in META["tissue"]]] # ,
+META = META[[x in ["muscle", "tendon","limb", "ligament", "cartilage"] for x in META["tissue"]]] # ,, "heart"
 META = META[list(META["tissue"]!="")]
 
 ## Species filtering
