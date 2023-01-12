@@ -19,7 +19,8 @@ rule ambient_rna_decon_soupx:
     run:
         shell(
             f"""
-            Rscript scripts/starsolo_soupx.R {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/ {threads}
+            cd {DATADIR}/align_out/{wildcards.sample}
+            Rscript {PRODIR}/align_snake/scripts/starsolo_soupx.R {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/ {threads}
             """
         )
 
@@ -33,6 +34,6 @@ rule cache_soupx_h5ad:
     run:
         shell(
             f"""
-            python scripts/cache_h5ad.py {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/soupx {output.H5AD}
+            python {PRODIR}/align_snake/scripts/cache_h5ad.py {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/soupx {output.H5AD}
             """
         )

@@ -24,7 +24,10 @@ NCORES = args[2]
 
 # Helper function(s) ----
 ## Quick function to find clusters
-getClusterIDs <- function(toc, verbose=F){
+getClusterIDs <- function(
+  toc, 
+  verbose=F
+){
   seu <- CreateSeuratObject(toc)
   seu <- seu %>%
     NormalizeData(verbose=verbose)%>%
@@ -52,9 +55,9 @@ write_sparse <- function(
     overwrite=F,
     verbose=F
 ){
-  require(utils, quietly=T, verbose=F)
-  require(Matrix, quietly=T, verbose=F)
-  require(R.utils, quietly=T, verbose=F)
+  require(utils, quietly=T)
+  require(Matrix, quietly=T)
+  require(R.utils, quietly=T)
   
   if(!dir.exists(path)){
     dir.create(
@@ -116,8 +119,8 @@ write_sparse <- function(
 }
 
 # Read in raw and filtered matrices ----
-tod = Seurat::Read10X(paste0(SOLO_DIR,'raw')) #droplets
-toc = Seurat::Read10X(paste0(SOLO_DIR,'filtered')) # cells
+tod = Seurat::Read10X(paste0(SOLO_DIR,'/raw')) #droplets
+toc = Seurat::Read10X(paste0(SOLO_DIR,'/filtered')) # cells
 
 #     SoupX ----
 # https://github.com/constantAmateur/SoupX
@@ -137,8 +140,8 @@ soup <- setClusters(
   tmp.clusters
 )
 
-soup.est <- autoEstCont(soup)
-adj.mat <- adjustCounts(soup.est)
+soup <- autoEstCont(soup)
+adj.mat <- adjustCounts(soup)
 
 
 # Save adjusted matrices to disk ----
@@ -158,7 +161,7 @@ if(!is.null(adj.mat)){
 
 # save Rho values
 # rhos <- list()
-# for(i in 1:length(soup.list.est)){
-#   rhos[[i]] <- mean(soup.list.est[[i]]$metaData$rho)
+# for(i in 1:length(soup)){
+#   rhos[[i]] <- mean(soup[[i]]$metaData$rho)
 # }
 # rhos <- do.call(rbind,rhos)
