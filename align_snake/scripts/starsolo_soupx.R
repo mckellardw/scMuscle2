@@ -6,16 +6,16 @@ args=(commandArgs(TRUE))
 
 
 # Load libraries  & helper functions ----
-library(Matrix)
-library(dplyr)
-library(Seurat)
+library(Matrix, quietly=T, verbose=F)
+library(dplyr, quietly=T, verbose=F)
+library(Seurat, quietly=T, verbose=F)
 # library(future) #TODO add multicore for Seurat w/ `future` for `getClusterIDs()`
 
-library(SoupX)
+library(SoupX, quietly=T, verbose=F)
 
 # write_sparse requirements
-library(utils)
-library(R.utils)
+library(utils, quietly=T, verbose=F)
+library(R.utils, quietly=T, verbose=F)
 
 # source("~/DWM_utils/sc_utils/seurat_helpers/seutils.R")
 
@@ -52,9 +52,9 @@ write_sparse <- function(
     overwrite=F,
     verbose=F
 ){
-  require(utils,quietly = T)
-  require(Matrix,quietly = T)
-  require(R.utils,quietly = T)
+  require(utils, quietly=T, verbose=F)
+  require(Matrix, quietly=T, verbose=F)
+  require(R.utils, quietly=T, verbose=F)
   
   if(!dir.exists(path)){
     dir.create(
@@ -116,8 +116,8 @@ write_sparse <- function(
 }
 
 # Read in raw and filtered matrices ----
-tod = Seurat::Read10X(paste0(DIR,'raw')) #droplets
-toc = Seurat::Read10X(paste0(DIR,'filtered')) # cells
+tod = Seurat::Read10X(paste0(SOLO_DIR,'raw')) #droplets
+toc = Seurat::Read10X(paste0(SOLO_DIR,'filtered')) # cells
 
 #     SoupX ----
 # https://github.com/constantAmateur/SoupX
@@ -130,20 +130,19 @@ soup <- SoupChannel(
 
 # set cluster IDs for cells before soup estimations
 ## quick preprocessing/clustering to get cluster IDs for cells
-tmp.clusters <- getClusterIDs(toc=sc$toc)
+tmp.clusters <- getClusterIDs(toc=soup$toc)
 
 soup <- setClusters(
-  sc,
+  soup,
   tmp.clusters
 )
 
-soup.est <- autoEstCont(sc)
-adj.mat <- adjustCounts(sc)
+soup.est <- autoEstCont(soup)
+adj.mat <- adjustCounts(soup.est)
 
 
 # Save adjusted matrices to disk ----
 if(!is.null(adj.mat)){
-  cat(paste0("Writing matrix for ", meta$sample[i],"...\n"))
   write_sparse(
     path=paste0(SOLO_DIR,"/soupx"), # name of new directory
     x=adj.mat, # matrix to write as sparse
@@ -153,7 +152,7 @@ if(!is.null(adj.mat)){
     verbose=T
   )
 }else{
-  message(paste0("Adjusted matrix is NULL...\n"))
+  message(paste0("Adjusted matrix is NULL for `", SOLO_DIR,"`...\n"))
 }
 
 

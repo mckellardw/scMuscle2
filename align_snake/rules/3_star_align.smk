@@ -15,9 +15,16 @@ rule STARsolo_align:
         VELDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto"),
         GENEDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene"),
         GENEFULLDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull"),
+        #TODO - tried this to clean up output files, but wildcard passing in expand statement not working
+        # MATS = expand( 
+        #         "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/{gene}/{status}/matrix.mtx", 
+        #         DATADIR=DATADIR, gene=["Gene","GeneFull"], status = ["raw","filtered"]
+        #         ),
         VELMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto/filtered/spliced.mtx",
         GENEMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx",
-        GENEFULLMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx"
+        GENEFULLMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx",
+        GENEMAT_RAW = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/raw/matrix.mtx",
+        GENEFULLMAT_RAW = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/raw/matrix.mtx"
     params:
         MEMLIMIT = config["MEMLIMIT_HI"]
     threads:
@@ -70,7 +77,9 @@ rule compress_STAR_outs:
     output:
         VELMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto/filtered/spliced.mtx.gz",
         GENEMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx.gz",
-        GENEFULLMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx.gz"
+        GENEFULLMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx.gz",
+        GENEMAT_RAW = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/raw/matrix.mtx.gz",
+        GENEFULLMAT_RAW = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/raw/matrix.mtx.gz"
     params:
         # SOLODIR = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/"
         VELDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto"),

@@ -28,7 +28,7 @@ rule unmapped_fastqc:
         UNMAPPED1_FQ = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1.fastq.gz",
         UNMAPPED2_FQ = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz"
     output:
-        FQC_DIR = directory("{DATADIR}/align_out/{sample}/Unmapped_fastqc_out")
+        FQC_DIR = directory("{DATADIR}/align_out/{sample}/fastqc_unmapped_R2")
     threads:
         config["CORES_LO"]
     run:
@@ -39,6 +39,6 @@ rule unmapped_fastqc:
             {FASTQC_EXEC} \
             -o {output.FQC_DIR} \
             -t {threads} \
-            {output.UNMAPPED1_FQ} {output.UNMAPPED2_FQ}
+            {input.UNMAPPED2_FQ}
             """
         )
