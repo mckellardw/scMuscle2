@@ -87,22 +87,27 @@ write_sparse <- function(
   if(overwrite){
     if(verbose){message("Overwriting old files if they exist...")}
     
-    if(file.exists(paste0(mhandle,".gz"))){
+    if(file.exists(paste0(mhandle,".gz"))){ # check matrix
       file.remove(paste0(mhandle,".gz"))
     }
-    if(file.exists(bhandle)){
-      file.remove(bhandle)
+    if(file.exists(paste0(path, "/barcodes.tsv.gz"))){ # check barcodes
+      file.remove(paste0(path, "/barcodes.tsv.gz"))
     }
-    if(file.exists(fhandle)){
-      file.remove(fhandle)
+    if(file.exists(paste0(path, "/features.tsv.gz"))){ # check features
+      file.remove(paste0(path, "/features.tsv.gz"))
     }
   }
   
-  writeMM(x, file=mhandle)
+  writeMM(
+    x, 
+    file=mhandle
+  )
+
   write(
     barcodes, 
     file=bhandle
   )
+
   write.table(
     features, 
     file=fhandle, 
@@ -119,6 +124,7 @@ write_sparse <- function(
 }
 
 # Read in raw and filtered matrices ----
+message(paste0("Reading in raw/filtered matrices...\n"))
 tod = Seurat::Read10X(paste0(SOLO_DIR,'/raw')) #droplets
 toc = Seurat::Read10X(paste0(SOLO_DIR,'/filtered')) # cells
 
@@ -133,6 +139,7 @@ soup <- SoupChannel(
 
 # set cluster IDs for cells before soup estimations
 ## quick preprocessing/clustering to get cluster IDs for cells
+message(paste0("Preprocessing to get cluster IDs...\n"))
 tmp.clusters <- getClusterIDs(toc=soup$toc)
 
 soup <- setClusters(
@@ -140,19 +147,21 @@ soup <- setClusters(
   tmp.clusters
 )
 
+message(paste0("Running soupx...\n"))
 soup <- autoEstCont(soup)
 adj.mat <- adjustCounts(soup)
 
 
 # Save adjusted matrices to disk ----
+message(paste0("Saving adjusted count matrix...\n"))
 if(!is.null(adj.mat)){
   write_sparse(
     path=paste0(SOLO_DIR,"/soupx"), # name of new directory
     x=adj.mat, # matrix to write as sparse
     barcodes=NULL, # cell IDs, colnames
     features=NULL, # gene IDs, rownames
-    overwrite=T,
-    verbose=T
+    overwrite=FALSE,
+    verbose=TRUE
   )
 }else{
   message(paste0("Adjusted matrix is NULL for `", SOLO_DIR,"`...\n"))

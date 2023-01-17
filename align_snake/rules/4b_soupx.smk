@@ -13,14 +13,15 @@ rule ambient_rna_decon_soupx:
         SOUPX_MAT = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/matrix.mtx.gz",
         SOUPX_CELLS = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/barcodes.tsv.gz",
         SOUPX_FEATS = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/features.tsv.gz"
-    params:
+    log:
+        DATADIR+"/align_out/{sample}/soupx.log"
     threads:
-        config["CORES_MID"]
+        config["CORES_LO"] 
     run:
         shell(
             f"""
             cd {DATADIR}/align_out/{wildcards.sample}
-            Rscript {PRODIR}/align_snake/scripts/starsolo_soupx.R {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/ {threads}
+            Rscript {PRODIR}/align_snake/scripts/starsolo_soupx.R {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/ {threads} 2> {log}
             """
         )
 
