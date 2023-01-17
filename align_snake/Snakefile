@@ -58,7 +58,7 @@ META = META[list(META["GSM.accession"]!="")]
 
 META = META[[x in ["3p_v2", "3p_v3", "3p_v3.1", "5p_v1"] for x in META["chemistry"]]]
 
-# META = META.iloc[[1,42,69],:] # subset to only download certain SRRs...
+# META = META.iloc[[42],:] # subset to only download certain SRRs...
 
 
 ########## Pre-snake metadata prep ##########
@@ -102,7 +102,10 @@ SPECIES = pd.unique(SPECIES)
 ########## Snakemake ##########
 rule all:
     input:
-        # expand("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/deconQC.h5ad", CACHEDIR=config["CACHEDIR"], sample=SAMPLES),
+        expand("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/{status}/preDecon.h5ad", DATADIR=config["DATADIR"], sample=SAMPLES, status=["raw","filtered"]),
+        # expand("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/deconQC.h5ad", DATADIR=config["DATADIR"], sample=SAMPLES), # cellbender output
+        expand("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/deconQC.h5ad", DATADIR=config["DATADIR"], sample=SAMPLES), # cellbender output
+        
         # expand("{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai", DATADIR=config["DATADIR"], sample=SAMPLES), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
         # expand("{DATADIR}/align_out/{sample}/Unmapped_fastqc_out", DATADIR=config["DATADIR"], sample=SAMPLES), #fastQC results for unmapped reads
         expand("{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz", DATADIR=config["DATADIR"], sample=SAMPLES), # compress unmapped reads
@@ -111,6 +114,7 @@ rule all:
         # expand("{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html", DATADIR=config["DATADIR"], sample=SAMPLES), # alignment QC with qualimap)
         expand("{DATADIR}/align_out/{sample}/fastqc_preTrim_R2", DATADIR=config["DATADIR"], sample=SAMPLES), # raw R2 fastQC results
         expand("{DATADIR}/align_out/{sample}/fastqc_postTrim_R2", DATADIR=config["DATADIR"], sample=SAMPLES), # adapter/polyA/ployG-trimmed R2 fastQC results
+        expand("{DATADIR}/align_out/{sample}/fastqc_unmapped_R2", DATADIR=config["DATADIR"], sample=SAMPLES), # unmapped R2 fastQC results
         expand("{REFDIR}/{SPECIES}/STAR/Genome", REFDIR=REFDIR, SPECIES=SPECIES), # Reference genomes
         expand("{METADIR}/{SRR}.json", METADIR=config["METADIR"], SRR=SRR_LIST) # metadata files
         # expand("{METADIR}/merged_metadata.csv", METADIR=config["METADIR"])
@@ -138,8 +142,8 @@ include: "rules/3_star_unmapped.smk" #TODO- necessary?
 include: "rules/3_qualimap.smk"
 
 # Counts preprocessing
-include: "rules/4a_scanpy_init.smk" #TODO- incorporate ambient RNA-decontaminated data
-# include: "rules/4b_soupx.smk" #TODO- replace with a python-based tool?
+include: "rules/4a_scanpy_init.smk" 
+include: "rules/4b_soupx.smk" 
 # include: "rules/4b_cellbender.smk" #TODO
 # include: "rules/4c_scanpy_QCfilter.smk" #TODO- finish doublet filtering
 
