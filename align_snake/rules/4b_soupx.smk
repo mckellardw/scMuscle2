@@ -33,7 +33,7 @@ rule cache_soupx_h5ad:
     input:
         GENEFULLMAT = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/matrix.mtx.gz"
     output:
-        H5AD = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/deconQC.h5ad"
+        H5AD = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/decon.h5ad"
     params:
         var_names = "gene_symbols" # scanpy.read_10x_mtx(), index for features is zero (1st column)
     threads:

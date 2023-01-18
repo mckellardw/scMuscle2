@@ -1,15 +1,16 @@
 import sys
 import scanpy as sc
 
-#TODO- change this from positional arguments...
 args = sys.argv
 ad_in = args[1]
 ad_out = args[2]
-min_genes = args[3]
-min_counts = args[4]
-max_mito = args[5]
+min_genes = int(args[3])
+min_counts = int(args[4])
+max_mito = int(args[5])
 
-adata = sc.read_h5ad(ad_in)
+adata = sc.read_h5ad(
+    ad_in
+)
 
 sc.pp.filter_cells(
     adata,
@@ -20,8 +21,14 @@ sc.pp.filter_cells(
     min_counts=min_counts
 )
 
+#preprocess according to Seurat recipe
+# sc.pp.recipe_seurat(
+#     adata
+# )
+
 # annotate the group of mitochondrial genes as 'mito'
-adata.var['mito'] = adata.var_names.str.startswith('MT-')
+#TODO- account for different species gene names...
+adata.var['mito'] = adata.var_names.str.startswith('mt-')
 
 sc.pp.calculate_qc_metrics(
     adata,
@@ -31,7 +38,7 @@ sc.pp.calculate_qc_metrics(
     inplace=True
 )
 
-adata = adata[adata.obs.pct_counts_mito < max_mito, :]
+# adata = adata[adata.obs.pct_counts_mito < max_mito, :]
 
 # Doublet prediction/filtering
 sc.external.pp.scrublet(
@@ -41,8 +48,5 @@ sc.external.pp.scrublet(
 #     adata,
 #     figsize =[6,2.25]
 # )
-cutoff_threshold = 42 #TODO- algorithmically compute this...
-adata = adata[adata.obs["doublet_score"] < cutoff_threshold,]
-
 
 adata.write(ad_out)
