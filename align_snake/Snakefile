@@ -38,7 +38,7 @@ CACHEDIR = config["CACHEDIR"] # Directory for cached h5ad files - `.../scMuscle2
 
 
 ########## Metadata ##########
-META = pd.read_csv(config["SAMPLE_SHEET"], na_filter=False)#sep="\t",encoding = "utf-8"
+META = pd.read_csv(config["SAMPLE_SHEET"], na_filter=False)#encoding = "utf-8"
 
 META = META[list(META["include"])] #remove undesired samples ("include"==False)
 META = META[list(META["file.format"]!="ERR")] #remove samples with file format issues
@@ -46,11 +46,10 @@ META = META[list(META["file.format"]!="ERR")] #remove samples with file format i
 
 ## Tissue filtering
 # META = META[list(META["tissue"]=="muscle")]
-META = META[[x in ["muscle", "tendon","limb", "ligament", "cartilage"] for x in META["tissue"]]] # ,, "heart"
+META = META[[x in ["muscle", "tendon","limb", "ligament", "cartilage"] for x in META["tissue"]]] # "heart"
 META = META[list(META["tissue"]!="")]
 
 ## Species filtering
-# META = META[list(META["species"]=="Ciona intestinalis")]
 META = META[[x in ["Homo sapiens", "Mus musculus"] for x in META["species"]]] #  "Danio rerio"
 
 META = META[list(META["GSM.accession"]!="NA")]
@@ -81,6 +80,7 @@ SRR_DICT = {}
 CHEM_DICT = {}
 FORMAT_DICT = {}
 SPECIES_DICT = {}
+LINK_DICT = {}
 for i in range(0,META.shape[0]):
     GSM = list(META["GSM.accession"])[i]
 
@@ -92,6 +92,9 @@ for i in range(0,META.shape[0]):
 
     SPECIES_DICT[GSM] = list(META["species"])[i]
     SPECIES_DICT[GSM] = SPECIES_DICT[GSM].lower().replace(" ", "_")
+
+    if list(META["file.link"])[i] != "NA":
+        LINK_DICT[GSM] = list(META["file.link"])[i]
 
 ########## Reference genome info ##########
 SPECIES = list(META["species"]) #all lowercase and underscores (no spaces!)
@@ -145,7 +148,7 @@ include: "rules/3_qualimap.smk"
 include: "rules/4a_scanpy_init.smk" 
 include: "rules/4b_soupx.smk" 
 # include: "rules/4b_cellbender.smk" #TODO
-# include: "rules/4c_scanpy_QCfilter.smk" #TODO- finish doublet filtering
+include: "rules/4c_scanpy_QCfilter.smk" 
 
-# Final QC
+# Final data aggregation and QC
 # include: "rules/5_multiqc.smk"

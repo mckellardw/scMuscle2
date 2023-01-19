@@ -37,7 +37,7 @@ rule get_fastqs:
                 """
             )
         elif FORMAT == "aws": #TODO
-            LINKS = str()
+            LINKS = str(LINK_DICT[{wildcards.sample}])
             shell(
                 f"""
                 cd {DATADIR}/align_out/{wildcards.sample}
@@ -56,6 +56,18 @@ rule get_fastqs:
                 cd {DATADIR}/align_out/{wildcards.sample}
                 zcat {R1_LIST} > tmp/merged_R1.fq
                 zcat {R2_LIST} > tmp/merged_R2.fq
+                pigz -p{threads} tmp/*.fq
+                """
+            )
+        elif FORMAT == "ngdc_fastq": #TODO
+            LINKS = str()
+            shell(
+                f"""
+                cd {DATADIR}/align_out/{wildcards.sample}
+                mkdir -p tmp/pulled_fqs
+                wget tmp/pulled_fqs {LINKS}
+                zcat tmp/pulled_fqs/*R1*.fastq.gz > tmp/merged_R1.fq
+                zcat tmp/pulled_fqs/*R2*.fastq.gz > tmp/merged_R2.fq
                 pigz -p{threads} tmp/*.fq
                 """
             )
