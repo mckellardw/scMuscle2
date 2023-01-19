@@ -36,7 +36,7 @@ rule get_fastqs:
                 bash {PRODIR}/align_snake/scripts/get_sra_bam.sh {PREFETCH_EXEC} {BAM2FQ_EXEC} {threads} {wildcards.sample}
                 """
             )
-        elif FORMAT == "aws": #TODO
+        elif FORMAT == "aws": 
             LINKS = LINK_DICT[wildcards.sample]
             LINKS = LINKS.replace(";", " " ) #make sure file list is space-delimited
             shell(
@@ -44,10 +44,12 @@ rule get_fastqs:
                 cd {DATADIR}/align_out/{wildcards.sample}
                 mkdir -p tmp/pulled_fqs
                 cd tmp/pulled_fqs
+                rm ./*
                 wget {LINKS}
                 zcat ./*R1*.f*.gz > ../merged_R1.fq
                 zcat ./*R2*.f*.gz > ../merged_R2.fq
                 pigz -p{threads} ../merged_R*.fq
+                rm ./*
                 """
             )
         elif FORMAT == "local": #TODO
@@ -62,15 +64,19 @@ rule get_fastqs:
                 """
             )
         elif FORMAT == "ngdc_fastq": #TODO
-            LINKS = str()
+            LINKS = LINK_DICT[wildcards.sample]
+            LINKS = LINKS.replace(";", " " ) #make sure file list is space-delimited
             shell(
                 f"""
                 cd {DATADIR}/align_out/{wildcards.sample}
                 mkdir -p tmp/pulled_fqs
-                wget tmp/pulled_fqs {LINKS}
-                zcat tmp/pulled_fqs/*R1*.fastq.gz > tmp/merged_R1.fq
-                zcat tmp/pulled_fqs/*R2*.fastq.gz > tmp/merged_R2.fq
-                pigz -p{threads} tmp/*.fq
+                cd tmp/pulled_fqs
+                rm ./*
+                wget {LINKS}
+                zcat ./*R1*.f*.gz > ../merged_R1.fq
+                zcat ./*R2*.f*.gz > ../merged_R2.fq
+                pigz -p{threads} ../merged_R*.fq
+                rm ./*
                 """
             )
 
