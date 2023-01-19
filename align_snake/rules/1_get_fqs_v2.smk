@@ -37,15 +37,17 @@ rule get_fastqs:
                 """
             )
         elif FORMAT == "aws": #TODO
-            LINKS = str(LINK_DICT[{wildcards.sample}])
+            LINKS = LINK_DICT[wildcards.sample]
+            LINKS = LINKS.replace(";", " " ) #make sure file list is space-delimited
             shell(
                 f"""
                 cd {DATADIR}/align_out/{wildcards.sample}
                 mkdir -p tmp/pulled_fqs
-                wget tmp/pulled_fqs {LINKS}
-                zcat tmp/pulled_fqs/*R1*.fastq.gz > tmp/merged_R1.fq
-                zcat tmp/pulled_fqs/*R2*.fastq.gz > tmp/merged_R2.fq
-                pigz -p{threads} tmp/*.fq
+                cd tmp/pulled_fqs
+                wget {LINKS}
+                zcat ./*R1*.f*.gz > ../merged_R1.fq
+                zcat ./*R2*.f*.gz > ../merged_R2.fq
+                pigz -p{threads} ../merged_R*.fq
                 """
             )
         elif FORMAT == "local": #TODO
