@@ -3,7 +3,8 @@
 #############################################
 # Download reads as an SRA file into a temporary directory, so they can be formatted as .fastq's
 
- # Convert SRA files to fastq with fasterq-dump
+ # Download and convert .sra files to .fastq with fasterq-dump
+ #TODO- replace SRA nonsense with [fastq-dl](https://github.com/rpetit3/fastq-dl)
 rule get_fastqs:
     input:
         SRR_LIST = "{DATADIR}/align_out/{sample}/SRR_list.txt"

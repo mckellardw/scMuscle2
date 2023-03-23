@@ -8,10 +8,19 @@ rule get_metadata:
         METAJSON = "{METADIR}/{SRR}.json"
     threads:
         config["CORES_MID"] #Limit number of concurrent 
-    shell:
-        """
-        {FFQ_EXEC} -o {output.METAJSON} {wildcards.SRR}
-        """
+    run:
+        if wildcards.SRR != "NA":
+            shell(
+                f"""
+                {FFQ_EXEC} -o {output.METAJSON} {wildcards.SRR}
+                """
+            )
+        else:
+            shell( # For samples which are missing an SRR ID...
+                f"""
+                touch {output.METAJSON}
+                """
+            )
 
 # Combine ffq-downloaded .json"s into a big csv for parsing
 #TODO- fix this...

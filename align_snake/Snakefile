@@ -42,7 +42,8 @@ META = pd.read_csv(config["SAMPLE_SHEET"], na_filter=False)#encoding = "utf-8"
 
 META = META[list(META["include"])] #remove undesired samples ("include"==False)
 META = META[list(META["file.format"]!="ERR")] #remove samples with file format issues
-# META = META[list(META["file.format"]!="bam")] #remove samples with file format issues
+META = META[list(META["file.format"]!="ngdc_fastq")] #remove samples with file format issues
+# META = META[list(META["file.format"]=="aws")] 
 
 ## Tissue filtering
 # META = META[list(META["tissue"]=="muscle")]
@@ -57,7 +58,7 @@ META = META[list(META["GSM.accession"]!="")]
 
 META = META[[x in ["3p_v2", "3p_v3", "3p_v3.1", "5p_v1"] for x in META["chemistry"]]]
 
-# META = META.iloc[[42],:] # subset to only download certain SRRs...
+# META = META.iloc[[1,2],:] # subset to only download certain SRRs...
 
 
 ########## Pre-snake metadata prep ##########
@@ -96,6 +97,7 @@ for i in range(0,META.shape[0]):
     if list(META["file.link"])[i] != "NA":
         LINK_DICT[GSM] = list(META["file.link"])[i]
 
+
 ########## Reference genome info ##########
 SPECIES = list(META["species"]) #all lowercase and underscores (no spaces!)
 SPECIES = [x.lower() for x in SPECIES]
@@ -105,21 +107,66 @@ SPECIES = pd.unique(SPECIES)
 ########## Snakemake ##########
 rule all:
     input:
-        expand("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/{status}/preDecon.h5ad", DATADIR=config["DATADIR"], sample=SAMPLES, status=["raw","filtered"]),
+        expand(
+            "{DATADIR}/atlas/{SPECIES}.h5ad", 
+            DATADIR=DATADIR,
+            SPECIES=SPECIES
+        ),
+        expand(
+            "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/{status}/preDecon.h5ad", 
+            DATADIR=config["DATADIR"], 
+            sample=SAMPLES, 
+            status=["raw","filtered"]
+        ),
         # expand("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/deconQC.h5ad", DATADIR=config["DATADIR"], sample=SAMPLES), # cellbender output
-        expand("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/deconQC.h5ad", DATADIR=config["DATADIR"], sample=SAMPLES), # cellbender output
-        
+        expand( # soupx output
+            "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/deconQC.h5ad", 
+            DATADIR=config["DATADIR"], 
+            sample=SAMPLES
+        ),         
         # expand("{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai", DATADIR=config["DATADIR"], sample=SAMPLES), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
         # expand("{DATADIR}/align_out/{sample}/Unmapped_fastqc_out", DATADIR=config["DATADIR"], sample=SAMPLES), #fastQC results for unmapped reads
-        expand("{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz", DATADIR=config["DATADIR"], sample=SAMPLES), # compress unmapped reads
-        expand("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx.gz", DATADIR=config["DATADIR"], sample=SAMPLES), # compressed count matrices
-        expand("{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam.bai", DATADIR=config["DATADIR"], sample=SAMPLES), # index non-dedup .bam
+        expand( # compress unmapped reads
+            "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz", 
+            DATADIR=config["DATADIR"], 
+            sample=SAMPLES
+        ), 
+        expand( # compressed count matrices
+            "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx.gz", 
+            DATADIR=config["DATADIR"], 
+            sample=SAMPLES
+        ), 
+        expand( # index non-dedup .bam 
+            "{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam.bai", 
+            DATADIR=config["DATADIR"], 
+            sample=SAMPLES
+        ), 
         # expand("{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html", DATADIR=config["DATADIR"], sample=SAMPLES), # alignment QC with qualimap)
-        expand("{DATADIR}/align_out/{sample}/fastqc_preTrim_R2", DATADIR=config["DATADIR"], sample=SAMPLES), # raw R2 fastQC results
-        expand("{DATADIR}/align_out/{sample}/fastqc_postTrim_R2", DATADIR=config["DATADIR"], sample=SAMPLES), # adapter/polyA/ployG-trimmed R2 fastQC results
-        expand("{DATADIR}/align_out/{sample}/fastqc_unmapped_R2", DATADIR=config["DATADIR"], sample=SAMPLES), # unmapped R2 fastQC results
-        expand("{REFDIR}/{SPECIES}/STAR/Genome", REFDIR=REFDIR, SPECIES=SPECIES), # Reference genomes
-        expand("{METADIR}/{SRR}.json", METADIR=config["METADIR"], SRR=SRR_LIST) # metadata files
+        expand( # raw R2 fastQC results
+            "{DATADIR}/align_out/{sample}/fastqc_preTrim_R2", 
+            DATADIR=config["DATADIR"], 
+            sample=SAMPLES
+        ), 
+        expand( # adapter/polyA/ployG-trimmed R2 fastQC results
+            "{DATADIR}/align_out/{sample}/fastqc_postTrim_R2", 
+            DATADIR=config["DATADIR"], 
+            sample=SAMPLES
+        ), 
+        expand( # unmapped R2 fastQC results
+            "{DATADIR}/align_out/{sample}/fastqc_unmapped_R2", 
+            DATADIR=config["DATADIR"],
+            sample=SAMPLES
+        ), 
+        expand( # Reference genomes
+            "{REFDIR}/{SPECIES}/STAR/Genome", 
+            REFDIR=REFDIR, 
+            SPECIES=SPECIES
+        ), 
+        expand( # metadata files
+            "{METADIR}/{SRR}.json", 
+            METADIR=config["METADIR"], 
+            SRR=SRR_LIST
+        ) 
         # expand("{METADIR}/merged_metadata.csv", METADIR=config["METADIR"])
 
 
@@ -151,4 +198,5 @@ include: "rules/4b_soupx.smk"
 include: "rules/4c_scanpy_QCfilter.smk" 
 
 # Final data aggregation and QC
+include: "rules/5_atlas_init.smk"
 # include: "rules/5_multiqc.smk"
