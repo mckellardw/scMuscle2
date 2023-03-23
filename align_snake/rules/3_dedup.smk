@@ -2,30 +2,29 @@
 ## UMI-aware .bam deduplication
 #############################################
 # Remove reads that don't have a corrected spot/cell barcode with samtools, then remove duplicates w/ **umi-tools**
-## High mem usage? Check here! https://umi-tools.readthedocs.io/en/latest/faq.html
-## **WARNING** this step is suuuupppppeeerrrr sloowwww. Don't run it if you don't need to!
+## Deduplication is done chromosome-by-chromosome to (dramatically) decrease run time/mem usage
 rule umitools_dedupBAM:
     input:
         CB_WHITELIST = CHEMISTRY_SHEET, #TODO: fix this...
         SORTEDBAM = "{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.out.bam"
     output:
-        DEDUPBAM = "{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam",
-        TMPBAM = temp("{DATADIR}/align_out/{sample}/tmp.bam")
-    params:
-        SAMTOOLS_EXEC = SAMTOOLS_EXEC,
-        UMITOOLS_EXEC = UMITOOLS_EXEC,
-        OUTPUT_PREFIX="{DATADIR}/align_out/{sample}/umitools_dedup/{sample}"
-        # TMPBAM = "{DATADIR}/align_out/{sample}/tmp.bam"
+        DEDUPBAM = "{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam"
     threads:
         config["CORES_LO"]
         #1
     log:
         "{DATADIR}/align_out/{sample}/umitools_dedup/dedup.log"
-    shell:
-        """
-        TODO
-        """
+    run:        
+        tmp_chemistry = CHEM_DICT[wildcards.sample]
+        whitelist = CHEMISTRY_SHEET["whitelist"][tmp_chemistry]
 
+        shell(
+            f"""
+            bash scripts/split_dedup.sh {input.SORTEDBAM} {whitelist} {threads} {output.DEDUPBAM} {OUTDIR}/{wildcards.sample}/tmp/dedup | tee {log}
+            """
+        )
+
+# Index the deduplicated .bam file(s)
 rule umitools_indexDedupBAM:
     input:
         SORTEDBAM = "{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam"
