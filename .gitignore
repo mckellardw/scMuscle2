@@ -1,0 +1,25 @@
+# Snakemake garbage
+.snakemake/*
+
+# VScode garbage
+.vscode/*
+
+# Big data files
+**.fastq
+**.fq
+**.fastq.gz
+**.fq.gz
+**.bw
+**.bam
+**.fa
+**.fa.gz
+
+# Misc.
+.~lock.*
+
+# Jupyter 
+.ipynb_checkpoints/*
+vignettes/.ipynb_checkpoints/*
+
+# This repo
+*.h5ad
