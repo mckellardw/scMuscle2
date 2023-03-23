@@ -18,15 +18,26 @@ rule ambient_rna_decon_soupx:
     log:
         DATADIR+"/align_out/{sample}/soupx.log"
     threads:
-        config["CORES_LO"] 
+        1
+        # config["CORES_LO"] 
     run:
-        shell(
-            f"""
-            cd {DATADIR}/align_out/{wildcards.sample}
-            Rscript {PRODIR}/align_snake/scripts/starsolo_soupx.R {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/ {threads} 2> {log}
-            cp {input.FILT_FEATS} {output.SOUPX_FEATS}
-            """
-        )
+        run_decon = META.loc[META["GSM.accession"] == wildcards.sample, "ambient.decon"].values[0]
+        if run_decon:
+            shell(
+                f"""
+                cd {DATADIR}/align_out/{wildcards.sample}
+                Rscript {PRODIR}/align_snake/scripts/starsolo_soupx.R {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/ {threads} 2> {log}
+                cp {input.FILT_FEATS} {output.SOUPX_FEATS}
+                """
+            )
+        else:
+            shell(
+                f"""
+                cp {input.GENEFULL_FILT_MAT} {output.SOUPX_MAT}
+                cp {input.GENEFULL_CELLS} {output.SOUPX_CELLS}
+                cp {input.GENEFULL_FEATS} {output.SOUPX_FEATS}
+                """
+            )
 
 # initialize & cache the **soupx** counts as an anndata file for easier loading later
 rule cache_soupx_h5ad:
