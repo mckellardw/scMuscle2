@@ -6,8 +6,8 @@
 rule ambient_rna_decon_soupx:
     input:
         GENEFULL_FILT_MAT = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx.gz",
-        FILT_CELLS = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/barcodes.tsv.gz",
-        FILT_FEATS = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/features.tsv.gz",
+        GENEFULL_FILT_CELLS = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/barcodes.tsv.gz",
+        GENEFULL_FILT_FEATS = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/features.tsv.gz",
         GENEFULL_RAW_MAT = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/raw/matrix.mtx.gz",
         RAW_CELLS = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/raw/barcodes.tsv.gz",
         RAW_FEATS = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/raw/features.tsv.gz"
@@ -27,15 +27,16 @@ rule ambient_rna_decon_soupx:
                 f"""
                 cd {DATADIR}/align_out/{wildcards.sample}
                 Rscript {PRODIR}/align_snake/scripts/starsolo_soupx.R {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/ {threads} 2> {log}
-                cp {input.FILT_FEATS} {output.SOUPX_FEATS}
+                cp {input.GENEFULL_FILT_FEATS} {output.SOUPX_FEATS}
                 """
             )
         else:
             shell(
                 f"""
+                mkdir -p {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/soupx/
                 cp {input.GENEFULL_FILT_MAT} {output.SOUPX_MAT}
-                cp {input.GENEFULL_CELLS} {output.SOUPX_CELLS}
-                cp {input.GENEFULL_FEATS} {output.SOUPX_FEATS}
+                cp {input.GENEFULL_FILT_CELLS} {output.SOUPX_CELLS}
+                cp {input.GENEFULL_FILT_FEATS} {output.SOUPX_FEATS}
                 """
             )
 
