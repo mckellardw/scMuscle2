@@ -87,14 +87,17 @@ write_sparse <- function(
   if(overwrite){
     if(verbose){message("Overwriting old files if they exist...")}
     
-    if(file.exists(paste0(mhandle,".gz"))){ # check matrix
-      file.remove(paste0(mhandle,".gz"))
+    if(file.exists(paste0(mhandle, ".gz"))){ # check matrix
+      file.remove(paste0(mhandle, ".gz"))
+      if(verbose){message("matrix file removed...")}
     }
     if(file.exists(paste0(path, "/barcodes.tsv.gz"))){ # check barcodes
       file.remove(paste0(path, "/barcodes.tsv.gz"))
+      if(verbose){message("barcodes file removed...")}
     }
     if(file.exists(paste0(path, "/features.tsv.gz"))){ # check features
       file.remove(paste0(path, "/features.tsv.gz"))
+      if(verbose){message("features file removed...")}
     }
   }
   
@@ -102,11 +105,13 @@ write_sparse <- function(
     x, 
     file=mhandle
   )
+  if(verbose){message("New matrix file written!")}
 
   write(
     barcodes, 
     file=bhandle
   )
+  if(verbose){message("New barcodes file written!")}
 
   write.table(
     features, 
@@ -116,11 +121,13 @@ write_sparse <- function(
     quote=FALSE, 
     sep="\t"
   )
+  if(verbose){message("New features file written!")}
   
   # Annoyingly, writeMM doesn't take connection objects.
   gzip(mhandle)
+  if(verbose){message("New matrix file gzipped!")}
   
-  # return(NULL)
+  return(NULL)
 }
 
 # Read in raw and filtered matrices ----
@@ -153,7 +160,7 @@ rm(
   tod, 
   tmp.clusters
 )
-gc()
+gc(verbose=F)
 
 # Run soupx
 message(paste0("Running soupx...\n"))
