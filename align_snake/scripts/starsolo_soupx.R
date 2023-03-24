@@ -120,7 +120,7 @@ write_sparse <- function(
   # Annoyingly, writeMM doesn't take connection objects.
   gzip(mhandle)
   
-  return(NULL)
+  # return(NULL)
 }
 
 # Read in raw and filtered matrices ----
@@ -147,20 +147,29 @@ soup <- setClusters(
   tmp.clusters
 )
 
+# Memory clean-up
+rm(
+  toc, 
+  tod, 
+  tmp.clusters
+)
+gc()
+
+# Run soupx
 message(paste0("Running soupx...\n"))
 soup <- autoEstCont(soup)
 adj.mat <- adjustCounts(soup)
 
 
 # Save adjusted matrices to disk ----
-message(paste0("Saving adjusted count matrix...\n"))
+message(paste0("Saving adjusted count matrix to `",SOLO_DIR,"/soupx","`...\n"))
 if(!is.null(adj.mat)){
   write_sparse(
     path=paste0(SOLO_DIR,"/soupx"), # name of new directory
-    x=adj.mat, # matrix to write as sparse
-    barcodes=NULL, # cell IDs, colnames
-    features=NULL, # gene IDs, rownames
-    overwrite=FALSE,
+    x=adj.mat,                      # matrix to write as sparse
+    barcodes=NULL,                  # cell IDs, colnames
+    features=NULL,                  # gene IDs, rownames
+    overwrite=TRUE,
     verbose=TRUE
   )
 }else{
