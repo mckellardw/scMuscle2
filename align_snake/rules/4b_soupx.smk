@@ -26,17 +26,19 @@ rule ambient_rna_decon_soupx:
             shell(
                 f"""
                 cd {DATADIR}/align_out/{wildcards.sample}
-                Rscript {PRODIR}/align_snake/scripts/starsolo_soupx.R {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/ {threads} 2> {log}
+                Rscript {PRODIR}/align_snake/scripts/starsolo_soupx.R {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull {threads} 2> {log}
                 cp {input.GENEFULL_FILT_FEATS} {output.SOUPX_FEATS}
                 """
             )
         else:
             shell(
-                f"""
-                mkdir -p {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/soupx/
+                f"""                
+                mkdir -p {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/soupx
                 cp {input.GENEFULL_FILT_MAT} {output.SOUPX_MAT}
                 cp {input.GENEFULL_FILT_CELLS} {output.SOUPX_CELLS}
                 cp {input.GENEFULL_FILT_FEATS} {output.SOUPX_FEATS}
+
+                echo "Copied GeneFull matrix over to soupx folder, no ambient RNA decontamination run." > {log}
                 """
             )
 

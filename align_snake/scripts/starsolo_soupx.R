@@ -88,8 +88,12 @@ write_sparse <- function(
     if(verbose){message("Overwriting old files if they exist...")}
     
     if(file.exists(paste0(mhandle, ".gz"))){ # check matrix
-      file.remove(paste0(mhandle, ".gz"))
+      file.remove(paste0(mhandle, ".gz")) 
       if(verbose){message("matrix file removed...")}
+    }
+    if(file.exists(paste0(mhandle, ".gz.tmp"))){ # check matrix tmp file
+      file.remove(paste0(mhandle, ".gz.tmp")) # matrix tmp file
+      if(verbose){message("matrix tmp file removed...")}
     }
     if(file.exists(paste0(path, "/barcodes.tsv.gz"))){ # check barcodes
       file.remove(paste0(path, "/barcodes.tsv.gz"))
@@ -105,13 +109,13 @@ write_sparse <- function(
     x, 
     file=mhandle
   )
-  if(verbose){message("New matrix file written!")}
+  if(verbose){message("New matrix file written to `",mhandle,"`!")}
 
   write(
     barcodes, 
     file=bhandle
   )
-  if(verbose){message("New barcodes file written!")}
+  if(verbose){message("New barcodes file written tp `",bhandle,"`!")}
 
   write.table(
     features, 
@@ -121,13 +125,13 @@ write_sparse <- function(
     quote=FALSE, 
     sep="\t"
   )
-  if(verbose){message("New features file written!")}
+  if(verbose){message("New features file written to `",fhandle,"`!")}
   
   # Annoyingly, writeMM doesn't take connection objects.
   gzip(mhandle)
   if(verbose){message("New matrix file gzipped!")}
   
-  return(NULL)
+  # return(NULL)
 }
 
 # Read in raw and filtered matrices ----
@@ -166,7 +170,7 @@ gc(verbose=F)
 message(paste0("Running soupx...\n"))
 soup <- autoEstCont(soup)
 adj.mat <- adjustCounts(soup)
-
+message(paste0("Adjusted matrix has ", ncol(adj.mat)," cells and ", nrow(adj.mat), " features...\n"))
 
 # Save adjusted matrices to disk ----
 message(paste0("Saving adjusted count matrix to `",SOLO_DIR,"/soupx","`...\n"))
