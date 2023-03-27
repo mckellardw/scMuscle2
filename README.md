@@ -1,9 +1,15 @@
 # **scMuscle2:** single-cell muscle transcriptomics across species
 In the first scMuscle project, we attempted to gain a better understanding of the constituent cell types of murine skeletal muscle. In this update, we aim to expand the scope, resolution, and depth of that view, and to improve the availability of our analyses to the greater muscle/single-cell communities.
 
+Draft of the mouse compendium, colored by sample ID (~1.2M cells/nuclei):
+![scMuscle2: mouse](images/20230327_mouse_gsm_umap.png)
+
+Draft of the human compendium, colored by sample ID (~875k cells/nuclei):
+![scMuscle2: human](images/20230327_human_gsm_umap.png)
+
+# Table of contents:
 <!---toc start-->
   * [Include your data](#how-to-include-your-data-in-scMuscle2)
-  * [TODO List](#todo)
   * [Description of meta data](#description-of-meta-data)
   * [Workflow](#workflow)
   * [Citation info](#citation-info)
@@ -12,40 +18,15 @@ In the first scMuscle project, we attempted to gain a better understanding of th
 # How to include your data in scMuscle2
 We made a [quick google survey](https://forms.gle/rm6R9hbTAtrpm8rcA) to simplify sharing metadata. Only publicly available data will be included in this study, so please to upload to GEO/SRA!
 
-Please send any questions to either David McKellar (dwm269@cornell.edu) or to our official scMuscle email address (scmuscle@cornell.edu).
+See [the metadata](https://github.com/mckellardw/scMuscle2/blob/main/scMuscle2_metadata_v1-0.csv) for datasets we have already found. Be sure to check the `include` and `comments` columns to see if we have had issues with your data, and please send any corrections either via email (see below) or as a pull request in this repo. Thanks!
 
-## **TODO:**
-- [ ] Add ambient RNA decontamination into `align_snake`
-  - Tools to try:
-    - [X] SoupX [github]() [manuscript]()
-    - [ ] Cellbender [github](https://github.com/broadinstitute/CellBender) [docs](https://cellbender.readthedocs.io/en/latest/) [`remove-background` vignette](https://cellbender.readthedocs.io/en/latest/usage/index.html)
-      - Command line tool & GPU-enabled!
-      - BUT, requires a cellranger-generated `.h5` file... LAME. [Convert dataframe to .h5 w/ pandas](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_hdf.html)
-      - If implemented, would require adding:
-        1. Convert raw mat to `.h5`
-        2. Run `remove-background`
-        3. Extract cell barcodes from scrubbed matrix
-        4. Subset original count mat then convert to `.h5` for easy loading/comparison
-    - [ ] DecontX [github](https://github.com/campbio/celda/blob/master/vignettes/decontX.Rmd) [manuscript](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-1950-6)
-      - R-based, but not compatible w/ Seurat...
-    - [ ] others...
-- [ ] Doublet removal
-  - [ ] DoubletDetection [[link](https://github.com/JonathanShor/DoubletDetection)] [[docs](https://doubletdetection.readthedocs.io/en/stable/index.html)]
-  - [ ] scrublet [[link](https://github.com/swolock/scrublet)]
-- [ ] Benchmark integration.
-  - [ ] [scIB](https://github.com/theislab/scib)? [documentation](https://scib.readthedocs.io/en/latest/)
-  - [ ] scDREAMER [github](https://github.com/Zafar-Lab/scDREAMER)
-- [ ] Pseudobulk/metacell analysis
-  - [ ] w/ [metacells](https://github.com/tanaylab/metacells)?
-  - [ ] or [SuperCell](https://github.com/GfellerLab/SuperCell)?
-- [ ] Figure out multi-species integration [SAM](https://github.com/atarashansky/self-assembling-manifold)
+Please send any questions to either David McKellar (dwm269@cornell.edu) or to our official scMuscle email address (scmuscle@cornell.edu).
 
 ## Datasets to add:
 - Saleh et al, iScience, 2022
   - https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE213925
   - https://www.cell.com/iscience/fulltext/S2589-0042(22)01687-X?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS258900422201687X%3Fshowall%3Dtrue
   - https://www.sciencedirect.com/science/article/pii/S2666675823000085?via%3Dihub
-
 
 ## Description of meta data
 #### Source/citation info:
@@ -114,12 +95,7 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
 1. Download raw sequencing data for all samples (`ffq`,`parallel-fastq-dump`)
 2. Build reference genomes (`gget`, `STAR`)
 3. Align sequencing data (`STAR`, `kallisto`?)  
-
-#TODO
-`TAR-scRNA-seq`- annotation-free analysis of scRNAseq data [link](https://github.com/fw262/TAR-scRNA-seq)
-4. Perform annotation-free analysis `multiTAR` (**#TODO**)
-
-
+4. 
 5. Integrate samples for each species separately (`Seurat`/`scanpy`/`Harmony`/etc)
 6. Cross-species integrative analysis (`SAMmap`)
 
@@ -135,6 +111,8 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
   - Cartilage
     -
 
+
 # Useful references:
-- Cross-species integration benchmark study [[link](https://www.biorxiv.org/content/10.1101/2022.09.27.509674v1)]
+- Cross-species integration benchmark study [ [link](https://www.biorxiv.org/content/10.1101/2022.09.27.509674v1) ]
   - Counldn't find BENGAL code, but found this snakmake from the authors' lab: https://github.com/Functional-Genomics/cross-species-cellgroup-comparison
+- Batch-correction benchmarking with [scIB](https://github.com/theislab/scib)
