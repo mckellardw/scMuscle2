@@ -41,12 +41,12 @@ for SRR in SRR_list:
         """
     )
 
-    # Remove technical reads (readlength<10)
+    # Remove technical reads (readlength=8 or readlength=10)
     system(
         f"""
         for SRR_FQ in tmp/{SRR}*.fastq
         do
-            if cat $SRR_FQ | head | grep -q "length=8"; then
+            if cat $SRR_FQ | head | grep -q -e "length=8" -e "length=10"; then
                 rm $SRR_FQ
             fi
         done
