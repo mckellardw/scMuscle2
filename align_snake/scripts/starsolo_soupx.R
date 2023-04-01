@@ -6,16 +6,16 @@ args=(commandArgs(TRUE))
 
 
 # Load libraries  & helper functions ----
-library(Matrix, quietly=T, verbose=F)
-library(dplyr, quietly=T, verbose=F)
-library(Seurat, quietly=T, verbose=F)
+suppressPackageStartupMessages(library(Matrix))
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(Seurat))
 # library(future) #TODO add multicore for Seurat w/ `future` for `getClusterIDs()`
 
-library(SoupX, quietly=T, verbose=F)
+suppressPackageStartupMessages(library(SoupX))
 
 # write_sparse requirements
-library(utils, quietly=T, verbose=F)
-library(R.utils, quietly=T, verbose=F)
+suppressPackageStartupMessages(library(utils))
+suppressPackageStartupMessages(library(R.utils))
 
 # source("~/DWM_utils/sc_utils/seurat_helpers/seutils.R")
 
@@ -73,26 +73,17 @@ write_sparse <- function(
   if(is.null(features)){
     features=rownames(x)
   }
-  # gene.info <- data.frame(gene.id, gene.symbol, stringsAsFactors=FALSE)
-  
-  # gene.info$gene.type <- rep(gene.type, length.out=nrow(gene.info))
-  mhandle <- file.path(path, "matrix.mtx")
-  bhandle <- gzfile(file.path(path, "barcodes.tsv.gz"), open="wb")
-  fhandle <- gzfile(file.path(path, "features.tsv.gz"), open="wb")
-  on.exit({
-    close(bhandle)
-    close(fhandle)
-  })
-  
+
+  # Remove old files if overwriting...
   if(overwrite){
     if(verbose){message("Overwriting old files if they exist...")}
     
-    if(file.exists(paste0(mhandle, ".gz"))){ # check matrix
-      file.remove(paste0(mhandle, ".gz")) 
+    if(file.exists(paste0(path, "/matrix.mtx.gz"))){ # check matrix
+      file.remove(paste0(path, "/matrix.mtx.gz")) 
       if(verbose){message("matrix file removed...")}
     }
-    if(file.exists(paste0(mhandle, ".gz.tmp"))){ # check matrix tmp file
-      file.remove(paste0(mhandle, ".gz.tmp")) # matrix tmp file
+    if(file.exists(paste0(path, "/matrix.mtx.gz.tmp"))){ # check matrix tmp file
+      file.remove(paste0(path, "/matrix.mtx.gz.tmp")) 
       if(verbose){message("matrix tmp file removed...")}
     }
     if(file.exists(paste0(path, "/barcodes.tsv.gz"))){ # check barcodes
@@ -104,28 +95,82 @@ write_sparse <- function(
       if(verbose){message("features file removed...")}
     }
   }
-  
-  writeMM(
-    x, 
-    file=mhandle
-  )
-  if(verbose){message("New matrix file written to `",mhandle,"`!")}
 
-  write(
-    barcodes, 
-    file=bhandle
-  )
-  if(verbose){message("New barcodes file written tp `",bhandle,"`!")}
+  # gene.info <- data.frame(gene.id, gene.symbol, stringsAsFactors=FALSE)
+  # gene.info$gene.type <- rep(gene.type, length.out=nrow(gene.info))
 
-  write.table(
-    features, 
-    file=fhandle, 
-    row.names=FALSE, 
-    col.names=FALSE, 
-    quote=FALSE, 
-    sep="\t"
+  # Open file connections
+  mhandle <- file.path(
+    path, 
+    "matrix.mtx"
   )
-  if(verbose){message("New features file written to `",fhandle,"`!")}
+  bhandle <- gzfile(
+    file.path(path, "barcodes.tsv.gz"), 
+    open="w"
+  )
+  fhandle <- gzfile(
+    file.path(path, "features.tsv.gz"),
+    open="w"
+  )
+  on.exit({
+    close(bhandle)
+    close(fhandle)
+  })
+    
+  # Write matrix...
+  tryCatch(
+    {
+      if(verbose){message("Writing new matrix file to `",mhandle,"`")}
+      writeMM(
+        x, 
+        file=mhandle
+      )
+    },
+    error = function(e) {
+      cat("Error: ", e$message, "\n")
+    },
+    warning = function(w) {
+      cat("Warning: ", w$message, "\n")
+    }
+  )
+
+  # Write barcodes...
+  tryCatch(
+    {
+      if(verbose){message("Writing new barcodes file to `",bhandle,"`!")}
+      write(
+        barcodes,
+        file = bhandle
+      )
+    },
+    error = function(e) {
+      cat("Error: ", e$message, "\n")
+    },
+    warning = function(w) {
+      cat("Warning: ", w$message, "\n")
+    }
+  )
+
+  # Write features...
+  tryCatch(
+    {
+      if(verbose){message("Writing new features file to `",fhandle,"`!")}
+      write.table(
+        features, 
+        file=fhandle, 
+        row.names=FALSE, 
+        col.names=FALSE, 
+        quote=FALSE, 
+        sep="\t"
+      )
+    },
+    error = function(e) {
+      cat("Error: ", e$message, "\n")
+    },
+    warning = function(w) {
+      cat("Warning: ", w$message, "\n")
+    }
+  )
   
   # Annoyingly, writeMM doesn't take connection objects.
   gzip(mhandle)
@@ -150,7 +195,7 @@ soup <- SoupChannel(
 
 # set cluster IDs for cells before soup estimations
 ## quick preprocessing/clustering to get cluster IDs for cells
-message(paste0("Preprocessing to get cluster IDs...\n"))
+message("Preprocessing to get cluster IDs...\n")
 tmp.clusters <- getClusterIDs(toc=soup$toc)
 
 soup <- setClusters(
@@ -186,7 +231,6 @@ if(!is.null(adj.mat)){
 }else{
   message(paste0("Adjusted matrix is NULL for `", SOLO_DIR,"`...\n"))
 }
-
 
 # save Rho values
 # rhos <- list()

@@ -41,6 +41,10 @@ rule ambient_rna_decon_soupx:
                 echo "Copied GeneFull matrix over to soupx folder, no ambient RNA decontamination run." > {log}
                 """
             )
+            
+        shell(
+            f"ls -R {DATADIR}/align_out/{wildcards.sample}/STARsolo/Solo.out/GeneFull/ >> {log}"
+        )
 
 # initialize & cache the **soupx** counts as an anndata file for easier loading later
 rule cache_soupx_h5ad:
