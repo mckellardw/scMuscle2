@@ -1,11 +1,11 @@
 # **scMuscle2:** single-cell muscle transcriptomics across species
 In the first scMuscle project, we attempted to gain a better understanding of the constituent cell types of murine skeletal muscle. In this update, we aim to expand the scope, resolution, and depth of that view, and to improve the availability of our analyses to the greater muscle/single-cell communities.
 
-Draft of the mouse compendium, colored by sample ID (~1.2M cells/nuclei):
-![scMuscle2: mouse](images/20230327_mouse_gsm_umap.png)
+Draft of the mouse compendium, colored by sample ID (~1.2M cells/nuclei):  
+![scMuscle2: mouse](figures/umapmouse_gsm_umap.png)
 
-Draft of the human compendium, colored by sample ID (~875k cells/nuclei):
-![scMuscle2: human](images/20230327_human_gsm_umap.png)
+Draft of the human compendium, colored by sample ID (~875k cells/nuclei):  
+![scMuscle2: human](figures/umaphuman_gsm_umap.png)
 
 # Table of contents:
 <!---toc start-->
@@ -23,7 +23,7 @@ See [the metadata](https://github.com/mckellardw/scMuscle2/blob/main/scMuscle2_m
 Please send any questions to either David McKellar (dwm269@cornell.edu) or to our official scMuscle email address (scmuscle@cornell.edu).
 
 ## Datasets to add:
-- None in the queue! Send me more data please!
+- None in the queue... Send me more data please!
 
 ## Description of meta data
 #### Source/citation info:
