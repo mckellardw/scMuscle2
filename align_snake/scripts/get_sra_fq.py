@@ -41,19 +41,19 @@ for SRR in SRR_list:
         """
     )
 
-    # Remove technical reads (readlength=8 or readlength=10)
+    # Remove index reads (readlength=8 or readlength=10) | readlength < 26 (just using 20bp below...)
     system(
         f"""
         for SRR_FQ in tmp/{SRR}*.fastq
         do
-            if cat $SRR_FQ | head | grep -q -e "length=8" -e "length=10"; then
+            if [[ $(cat $SRR_FQ | awk 'NR==2 {{ print }}' | wc -m) -lt 27 ]]; then
                 rm $SRR_FQ
             fi
         done
         """
     )
 
-    # Rename fastqs
+    # Rename fastqs so that R1 and R2 files can be merged
     fq_files = glob.glob(f"tmp/{SRR}*.fastq")
 
     sra_sizes = {}
@@ -69,7 +69,7 @@ for SRR in SRR_list:
     rename(rename_dict["R2"], f"tmp/{SRR}_R2.fastq")
 #end of loop
 
-# merge fastqs into GSM####.fastq, then remove individual fastq's
+# merge .fastqs into GSM####.fastq, then remove individual .fastq's
 system(
     f"""
     cat tmp/*_R1.fastq > tmp/merged_R1.fq

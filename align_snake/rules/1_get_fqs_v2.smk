@@ -24,10 +24,10 @@ rule get_fastqs:
 
         if FORMAT == "fastq":
             shell(
-            f"""
-            cd {DATADIR}/align_out/{wildcards.sample}
-            python {PRODIR}/align_snake/scripts/get_sra_fq.py {PREFETCH_EXEC} {FQD_EXEC} {threads} {params.MEMLIMIT}
-            """
+                f"""
+                cd {DATADIR}/align_out/{wildcards.sample}
+                python {PRODIR}/align_snake/scripts/get_sra_fq.py {PREFETCH_EXEC} {FQD_EXEC} {threads} {params.MEMLIMIT}
+                """
             )
         elif FORMAT == "bam":
             # pull .bam file
