@@ -58,7 +58,7 @@ META = META[list(META["GSM.accession"]!="")]
 
 META = META[[x in ["3p_v2", "3p_v3", "3p_v3.1", "5p_v1"] for x in META["chemistry"]]]
 
-# META = META.iloc[[1,2],:] # subset to only download certain SRRs...
+# META = META.iloc[[100,101,102],:] # subset to only download certain samples...
 
 
 ########## Pre-snake metadata prep ##########
@@ -70,12 +70,10 @@ for i in range(0,len(SRR_LIST)):
 SRR_LIST = list(chain(*SRR_LIST))
 
 ## Prep for each **GSM** ID ~~~
-# Grab SRR IDs and their associated fastqs
+# Grab sample IDs and their associated fastqs
 SAMPLES = META["GSM.accession"].unique()
 
 # Build dictionary of SRR IDs/fastq files
-#TODO: add non-SRA sample functionality
-
 # Build dictionaries of chemistries & species to use for alignment
 SRR_DICT = {}
 CHEM_DICT = {}
@@ -118,14 +116,26 @@ rule all:
             sample=SAMPLES, 
             status=["raw","filtered"]
         ),
-        # expand("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/deconQC.h5ad", DATADIR=config["DATADIR"], sample=SAMPLES), # cellbender output
+        # expand( #TODO cellbender output
+        #     "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/cellbender/deconQC.h5ad", 
+        #     DATADIR=config["DATADIR"], 
+        #     sample=SAMPLES
+        # ), 
         expand( # soupx output
             "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/deconQC.h5ad", 
             DATADIR=config["DATADIR"], 
             sample=SAMPLES
         ),         
-        # expand("{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai", DATADIR=config["DATADIR"], sample=SAMPLES), # umi_tools deduplicated .bam **Note** this is super slow!! Only uncomment if NEEDED
-        # expand("{DATADIR}/align_out/{sample}/Unmapped_fastqc_out", DATADIR=config["DATADIR"], sample=SAMPLES), #fastQC results for unmapped reads
+        # expand( # alignment QC with qualimap)
+        #     "{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html", 
+        #     DATADIR=config["DATADIR"],
+        #     sample=SAMPLES
+        # ), 
+        # expand( # umi_tools deduplicated .bam **Note** this is slow!! 
+        #     "{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai", 
+        #     DATADIR=config["DATADIR"], 
+        #     sample=SAMPLES
+        # ), 
         expand( # compress unmapped reads
             "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz", 
             DATADIR=config["DATADIR"], 
@@ -141,7 +151,6 @@ rule all:
             DATADIR=config["DATADIR"], 
             sample=SAMPLES
         ), 
-        # expand("{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html", DATADIR=config["DATADIR"], sample=SAMPLES), # alignment QC with qualimap)
         expand( # raw R2 fastQC results
             "{DATADIR}/align_out/{sample}/fastqc_preTrim_R2", 
             DATADIR=config["DATADIR"], 
