@@ -13,9 +13,7 @@ print(f"Loaded {len(ad_list)} anndata objects...")
 
 # Get sample IDs for merging
 # batch_categories = [os.path.splitext(os.path.basename(file_path))[0] for file_path in ad_path_list] # only works if file is /path/to/{sampleID}.h5ad
-print(ad_list[0].obs_keys)
 batch_categories = [ad.obs[batch_column][0] for ad in ad_list]
-print(batch_categories)
 
 # Merge
 merged_ad = ad_list[0].concatenate(
