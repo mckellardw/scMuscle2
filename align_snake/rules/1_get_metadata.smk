@@ -28,18 +28,25 @@ rule merge_metadata:
     input:
         expand("{METADIR}/{SRR}.json", METADIR=config["METADIR"], SRR=SRR_LIST)
     output:
-        METACSV = "{METADIR}/merged_metadata.csv"
+        METACSV = "{PRODIR}/merged_metadata.csv"
     run:
         df_list = list()
+        # merged_df = pd.DataFrame()
         for f in input: # load metadata files for each SRR
-            with open(f) as data_file:
-                data = json.load(data_file)
-            df = pd.json_normalize(data).T
-            tmp = df.index[0].split(".")[0] + "." # Get SRR ID...
-            df = df.rename(index = lambda x: x.strip(tmp)) # Remove SRR ID from row names
-            df_list.append(df.T) # transpose so that each row is a different run
+            if path.basename(f) == "NA.json":
+                pass # ignore NAs
+            else:
+                with open(f) as data_file:
+                    data = json.load(data_file)
+                df = pd.json_normalize(data).T
+                tmp = df.index[0].split(".")[0] + "." # Get SRR ID...
+                df = df.rename(index = lambda x: x.strip(tmp)) # Remove SRR ID from row names
+                df_list.append(df.T) # transpose so that each row is a different run
 
         print("Concatenating metadata...")
         df_out = pd.concat(df_list)
 
-        df_out.to_csv(output.METACSV, index=False)
+        df_out.to_csv(
+            output.METACSV, 
+            index=False
+        )

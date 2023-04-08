@@ -58,7 +58,7 @@ META = META[list(META["GSM.accession"]!="")]
 
 META = META[[x in ["3p_v2", "3p_v3", "3p_v3.1", "5p_v1"] for x in META["chemistry"]]]
 
-# META = META.iloc[[100,101,102],:] # subset to only download certain samples...
+# META = META.iloc[[100,101,102],:] # subset to only download certain samples [for debugging]
 
 
 ########## Pre-snake metadata prep ##########
@@ -121,8 +121,8 @@ rule all:
         #     DATADIR=config["DATADIR"], 
         #     sample=SAMPLES
         # ), 
-        expand( # soupx output
-            "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/deconQC.h5ad", 
+        expand( # soupx output, with metadata
+            "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/deconQC_meta.h5ad", 
             DATADIR=config["DATADIR"], 
             sample=SAMPLES
         ),         
@@ -132,7 +132,7 @@ rule all:
         #     sample=SAMPLES
         # ), 
         # expand( # umi_tools deduplicated .bam **Note** this is slow!! 
-        #     "{DATADIR}/align_out/{sample}/Aligned.sortedByCoord.dedup.out.bam.bai", 
+        #     "{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.dedup.out.bam.bai", 
         #     DATADIR=config["DATADIR"], 
         #     sample=SAMPLES
         # ), 
@@ -175,8 +175,11 @@ rule all:
             "{METADIR}/{SRR}.json", 
             METADIR=config["METADIR"], 
             SRR=SRR_LIST
-        ) 
-        # expand("{METADIR}/merged_metadata.csv", METADIR=config["METADIR"])
+        ),
+        expand( # merged metadata table, containing info from GEO, etc.
+            "{PRODIR}/merged_metadata.csv", 
+            PRODIR=config["PRODIR"]
+        )
 
 
 # Target rule
