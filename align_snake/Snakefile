@@ -40,10 +40,11 @@ CACHEDIR = config["CACHEDIR"] # Directory for cached h5ad files - `.../scMuscle2
 ########## Metadata ##########
 META = pd.read_csv(config["SAMPLE_SHEET"], na_filter=False)#encoding = "utf-8"
 
+# Metadata filtering
 META = META[list(META["include"])] #remove undesired samples ("include"==False)
 META = META[list(META["file.format"]!="ERR")] #remove samples with file format issues
 META = META[list(META["file.format"]!="ngdc_fastq")] #remove samples with file format issues
-# META = META[list(META["file.format"]=="aws")] 
+# META = META[list(META["file.format"]!="aws")] 
 
 ## Tissue filtering
 # META = META[list(META["tissue"]=="muscle")]
@@ -181,34 +182,28 @@ rule all:
             PRODIR=config["PRODIR"]
         )
 
-
-# Target rule
-# include: "rules/target_all.smk" # entire workflow
-
-# Check for/make directories
-# include: "rules/0_mkdirs.smk"
-
-# Download metadata and raw data
+# Import rules
+## Download metadata and raw data
 include: "rules/1_write_SRR_list.smk"
 include: "rules/1_get_metadata.smk"
 include: "rules/1_get_fqs_v2.smk"
 
-# Aggregate and trim raw read data
+## Aggregate and trim raw read data
 include: "rules/2_trimQC.smk"
 
-# Alignment, post-alignment clean-up, and QC with STARsolo
+## Alignment, post-alignment clean-up, and QC with STARsolo
 include: "rules/3_star_build_ref.smk"
 include: "rules/3_star_align.smk"
 include: "rules/3_dedup.smk"
 include: "rules/3_star_unmapped.smk" #TODO- necessary?
 include: "rules/3_qualimap.smk"
 
-# Counts preprocessing
+## Counts preprocessing
 include: "rules/4a_scanpy_init.smk" 
 include: "rules/4b_soupx.smk" 
 # include: "rules/4b_cellbender.smk" #TODO
 include: "rules/4c_scanpy_QCfilter.smk" 
 
-# Final data aggregation and QC
+## Final data aggregation and QC
 include: "rules/5_atlas_init.smk"
 # include: "rules/5_multiqc.smk"
