@@ -48,7 +48,7 @@ META = META[list(META["file.format"]!="ngdc_fastq")] #remove samples with file f
 
 ## Tissue filtering
 # META = META[list(META["tissue"]=="muscle")]
-META = META[[x in ["muscle", "tendon","limb", "ligament", "cartilage"] for x in META["tissue"]]] # "heart"
+META = META[[x in ["muscle", "tendon", "limb", "ligament", "cartilage"] for x in META["tissue"]]] # "heart"
 META = META[list(META["tissue"]!="")]
 
 ## Species filtering
@@ -57,7 +57,7 @@ META = META[[x in ["Homo sapiens", "Mus musculus"] for x in META["species"]]] # 
 META = META[list(META["GSM.accession"]!="NA")]
 META = META[list(META["GSM.accession"]!="")]
 
-META = META[[x in ["3p_v2", "3p_v3", "3p_v3.1", "5p_v1"] for x in META["chemistry"]]]
+META = META[[x in ["3p_v2", "3p_v3", "3p_v3.1", "5p_v1", "5p_v3"] for x in META["chemistry"]]]
 
 # META = META.iloc[[100,101,102],:] # subset to only download certain samples [for debugging]
 
