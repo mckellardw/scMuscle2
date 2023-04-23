@@ -1,4 +1,5 @@
 # Utility functions for use with scanpy
+## See current version here - https://github.com/mckellardw/DWM_utils/blob/main/sc_utils/scanpy_helpers/scantils.py
 
 # Calculate the number of PCs that contain some proportion (default is 95%) of the variance
 def npcs(
@@ -43,3 +44,34 @@ def reorder_reduction(
         ADATA.obsm[reduction] = ADATA.obsm[reduction][:,pc_order]
     else:
         print(f"The reduction '{reduction}' was not found...")
+
+
+# Read in a list of gene lists from .csv (each column is a gene list)
+## Useful for plotting
+def read_csv_to_dict(filename):
+    import csv
+
+    # Open the CSV file
+    with open(filename, 'r') as file:
+
+        # Create a CSV reader object
+        reader = csv.reader(file)
+
+        # Read the first row as header
+        header = next(reader)
+
+        # Create an empty dictionary to store the columns
+        columns = {col: [] for col in header}
+
+        # Loop through each row in the CSV file
+        for row in reader:
+
+            # Loop through each column in the row
+            for col, value in zip(header, row):
+
+                # Add the value to the corresponding column in the dictionary
+                if value: # skip empty strings
+                    columns[col].append(value)
+
+    # Return the dictionary
+    return columns
