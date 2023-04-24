@@ -23,3 +23,4 @@ vignettes/.ipynb_checkpoints/*
 
 # This repo
 *.h5ad
+vignettes/OLD/*
