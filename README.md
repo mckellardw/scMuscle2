@@ -27,7 +27,9 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
   - https://www.sciencedirect.com/science/article/pii/S1934590923000875?dgcid=raven_sd_search_email#da0010
 - Defining the spatial-molecular map of fibrotic tendon healing and the drivers of Scleraxis-lineage cell fate and function - https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE216214
 - Rabbit rotator cuff Visium datasets - https://josr-online.biomedcentral.com/articles/10.1186/s13018-022-03326-8
-- 
+- https://journals.biologists.com/jcs/article/136/8/jcs260913/307168/Distinct-myofibre-domains-of-the-human
+- https://pubmed.ncbi.nlm.nih.gov/36979114/
+- https://bmcbiol.biomedcentral.com/articles/10.1186/s12915-023-01519-z
 <!-- - None in the queue... Send me more data please! -->
 
 ## Description of meta data
