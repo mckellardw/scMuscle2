@@ -15,6 +15,7 @@ Draft of the human compendium, colored by sample ID (1,048,507 cells/nuclei):
   * [Citation info](#citation-info)
 <!---toc end-->
 
+
 # How to include your data in scMuscle2
 We made a [quick google survey](https://forms.gle/rm6R9hbTAtrpm8rcA) to simplify sharing metadata. Only publicly available data will be included in this study, so please to upload to GEO/SRA!
 
@@ -23,16 +24,22 @@ See [the metadata](https://github.com/mckellardw/scMuscle2/blob/main/scMuscle2_m
 Please send any questions to either David McKellar (dwm269@cornell.edu) or to our official scMuscle email address (scmuscle@cornell.edu).
 
 ## Datasets to add:
-- Rando exercise paper - https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE196364
-  - https://www.sciencedirect.com/science/article/pii/S1934590923000875?dgcid=raven_sd_search_email#da0010
-- Defining the spatial-molecular map of fibrotic tendon healing and the drivers of Scleraxis-lineage cell fate and function - https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE216214
-- Rabbit rotator cuff Visium datasets - https://josr-online.biomedcentral.com/articles/10.1186/s13018-022-03326-8
+### Single-cell/nuc data
 - https://journals.biologists.com/jcs/article/136/8/jcs260913/307168/Distinct-myofibre-domains-of-the-human
-- https://pubmed.ncbi.nlm.nih.gov/36979114/
-- https://bmcbiol.biomedcentral.com/articles/10.1186/s12915-023-01519-z
+  - E-MTAB-12529 and E-MTAB-12530
+- https://bmcbiol.biomedcentral.com/articles/10.1186/s12915-023-01519-z 
+  - pig data 
+- https://pubmed.ncbi.nlm.nih.gov/37102148/
+  - multiome iPSC/hMuSC data
+- https://pubmed.ncbi.nlm.nih.gov/37235502/
+  - Data not available?
+### Spatial data
+- Defining the spatial-molecular map of fibrotic tendon healing and the drivers of Scleraxis-lineage cell fate and function - https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE216214 (Visium datasets)
+- Rabbit rotator cuff Visium datasets - https://josr-online.biomedcentral.com/articles/10.1186/s13018-022-03326-8
 <!-- - None in the queue... Send me more data please! -->
 
-## Description of meta data
+## Description of metadata
+#TODO
 #### Source/citation info:
 - **source.label** - shorthand for the publication from which this data was taken (first author's last name plus year final manuscript was published)
 - **sample** - sample ID, specific to each lane of a 10x Chromium run (string of characters with no spaces, no periods, and no hyphens/dashes)
@@ -64,7 +71,6 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
 - **other.accession** - `INSERT_DESCRIPTION_HERE`
 - **file.link** - link that can be used to directly download files with `wget`
 
-
 ## Sources & keywords used to find samples
 - [NCBI/GEO](https://www.ncbi.nlm.nih.gov/geo/) - keywords used:
   - (muscle) AND (single-cell)
@@ -94,6 +100,7 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
 - [Scanpy](TODO)
 -
 
+
 # **Workflow**
 `align_snake` - snakemake workflow to automate everything between metadata collectino and count matrix preprocessing
 1. Download raw sequencing data for all samples (`ffq`,`parallel-fastq-dump`)
@@ -103,16 +110,17 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
 5. Integrate samples for each species separately (`Seurat`/`scanpy`/`Harmony`/etc)
 6. Cross-species integrative analysis (`SAMmap`)
 
-## "tissue" annotations
+## "tissue" & "subtissue" annotations
+#TODO
 - Using tiered tissue annotations:
-  - Muscle
-    - Hindlimb
-    - Tibialis Anterior
-    - Quadriceps
+  - muscle
+    - hindlimb
+    - tibialis anterior
+    - quadriceps
     -
-  - Tendon
+  - tendon
     -
-  - Cartilage
+  - cartilage
     -
 
 

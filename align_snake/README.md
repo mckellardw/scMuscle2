@@ -1,6 +1,5 @@
 # `align_snake`
 Preprocessing, alignment, QC, and quantification workflow for 10x Genomics single-cell & single-nucleus RNA-seq data (Chromium, v2, v3, or v3.1)
-**by David W. McKellar**
 
 #Pipeline TODO:
 - Increase data access functionalities
@@ -23,18 +22,13 @@ Preprocessing, alignment, QC, and quantification workflow for 10x Genomics singl
 - `pigz` [v2.6](https://zlib.net/pigz/)
 - `pandas` [v##]()
 - `itertools` [v##]()
-
 - `gget` [v0.2.6](https://github.com/pachterlab/gget)
 - `cutadapt` [v4.1](https://cutadapt.readthedocs.io/en/stable/)
-- ~~`trim-galore` [v0.6.2](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/)~~
 - `fastqc` [v0.11.8](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 - `STAR` [v2.7.10b](https://github.com/alexdobin/STAR)
 - `qualimap` [v.2.2.2a](http://qualimap.conesalab.org/)
 - `multiqc` [v1.13](https://multiqc.info/)
 
-*Maybe include*:
-- `vsearch` [v#](https://github.com/torognes/vsearch)
-- `BLAST`
 
 #### **Build `conda` environment:**
 Be sure to [install conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) first!
