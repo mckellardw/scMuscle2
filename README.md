@@ -78,8 +78,7 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
   - (limb) AND (single-cell)
   - (skeletal) AND (single-cell)
   - (cartilage) AND (single-cell)
-- [CNBC/NGDC](https://ngdc.cncb.ac.cn/) - keywords used:
-  -
+- [CNBC/NGDC](https://ngdc.cncb.ac.cn/)
 - [10x Genomics - 'Publications'](https://www.10xgenomics.com/resources/publications)
 - [panglaoDB](https://panglaodb.se/)
 - [Broad Single-Cell Portal](https://singlecell.broadinstitute.org/single_cell)
@@ -103,12 +102,15 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
 
 # **Workflow**
 `align_snake` - snakemake workflow to automate everything between metadata collectino and count matrix preprocessing
-1. Download raw sequencing data for all samples (`ffq`,`parallel-fastq-dump`)
+1. Download raw sequencing data for all samples (`ffq`,`parallel-fastq-dump`,`wget`)
 2. Build reference genomes (`gget`, `STAR`)
-3. Align sequencing data (`STAR`, `kallisto`?)  
-4. 
-5. Integrate samples for each species separately (`Seurat`/`scanpy`/`Harmony`/etc)
-6. Cross-species integrative analysis (`SAMmap`)
+3. Align sequencing data (`STARsolo`)  
+4. QC samples individually
+5. Integrate samples for each species separately (`scanpy`/`Harmony`/etc)
+6. Manually re-annotate clusters/cell types
+
+#TODO
+7. Cross-species integrative analysis (`SAMmap`)
 
 ## "tissue" & "subtissue" annotations
 #TODO
@@ -117,14 +119,42 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
     - hindlimb
     - tibialis anterior
     - quadriceps
-    -
+    - gastrocnemius
+    - soleus
+    - rectus femoris
+    - gluteus minimus
+    - vastus lateralis
+    - Flexor hallucis longus
+    - serratus
+    - orbicularis oris
+    - external oblique
+    - rectus abdominus
+    - trapezius
+    - lower abdominal muscle
+    - triceps
+    - plantaris
+    - embryonic forelimb
+    - tail
+    - pharynx
+    - diaphragm
+    - tongue
+    - muscle stem cell
+    - tumor
+    - xenograft
+    - myoblasts
+    - cell line
+    - iPSC / psc-derived
+    - organoid
   - tendon
-    -
+    - achilles
+    - flexor digitorus longus tendon
+    - enthesis
+    - iPSC
   - cartilage
-    -
+    - #TODO
 
 
 # Useful references:
+- Batch-correction benchmarking with [scIB](https://github.com/theislab/scib)
 - Cross-species integration benchmark study [ [link](https://www.biorxiv.org/content/10.1101/2022.09.27.509674v1) ]
   - Counldn't find BENGAL code, but found this snakmake from the authors' lab: https://github.com/Functional-Genomics/cross-species-cellgroup-comparison
-- Batch-correction benchmarking with [scIB](https://github.com/theislab/scib)
