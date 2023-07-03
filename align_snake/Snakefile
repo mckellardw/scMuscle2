@@ -69,10 +69,12 @@ SRR_LIST = list(META["SRR.accession"])
 for i in range(0,len(SRR_LIST)):
     SRR_LIST[i] = SRR_LIST[i].split(";")
 SRR_LIST = list(chain(*SRR_LIST))
+SRR_LIST = [x for x in SRR_LIST if x] # remove empty sample names
 
 ## Prep for each **GSM** ID ~~~
 # Grab sample IDs and their associated fastqs
 SAMPLES = META["GSM.accession"].unique()
+SAMPLES = [x for x in SAMPLES if x] # remove empty sample names
 
 # Build dictionary of SRR IDs/fastq files
 # Build dictionaries of chemistries & species to use for alignment
