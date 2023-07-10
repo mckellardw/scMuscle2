@@ -1,16 +1,19 @@
 ########################################################################################################
 # align_snake
-#   Snakemake workflow to  download fastq files and associated metadata from SRA, then use STARsolo to align and quantify 10x Chromium datasets, and finally perform simple preprocessing so that data are ready for downstream analysis
-#   Written by David W. McKellar
+##  Snakemake workflow to  download fastq files and associated metadata from SRA, then use STARsolo
+##  to align and quantify 10x Chromium datasets, and finally perform simple preprocessing so that 
+##  data are ready for downstream analysis
 ########################################################################################################
 import pandas as pd
 from itertools import chain
 from functools import reduce
 from os import path, remove, rename
 
+
 ########## Config files ##########
 configfile:"config.yaml"
 CHEMISTRY_SHEET = pd.read_csv(config["CHEMISTRY_SHEET"], na_filter=False,index_col=0)#"resources/chemistry_sheet.csv"
+
 
 ########## Executables ##########
 FFQ_EXEC = config["FFQ_EXEC"]
@@ -20,7 +23,6 @@ BAM2FQ_EXEC = config["BAM2FQ_EXEC"]
 STAR_EXEC = config["STAR_EXEC"]
 GGET_EXEC = config["GGET_EXEC"]
 FASTQC_EXEC = config["FASTQC_EXEC"]
-# TRIMGALORE_EXEC = config["TRIMGALORE_EXEC"]
 CUTADAPT_EXEC = config["CUTADAPT_EXEC"]
 SAMTOOLS_EXEC = config["SAMTOOLS_EXEC"]
 UMITOOLS_EXEC = config["UMITOOLS_EXEC"]
@@ -29,12 +31,12 @@ MULTIQC_EXEC = config["MULTIQC_EXEC"]
 
 
 ########## Directories ##########
-PRODIR = config["PRODIR"] #Project parent directory - `.../scMuscle2`
-METADIR = config["METADIR"] # Metadata directory - `.../scMuscle2/meta`
-TMPDIR = config["TMPDIR"] # temporary files - `.../scMuscle2/tmp`
-DATADIR = config["DATADIR"] # outputs for STAR alignment, etc - `.../scMuscle2/data`
-REFDIR = config["REFDIR"] # Output for reference genomes - `.../scMuscle2/refs`
-CACHEDIR = config["CACHEDIR"] # Directory for cached h5ad files - `.../scMuscle2/cache`
+PRODIR = config["PRODIR"] # Project parent directory -      `.../scMuscle2`
+METADIR = config["METADIR"] # Metadata directory -          `.../scMuscle2/meta`
+TMPDIR = config["TMPDIR"] # temporary files -               `.../scMuscle2/tmp`
+DATADIR = config["DATADIR"] # fastqc, STAR alignment, etc - `.../scMuscle2/data`
+REFDIR = config["REFDIR"] # Reference genomes -             `.../scMuscle2/refs`
+CACHEDIR = config["CACHEDIR"] # Cached .h5ad files -        `.../scMuscle2/cache`
 
 
 ########## Metadata ##########
@@ -105,7 +107,8 @@ SPECIES = [x.lower() for x in SPECIES]
 SPECIES = [x.replace(" ", "_") for x in SPECIES]
 SPECIES = pd.unique(SPECIES)
 
-########## Snakemake ##########
+
+########## Snakemake rules ##########
 rule all:
     input:
         expand(
@@ -129,11 +132,11 @@ rule all:
             DATADIR=config["DATADIR"], 
             sample=SAMPLES
         ),         
-        expand( # alignment QC with qualimap)
-            "{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html", 
-            DATADIR=config["DATADIR"],
-            sample=SAMPLES
-        ), 
+        # expand( #TODO alignment QC with qualimap)
+        #     "{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html", 
+        #     DATADIR=config["DATADIR"],
+        #     sample=SAMPLES
+        # ), 
         expand( # compress unmapped reads
             "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz", 
             DATADIR=config["DATADIR"], 
@@ -144,26 +147,13 @@ rule all:
             DATADIR=config["DATADIR"], 
             sample=SAMPLES
         ), 
-        # expand( # index non-dedup .bam 
-        #     "{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam.bai", 
-        #     DATADIR=config["DATADIR"], 
-        #     sample=SAMPLES
-        # ), 
-        expand( # raw R2 fastQC results
-            "{DATADIR}/align_out/{sample}/fastqc_preTrim_R2", 
-            DATADIR=config["DATADIR"], 
-            sample=SAMPLES
-        ), 
-        expand( # adapter/polyA/ployG-trimmed R2 fastQC results
-            "{DATADIR}/align_out/{sample}/fastqc_postTrim_R2", 
-            DATADIR=config["DATADIR"], 
-            sample=SAMPLES
-        ), 
-        expand( # unmapped R2 fastQC results
-            "{DATADIR}/align_out/{sample}/fastqc_unmapped_R2", 
+        expand( # fastQC results R2, before and after trimming as well as unmapped reads
+            "{DATADIR}/align_out/{sample}/fastqc_{TRIM}_{READ}", 
             DATADIR=config["DATADIR"],
+            TRIM=["preTrim", "postTrim", "unmapped"],
+            READ=["R2"],
             sample=SAMPLES
-        ), 
+        ),
         expand( # Reference genomes
             "{REFDIR}/{SPECIES}/STAR/Genome", 
             REFDIR=REFDIR, 
@@ -192,8 +182,8 @@ include: "rules/2a_trimQC.smk"
 include: "rules/3a_star_build_ref.smk"
 include: "rules/3b_star_align.smk"
 include: "rules/3c_star_unmapped.smk"
-include: "rules/3d_dedup.smk"
-include: "rules/3e_qualimap.smk"
+# include: "rules/3d_dedup.smk"
+# include: "rules/3e_qualimap.smk"
 
 ## Counts preprocessing
 include: "rules/4a_scanpy_init.smk" 
