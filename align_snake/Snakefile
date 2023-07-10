@@ -129,16 +129,11 @@ rule all:
             DATADIR=config["DATADIR"], 
             sample=SAMPLES
         ),         
-        # expand( # alignment QC with qualimap)
-        #     "{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html", 
-        #     DATADIR=config["DATADIR"],
-        #     sample=SAMPLES
-        # ), 
-        # expand( # umi_tools deduplicated .bam **Note** this is slow!! 
-        #     "{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.dedup.out.bam.bai", 
-        #     DATADIR=config["DATADIR"], 
-        #     sample=SAMPLES
-        # ), 
+        expand( # alignment QC with qualimap)
+            "{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html", 
+            DATADIR=config["DATADIR"],
+            sample=SAMPLES
+        ), 
         expand( # compress unmapped reads
             "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz", 
             DATADIR=config["DATADIR"], 
@@ -149,11 +144,11 @@ rule all:
             DATADIR=config["DATADIR"], 
             sample=SAMPLES
         ), 
-        expand( # index non-dedup .bam 
-            "{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam.bai", 
-            DATADIR=config["DATADIR"], 
-            sample=SAMPLES
-        ), 
+        # expand( # index non-dedup .bam 
+        #     "{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam.bai", 
+        #     DATADIR=config["DATADIR"], 
+        #     sample=SAMPLES
+        # ), 
         expand( # raw R2 fastQC results
             "{DATADIR}/align_out/{sample}/fastqc_preTrim_R2", 
             DATADIR=config["DATADIR"], 
@@ -186,19 +181,19 @@ rule all:
 
 # Import rules
 ## Download metadata and raw data
-include: "rules/1_write_SRR_list.smk"
-include: "rules/1_get_metadata.smk"
-include: "rules/1_get_fqs_v2.smk"
+include: "rules/1a_write_SRR_list.smk"
+include: "rules/1b_get_metadata.smk"
+include: "rules/1c_get_fqs_v2.smk"
 
 ## Aggregate and trim raw read data
-include: "rules/2_trimQC.smk"
+include: "rules/2a_trimQC.smk"
 
 ## Alignment, post-alignment clean-up, and QC with STARsolo
-include: "rules/3_star_build_ref.smk"
-include: "rules/3_star_align.smk"
-include: "rules/3_dedup.smk"
-include: "rules/3_star_unmapped.smk" #TODO- necessary?
-include: "rules/3_qualimap.smk"
+include: "rules/3a_star_build_ref.smk"
+include: "rules/3b_star_align.smk"
+include: "rules/3c_star_unmapped.smk"
+include: "rules/3d_dedup.smk"
+include: "rules/3e_qualimap.smk"
 
 ## Counts preprocessing
 include: "rules/4a_scanpy_init.smk" 
@@ -207,5 +202,5 @@ include: "rules/4b_soupx.smk"
 include: "rules/4c_scanpy_QCfilter.smk" 
 
 ## Final data aggregation and QC
-include: "rules/5_atlas_init.smk"
-# include: "rules/5_multiqc.smk"
+include: "rules/5a_atlas_init.smk"
+# include: "rules/5b_multiqc.smk"

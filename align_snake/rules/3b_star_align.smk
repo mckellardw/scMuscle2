@@ -9,17 +9,12 @@ rule STARsolo_align:
         FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2_final.fq.gz",
         REF_LIST = expand("{REFDIR}/{SPECIES}/STAR/Genome", REFDIR=REFDIR, SPECIES=SPECIES) # Reference genomes
     output:
-        SORTEDBAM = "{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam", #TODO: add temp()
+        SORTEDBAM = temp("{DATADIR}/align_out/{sample}/STARsolo/Aligned.sortedByCoord.out.bam"),
         UNMAPPED1 = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1",
         UNMAPPED2 = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2",
         # VELDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto"),
         # GENEDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene"),
         # GENEFULLDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull"),
-        #TODO - tried this to clean up output files, but wildcard passing in expand statement not working
-        # MATS = expand( 
-        #         "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/{gene}/{status}/matrix.mtx", 
-        #         DATADIR=DATADIR, gene=["Gene","GeneFull"], status = ["raw","filtered"]
-        #         ),
         VELMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto/filtered/spliced.mtx",
         GENEMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx",
         GENEFULLMAT = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/matrix.mtx",
@@ -68,6 +63,7 @@ rule STARsolo_align:
         )
         # --genomeLoad LoadAndRemove \
 
+
 # compress outputs from STAR (count matrices)
 rule compress_STAR_outs:
     input:
@@ -85,7 +81,6 @@ rule compress_STAR_outs:
         RAW_CELLS = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/raw/barcodes.tsv.gz",
         RAW_FEATS = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/raw/features.tsv.gz"
     params:
-        # SOLODIR = "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/"
         VELDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Velocyto"),
         GENEDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene"),
         GENEFULLDIR = directory("{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull")
@@ -102,6 +97,7 @@ rule compress_STAR_outs:
             """
         )
 
+
 # Index the .bam produced by STAR
 rule indexSortedBAM:
     input:
@@ -115,4 +111,4 @@ rule indexSortedBAM:
         """
         {SAMTOOLS_EXEC} index {input.SORTEDBAM}
         """
-# -@ {threads}
+    # -@ {threads}

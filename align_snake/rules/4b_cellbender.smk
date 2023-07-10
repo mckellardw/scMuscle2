@@ -13,17 +13,20 @@ rule ambient_rna_decon_cellbender:
         H5AD = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/decon.h5ad"
     output:
         H5AD = DATADIR+"/align_out/{sample}/STARsolo/Solo.out/GeneFull/filtered/decon.h5ad"
-    params:
+    conda:
+        "cellbender"
     threads:
         config["CORES_MID"]
-    script: #TODO
-        """
-        cellbender remove-background \
-        --input raw_feature_bc_matrix.h5 \
-        --output output.h5 \
-        --cuda \
-        --expected-cells 5000 \
-        --total-droplets-included 20000 \
-        --fpr 0.01 \
-        --epochs 150
-        """
+    run:
+        script(
+            f"""
+            cellbender remove-background \
+            --input {input.H5AD} \
+            --output {output.H5AD} \
+            --total-droplets-included 20000 \
+            --fpr 0.01 \
+            --epochs 150
+            """
+        )
+            # --cuda \
+            # --expected-cells 5000 \
