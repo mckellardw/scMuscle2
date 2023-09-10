@@ -25,10 +25,6 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
 
 ## Datasets to add:
 ### Single-cell/nuc data
-- https://www.biorxiv.org/content/10.1101/2023.05.25.542370v1
-  - New data from Cosgrove lab
-- https://pubmed.ncbi.nlm.nih.gov/37192223/
-  - Barruet et al
 - https://journals.biologists.com/jcs/article/136/8/jcs260913/307168/Distinct-myofibre-domains-of-the-human
   - E-MTAB-12529 and E-MTAB-12530
 - https://bmcbiol.biomedcentral.com/articles/10.1186/s12915-023-01519-z 
