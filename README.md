@@ -112,7 +112,16 @@ Please send any questions to either David McKellar (dwm269@cornell.edu) or to ou
 #TODO
 7. Cross-species integrative analysis (`SAMmap`)
 
-## "tissue" & "subtissue" annotations
+# Download the dataset from cellxgene w/ `gget`
+[gget](https://github.com/pachterlab/gget)
+
+#TODO
+```
+$ gget setup cellxgene # setup only needs to be run once
+$ gget cellxgene --gene ACE2 SLC5A1 --tissue lung --cell_type 'mucus secreting cell' -o example_adata.h5ad
+```
+
+# "tissue" & "subtissue" annotations
 #TODO
 - Using tiered tissue annotations:
   - muscle
