@@ -1,10 +1,16 @@
 # Snakemake garbage
-.snakemake/*
+align_snake/.snakemake/*
 
 # VScode garbage
 .vscode/*
 
 # Big data files
+align_out/*
+
+**.sra
+**.sra.lock
+**.sra.prf
+**.sra.tmp
 **.fastq
 **.fq
 **.fastq.gz

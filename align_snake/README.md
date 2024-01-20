@@ -37,9 +37,7 @@ conda create --name align_snake
 
 conda activate align_snake
 
-conda install -c bioconda ffq parallel-fastq-dump gget fastqc cutadapt star multiqc
-
-conda install  -c conda-forge pigz pandas
+conda install -c bioconda ffq parallel-fastq-dump gget fastqc cutadapt star multiqc kallisto bustools snakemake
 
 conda install itertools
 ```
