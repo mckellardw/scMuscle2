@@ -12,35 +12,44 @@ from os import path, remove, rename
 
 ########## Config files ##########
 configfile:"config.yaml"
-CHEMISTRY_SHEET = pd.read_csv(config["CHEMISTRY_SHEET"], na_filter=False,index_col=0)#"resources/chemistry_sheet.csv"
+
+#"resources/chemistry_sheet.csv"
+CHEMISTRY_SHEET = pd.read_csv(
+    config["CHEMISTRY_SHEET"], 
+    na_filter=False,
+    index_col=0
+)
 
 
 ########## Executables ##########
-FFQ_EXEC = config["FFQ_EXEC"]
-PREFETCH_EXEC = config["PREFETCH_EXEC"]
-FQD_EXEC = config["FQD_EXEC"]
-BAM2FQ_EXEC = config["BAM2FQ_EXEC"]
-STAR_EXEC = config["STAR_EXEC"]
-GGET_EXEC = config["GGET_EXEC"]
-FASTQC_EXEC = config["FASTQC_EXEC"]
-CUTADAPT_EXEC = config["CUTADAPT_EXEC"]
-SAMTOOLS_EXEC = config["SAMTOOLS_EXEC"]
-UMITOOLS_EXEC = config["UMITOOLS_EXEC"]
-QUALIMAP_EXEC = config["QUALIMAP_EXEC"]
-MULTIQC_EXEC = config["MULTIQC_EXEC"]
+EXEC = config["EXEC"]
+# FFQ_EXEC = config["FFQ_EXEC"]
+# PREFETCH_EXEC = config["PREFETCH_EXEC"]
+# FQD_EXEC = config["FQD_EXEC"]
+# BAM2FQ_EXEC = config["BAM2FQ_EXEC"]
+# STAR_EXEC = config["STAR_EXEC"]
+# GGET_EXEC = config["GGET_EXEC"]
+# FASTQC_EXEC = config["FASTQC_EXEC"]
+# CUTADAPT_EXEC = config["CUTADAPT_EXEC"]
+# SAMTOOLS_EXEC = config["SAMTOOLS_EXEC"]
+# UMITOOLS_EXEC = config["UMITOOLS_EXEC"]
+# QUALIMAP_EXEC = config["QUALIMAP_EXEC"]
+# MULTIQC_EXEC = config["MULTIQC_EXEC"]
 
 
 ########## Directories ##########
-PRODIR = config["PRODIR"] # Project parent directory -      `.../scMuscle2`
-METADIR = config["METADIR"] # Metadata directory -          `.../scMuscle2/meta`
-TMPDIR = config["TMPDIR"] # temporary files -               `.../scMuscle2/tmp`
-DATADIR = config["DATADIR"] # fastqc, STAR alignment, etc - `.../scMuscle2/data`
-REFDIR = config["REFDIR"] # Reference genomes -             `.../scMuscle2/refs`
-CACHEDIR = config["CACHEDIR"] # Cached .h5ad files -        `.../scMuscle2/cache`
-
+PRODIR =   config["PRODIR"]  # Project parent directory -     `.../scMuscle2`
+DATADIR =  f"{PRODIR}/data"  # fastqc, STAR alignment, etc -  `.../scMuscle2/data`
+METADIR =  f"{PRODIR}/meta"  # Metadata directory -           `.../scMuscle2/meta`
+TMPDIR =   f"{PRODIR}/tmp"   # temporary files -              `.../scMuscle2/tmp`
+REFDIR =   f"{PRODIR}/refs"  # Reference genomes -            `.../scMuscle2/refs`
+CACHEDIR = f"{PRODIR}/cache" # Cached .h5ad files -           `.../scMuscle2/cache`
 
 ########## Metadata ##########
-META = pd.read_csv(config["SAMPLE_SHEET"], na_filter=False)#encoding = "utf-8"
+META = pd.read_csv(
+    config["SAMPLE_SHEET"], 
+    na_filter=False
+)#encoding = "utf-8"
 
 # Metadata filtering
 META = META[list(META["include"])] #remove undesired samples ("include"==False)
@@ -111,27 +120,27 @@ SPECIES = pd.unique(SPECIES)
 ########## Snakemake rules ##########
 rule all:
     input:
-        expand(
-            "{DATADIR}/atlas/{SPECIES}.h5ad", 
-            DATADIR=DATADIR,
-            SPECIES=SPECIES
-        ),
+        # expand(
+        #     "{DATADIR}/atlas/{SPECIES}.h5ad", 
+        #     DATADIR=DATADIR,
+        #     SPECIES=SPECIES
+        # ),
         expand(
             "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/{status}/preDecon.h5ad", 
-            DATADIR=config["DATADIR"], 
+            DATADIR=DATADIR,
             sample=SAMPLES, 
             status=["raw","filtered"]
         ),
         # expand( #TODO cellbender output
         #     "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/cellbender/deconQC.h5ad", 
-        #     DATADIR=config["DATADIR"], 
+        #     DATADIR=DATADIR, 
         #     sample=SAMPLES
         # ), 
-        expand( # soupx output, with metadata
-            "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/deconQC_meta.h5ad", 
-            DATADIR=config["DATADIR"], 
-            sample=SAMPLES
-        ),         
+        # expand( # soupx output, with metadata
+        #     "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/deconQC_meta.h5ad", 
+        #     DATADIR=DATADIR, 
+        #     sample=SAMPLES
+        # ),         
         # expand( #TODO alignment QC with qualimap)
         #     "{DATADIR}/align_out/{sample}/qualimap_out/qualimapReport.html", 
         #     DATADIR=config["DATADIR"],
@@ -139,34 +148,34 @@ rule all:
         # ), 
         expand( # compress unmapped reads
             "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz", 
-            DATADIR=config["DATADIR"], 
+            DATADIR=DATADIR, 
             sample=SAMPLES
         ), 
         expand( # compressed count matrices
             "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/Gene/filtered/matrix.mtx.gz", 
-            DATADIR=config["DATADIR"], 
+            DATADIR=DATADIR, 
             sample=SAMPLES
         ), 
         expand( # fastQC results R2, before and after trimming as well as unmapped reads
-            "{DATADIR}/align_out/{sample}/fastqc_{TRIM}_{READ}", 
-            DATADIR=config["DATADIR"],
+            "{DATADIR}/align_out/{sample}/fastqc/{TRIM}_{READ}", 
+            DATADIR=DATADIR,
             TRIM=["preTrim", "postTrim", "unmapped"],
             READ=["R2"],
             sample=SAMPLES
         ),
-        expand( # Reference genomes
-            "{REFDIR}/{SPECIES}/STAR/Genome", 
-            REFDIR=REFDIR, 
-            SPECIES=SPECIES
-        ), 
+        # expand( # Reference genomes
+        #     "{REFDIR}/{SPECIES}/STAR/Genome", 
+        #     REFDIR=REFDIR, 
+        #     SPECIES=SPECIES
+        # ), 
         expand( # metadata files
             "{METADIR}/{SRR}.json", 
-            METADIR=config["METADIR"], 
+            METADIR=METADIR, 
             SRR=SRR_LIST
         ),
         expand( # merged metadata table, containing info from GEO, etc.
             "{PRODIR}/merged_metadata.csv", 
-            PRODIR=config["PRODIR"]
+            PRODIR=PRODIR
         )
 
 # Import rules

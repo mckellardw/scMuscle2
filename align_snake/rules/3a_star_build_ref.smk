@@ -3,14 +3,16 @@
 rule build_refs:
     output:
         # REF_METADATA = expand("{REFDIR}/{SPECIES}/STAR/metadata.json", REFDIR=config["REFDIR"], SPECIES=SPECIES),
-        REF = expand("{REFDIR}/{SPECIES}/STAR/Genome", REFDIR=config["REFDIR"], SPECIES=SPECIES) # Reference genomes
+        REF = expand("{REFDIR}/{SPECIES}/STAR/Genome", REFDIR=REFDIR, SPECIES=SPECIES) # Reference genomes
     threads:
         config["CORES_HI"]
     run:
         #TODO- import error from gget python module, although the command line tool works? Seems like it is a
         # from gget import ref
         # available_species = ref(species="NA", list_species=True)
-        shell("{GGET_EXEC} ref -l > resources/gget_species.txt")
+        shell(
+            f"{EXEC['GGET']} ref -l > resources/gget_species.txt"
+        )
 
         from pandas import read_csv
         available_species = read_csv("resources/gget_species.txt",header=None)[0].values.tolist()
@@ -25,7 +27,7 @@ rule build_refs:
                         mkdir -p {REFDIR}/{S}
                         cd {REFDIR}/{S}
 
-                        {GGET_EXEC} ref \
+                        {EXEC['GGET']} ref \
                         --out {REFDIR}/{S}/metadata.json \
                         --which gtf,dna \
                         --download \
@@ -39,7 +41,7 @@ rule build_refs:
                     print(f"Building STAR reference for {S}...\n")
                     shell(
                         f"""
-                        {STAR_EXEC} \
+                        {EXEC['STAR']} \
                         --runThreadN {threads} \
                         --runMode genomeGenerate \
                         --genomeDir {REFDIR}/{S}/STAR \

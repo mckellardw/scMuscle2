@@ -9,8 +9,8 @@ rule get_fastqs:
     input:
         SRR_LIST = "{DATADIR}/align_out/{sample}/SRR_list.txt"
     output:
-        MERGED_R1_FQ = temp("{DATADIR}/align_out/{sample}/tmp/merged_R1.fq.gz"),
-        MERGED_R2_FQ = temp("{DATADIR}/align_out/{sample}/tmp/merged_R2.fq.gz")
+        MERGED_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R1.fq.gz", #temp()
+        MERGED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2.fq.gz"
     params:
         MEMLIMIT = config["MEMLIMIT_LO"]
     threads:
@@ -18,7 +18,7 @@ rule get_fastqs:
     priority:
         42
     run:
-        FORMAT = FORMAT_DICT[wildcards.sample]
+        FORMAT    = FORMAT_DICT[wildcards.sample]
         CHEMISTRY = CHEM_DICT[wildcards.sample]
         # [SRR for SRR in SRR_LIST if FORMAT_DICT[SRR] in ["fastq","bam"]]
 
@@ -26,7 +26,7 @@ rule get_fastqs:
             shell(
                 f"""
                 cd {DATADIR}/align_out/{wildcards.sample}
-                python {PRODIR}/align_snake/scripts/get_sra_fq.py {PREFETCH_EXEC} {FQD_EXEC} {threads} {params.MEMLIMIT}
+                python {PRODIR}/align_snake/scripts/get_sra_fq.py {EXEC['PREFETCH']} {EXEC['FASTERQDUMP']} {threads} {params.MEMLIMIT}
                 """
             )
         elif FORMAT == "bam":
@@ -34,7 +34,7 @@ rule get_fastqs:
             shell(
                 f"""
                 cd {DATADIR}/align_out/{wildcards.sample}
-                bash {PRODIR}/align_snake/scripts/get_sra_bam.sh {PREFETCH_EXEC} {BAM2FQ_EXEC} {threads} {wildcards.sample}
+                bash {PRODIR}/align_snake/scripts/get_sra_bam.sh {EXEC['PREFETCH']} {EXEC['BAM2FQ']} {threads} {wildcards.sample}
                 """
             )
         elif FORMAT == "aws": 

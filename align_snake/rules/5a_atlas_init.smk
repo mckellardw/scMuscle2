@@ -1,8 +1,9 @@
+# Aggregate species-level atlases
 rule atlas_init:
     input:
         expand( 
             "{DATADIR}/align_out/{sample}/STARsolo/Solo.out/GeneFull/soupx/deconQC_meta.h5ad", 
-            DATADIR=config["DATADIR"], 
+            DATADIR=DATADIR,
             sample=SAMPLES # GSM.accession
         ), 
     output:

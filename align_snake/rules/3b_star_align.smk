@@ -40,7 +40,7 @@ rule STARsolo_align:
             f"""
             mkdir -p {DATADIR}/align_out/{wildcards.sample}/STARsolo
 
-            {STAR_EXEC} \
+            {EXEC['STAR']} \
             --runThreadN {threads} \
             --outFileNamePrefix {DATADIR}/align_out/{wildcards.sample}/STARsolo/ \
             --outSAMtype BAM SortedByCoordinate \
@@ -107,8 +107,10 @@ rule indexSortedBAM:
     threads:
         # config["CORES_LO"]
         1
-    shell:
-        """
-        {SAMTOOLS_EXEC} index {input.SORTEDBAM}
-        """
+    run:
+        shell(
+            f"""
+            {EXEC['SAMTOOLS']} index {input.SORTEDBAM}
+            """
+        )
     # -@ {threads}

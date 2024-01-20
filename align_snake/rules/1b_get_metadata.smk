@@ -12,7 +12,7 @@ rule get_metadata:
         if wildcards.SRR != "NA":
             shell(
                 f"""
-                {FFQ_EXEC} -o {output.METAJSON} {wildcards.SRR}
+                {EXEC['FFQ']} -o {output.METAJSON} {wildcards.SRR}
                 """
             )
         else:
@@ -26,7 +26,7 @@ rule get_metadata:
 #TODO- fix this...
 rule merge_metadata:
     input:
-        expand("{METADIR}/{SRR}.json", METADIR=config["METADIR"], SRR=SRR_LIST)
+        expand("{METADIR}/{SRR}.json", METADIR=METADIR, SRR=SRR_LIST)
     output:
         METACSV = "{PRODIR}/merged_metadata.csv"
     run:

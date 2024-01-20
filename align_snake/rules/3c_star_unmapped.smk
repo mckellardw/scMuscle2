@@ -18,7 +18,7 @@ rule unmapped_compress:
             mv {input.UNMAPPED1} {input.UNMAPPED2}.fastq
             mv {input.UNMAPPED2} {input.UNMAPPED1}.fastq
 
-            pigz -p {threads} {input.UNMAPPED1}.fastq {input.UNMAPPED2}.fastq
+            {EXEC['PIGZ']} -p {threads} {input.UNMAPPED1}.fastq {input.UNMAPPED2}.fastq
             """
         )
 
@@ -28,15 +28,15 @@ rule unmapped_fastqc:
         UNMAPPED1_FQ = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate1.fastq.gz",
         UNMAPPED2_FQ = "{DATADIR}/align_out/{sample}/STARsolo/Unmapped.out.mate2.fastq.gz"
     output:
-        FQC_DIR = directory("{DATADIR}/align_out/{sample}/fastqc_unmapped_R2")
+        FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/fastqc/unmapped_R2")
     threads:
         config["CORES_LO"]
     run:
         shell(
             f"""
-            mkdir -p {output.FQC_DIR}
+            mkdir -p {output.FASTQC_DIR}
 
-            {FASTQC_EXEC} \
+            {EXEC['FASTQC']} \
             -o {output.FQC_DIR} \
             -t {threads} \
             {input.UNMAPPED2_FQ}

@@ -6,7 +6,7 @@ rule preTrim_FastQC_R2:
     input:
         MERGED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2.fq.gz"
     output:
-        FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/fastqc_preTrim_R2"),
+        FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/fastqc/preTrim_R2"),
     params:
         adapters = config['FASTQC_ADAPTERS']
     threads:
@@ -16,7 +16,7 @@ rule preTrim_FastQC_R2:
             f"""
             mkdir -p {output.FASTQC_DIR}
 
-            {FASTQC_EXEC} \
+            {EXEC['FASTQC']} \
             --outdir {output.FASTQC_DIR} \
             --threads {threads} \
             -a {params.adapters} \
@@ -33,7 +33,7 @@ rule cutadapt_R2:
         FINAL_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R1_final.fq.gz", #temp()
         FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2_final.fq.gz" #temp()
     params:
-        CUTADAPT_EXEC = CUTADAPT_EXEC,
+        MIN_R2_LENGTH = 16,
         THREE_PRIME_R2_POLYA = "A"*100, # 100 A-mer
         THREE_PRIME_R2_POLYG = "G"*100, # 100 G-mer
         FIVE_PRIME_R2_TSO = "CCCATGTACTCTGCGTTGATACCACTGCTT", #10x TSO sequence
@@ -46,8 +46,8 @@ rule cutadapt_R2:
     run:
         shell(
             f"""
-            {params.CUTADAPT_EXEC} \
-            --minimum-length 18 \
+            {EXEC['CUTADAPT']} \
+            --minimum-length {PARAMS.MIN_R2_LENGTH} \
             -A {params.THREE_PRIME_R2_POLYA} \
             -A {params.THREE_PRIME_R2_POLYG} \
             -G {params.FIVE_PRIME_R2_TSO} \
@@ -56,7 +56,8 @@ rule cutadapt_R2:
             -o {output.FINAL_R1_FQ} \
             -p {output.FINAL_R2_FQ} \
             --cores {threads} \
-            {input.MERGED_R1_FQ} {input.MERGED_R2_FQ} 1> {log}
+            {input.MERGED_R1_FQ} {input.MERGED_R2_FQ} \
+            1> {log}
             """
         )
 
@@ -65,17 +66,17 @@ rule postTrim_FastQC_R2:
     input:
         FINAL_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2_final.fq.gz"
     output:
-        FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/fastqc_postTrim_R2")
+        FASTQC_DIR = directory("{DATADIR}/align_out/{sample}/fastqc/postTrim_R2")
     params:
         adapters = config['FASTQC_ADAPTERS']
     threads:
-        min([config["CORES_LO"],8]) # 8 core max
+        min([config["CORES_LO"], 8]) # 8 core max
     run:
         shell(
             f"""
             mkdir -p {output.FASTQC_DIR}
 
-            {FASTQC_EXEC} \
+            {EXEC['FASTQC']} \
             --outdir {output.FASTQC_DIR} \
             --threads {threads} \
             -a {params.adapters} \
