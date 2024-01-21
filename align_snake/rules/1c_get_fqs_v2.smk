@@ -15,6 +15,8 @@ rule get_fastqs:
         MEMLIMIT = config["MEMLIMIT_LO"]
     threads:
         config["CORES_LO"]
+    log:
+        "{DATADIR}/align_out/{sample}/get_fastqs.log"
     priority:
         42
     run:

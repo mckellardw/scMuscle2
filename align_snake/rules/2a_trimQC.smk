@@ -11,6 +11,8 @@ rule preTrim_FastQC_R2:
         adapters = config['FASTQC_ADAPTERS']
     threads:
         config["CORES_LO"]
+    log:
+        "{DATADIR}/align_out/{sample}/fastqc/preTrim_R2.log"
     run:
         shell(
             f"""
@@ -71,6 +73,8 @@ rule postTrim_FastQC_R2:
         adapters = config['FASTQC_ADAPTERS']
     threads:
         min([config["CORES_LO"], 8]) # 8 core max
+    log:
+        "{DATADIR}/align_out/{sample}/fastqc/postTrim_R2.log"
     run:
         shell(
             f"""

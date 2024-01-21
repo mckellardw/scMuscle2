@@ -6,6 +6,8 @@ rule build_refs:
         REF = expand("{REFDIR}/{SPECIES}/STAR/Genome", REFDIR=REFDIR, SPECIES=SPECIES) # Reference genomes
     threads:
         config["CORES_HI"]
+    log:
+        f"{REFDIR}/star.log"
     run:
         #TODO- import error from gget python module, although the command line tool works? Seems like it is a
         # from gget import ref
