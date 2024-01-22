@@ -1,0 +1,18 @@
+{
+    "homo_sapiens": {
+        "annotation_gtf": {
+            "ftp": "http://ftp.ensembl.org/pub/release-111/gtf/homo_sapiens/Homo_sapiens.GRCh38.111.gtf.gz",
+            "ensembl_release": 111,
+            "release_date": "2023-10-08",
+            "release_time": "23:49",
+            "bytes": "52M"
+        },
+        "genome_dna": {
+            "ftp": "http://ftp.ensembl.org/pub/release-111/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz",
+            "ensembl_release": 111,
+            "release_date": "2023-10-04",
+            "release_time": "12:32",
+            "bytes": "841M"
+        }
+    }
+}
