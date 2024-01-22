@@ -3,16 +3,19 @@
 #############################################
 # Download metadata for each individual SRR (run) ID
 ## Info: https://github.com/pachterlab/ffq
-rule get_metadata:
+rule get_metadata_ffq:
     output:
-        METAJSON = "{METADIR}/{SRR}.json"
+        METAJSON = "{METADIR}/ffq/{SRR}.json"
     threads:
         config["CORES_MID"] #Limit number of concurrent 
+    log:
+        "{METADIR}/logs/{SRR}.log"
     run:
         if wildcards.SRR != "NA":
             shell(
                 f"""
-                {EXEC['FFQ']} -o {output.METAJSON} {wildcards.SRR}
+                {EXEC['FFQ']} -o {output.METAJSON} {wildcards.SRR} \
+                2> {log}
                 """
             )
         else:
@@ -24,11 +27,11 @@ rule get_metadata:
 
 # Combine ffq-downloaded .json"s into a big csv for parsing
 #TODO- fix this...
-rule merge_metadata:
+rule merge_metadata_ffq:
     input:
-        expand("{METADIR}/{SRR}.json", METADIR=METADIR, SRR=SRR_LIST)
+        expand("{METADIR}/ffq/{SRR}.json", METADIR=METADIR, SRR=SRR_LIST)
     output:
-        METACSV = "{PRODIR}/merged_metadata.csv"
+        METACSV = "{PRODIR}/merged_metadata_ffq.csv"
     run:
         df_list = list()
         # merged_df = pd.DataFrame()
@@ -50,3 +53,36 @@ rule merge_metadata:
             output.METACSV, 
             index=False
         )
+
+#-------------------------------------
+
+rule get_metadata_fastqdl:
+    output:
+        META = "{METADIR}/fastqdl/{SRR}-run-info.tsv"
+    params:
+        SLEEP = 14,
+        MAX_ATTEMPTS = 4
+    threads:
+        config["CORES_LO"] #Limit number of concurrent 
+    log:
+        "{METADIR}/logs/{SRR}_fastqdl.log"
+    run:
+        if wildcards.SRR != "NA":
+            shell(
+                f"""
+                {EXEC['FASTQDL']} \
+                --accession {wildcards.SRR} \
+                --sleep {params.SLEEP} \
+                --max-attempts {params.MAX_ATTEMPTS} \
+                --only-download-metadata \
+                --prefix {wildcards.SRR} \
+                --outdir $(dirname {output.META}) \
+                2> {log}
+                """
+            )
+        else:
+            shell( # For samples which are missing an SRR ID...
+                f"""
+                touch {output.META}
+                """
+            )
