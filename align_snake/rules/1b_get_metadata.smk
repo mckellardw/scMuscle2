@@ -31,7 +31,7 @@ rule merge_metadata_ffq:
     input:
         expand("{METADIR}/ffq/{SRR}.json", METADIR=METADIR, SRR=SRR_LIST)
     output:
-        METACSV = "{PRODIR}/merged_metadata_ffq.csv"
+        METACSV = "{METADIR}/merged_metadata_ffq.csv"
     run:
         df_list = list()
         # merged_df = pd.DataFrame()
@@ -86,3 +86,30 @@ rule get_metadata_fastqdl:
                 touch {output.META}
                 """
             )
+
+rule merge_metadata_fastqdl:
+    input:
+        expand("{METADIR}/fastqdl/{SRR}-run-info.tsv", METADIR=METADIR, SRR=SRR_LIST)
+    output:
+        METACSV = "{METADIR}/merged_metadata_fastqdl.csv"
+    run:
+        df_list = list()
+        # merged_df = pd.DataFrame()
+        for f in input: # load metadata files for each SRR
+            if path.basename(f) == "NA.json":
+                pass # ignore NAs
+            else:
+                with open(f) as data_file:
+                    data = json.load(data_file)
+                df = pd.json_normalize(data).T
+                tmp = df.index[0].split(".")[0] + "." # Get SRR ID...
+                df = df.rename(index = lambda x: x.strip(tmp)) # Remove SRR ID from row names
+                df_list.append(df.T) # transpose so that each row is a different run
+
+        print("Concatenating metadata...")
+        df_out = pd.concat(df_list)
+
+        df_out.to_csv(
+            output.METACSV, 
+            index=False
+        )

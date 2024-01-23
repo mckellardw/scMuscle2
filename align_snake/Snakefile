@@ -99,11 +99,9 @@ for i in range(0,META.shape[0]):
 
 ########## Reference genome info ##########
 SPECIES = list(META["species"]) #all lowercase and underscores (no spaces!)
-SPECIES = [x.lower() for x in SPECIES]
-SPECIES = [x.replace(" ", "_") for x in SPECIES]
-SPECIES = pd.unique(SPECIES)
-
-
+SPECIES = [S.lower() for S in SPECIES]
+SPECIES = [S.replace(" ", "_") for S in SPECIES]
+SPECIES = list(set(SPECIES))
 
 ########## Rules ##########
 
@@ -145,13 +143,13 @@ rule all:
         #     DATADIR=DATADIR, 
         #     sample=SAMPLES
         # ), 
-        # expand( # fastQC results R2, before and after trimming as well as unmapped reads
-        #     "{DATADIR}/align_out/{sample}/fastqc/{TRIM}_{READ}", 
-        #     DATADIR=DATADIR,
-        #     TRIM=["preTrim", "postTrim", "unmapped"],
-        #     READ=["R2"],
-        #     sample=SAMPLES
-        # ),
+        expand( # fastQC results R2, before and after trimming as well as unmapped reads
+            "{DATADIR}/align_out/{sample}/fastqc/{TRIM}_{READ}", 
+            DATADIR=DATADIR,
+            TRIM=["preTrim", "postTrim", "unmapped"],
+            READ=["R2"],
+            sample=SAMPLES
+        ),
         # expand( # Reference genomes
         #     "{REFDIR}/{SPECIES}/STAR/Genome", 
         #     REFDIR=REFDIR, 
@@ -164,8 +162,9 @@ rule all:
             f"{METADIR}/fastqdl/{SRR}-run-info.tsv" for SRR in SRR_LIST
         ],
         expand( # merged metadata table, containing info from GEO, etc.
-            "{PRODIR}/merged_metadata_ffq.csv", 
-            PRODIR=PRODIR
+            "{METADIR}/merged_metadata_{TOOL}.csv", 
+            METADIR=METADIR,
+            TOOL=["ffq", "fastqdl"]
         )
 
 # Import rules

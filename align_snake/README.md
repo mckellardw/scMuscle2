@@ -1,22 +1,21 @@
 # `align_snake`
-Preprocessing, alignment, QC, and quantification workflow for 10x Genomics single-cell & single-nucleus RNA-seq data (Chromium, v2, v3, or v3.1)
+Preprocessing, alignment, QC, and quantification workflow for single-cell & single-nucleus RNA-seq data 
+(Only 10x Genomics Chromium, v2, v3, or v3.1 right now)
 
 #Pipeline TODO:
 - Increase data access functionalities
+  - Replace `sra-toolkit` with `fastq-dl`
   - Add `aws`/`wget` as a download option
     - Tabula dataset downloads... just `wget` from AWS?
   - Add `local` as a download option under `meta$file.format`
 - Add `multiqc` [[link](https://multiqc.info/)] rule to aggregate QC info on alignment/etc.
 
-#README TODO:
-- Info on sample_sheet format
-
 ## Data to add...
-- Tabula Microcebus raw data still not available [link](https://tabula-microcebus.ds.czbiohub.org/whereisthedata)
+- Tabula Microcebus raw data [link](https://tabula-microcebus.ds.czbiohub.org/whereisthedata)
 
 ## **Dependencies:**
-- `sra-toolkit` [v3.0.0](https://github.com/ncbi/sra-tools/wiki/01.-Downloading-SRA-Toolkit)
-- `parallel-fastq-dump` [link](https://github.com/rvalieris/parallel-fastq-dump)
+- `sra-toolkit` [v3.0.10](https://github.com/ncbi/sra-tools/wiki/01.-Downloading-SRA-Toolkit)
+- `fastq-dl` [v#.#](https://github.com/rpetit3/fastq-dl)
 - `ffq` [v0.2.1](https://github.com/pachterlab/ffq)
 - `bam2fastq` [v1.4.1](https://github.com/10XGenomics/bamtofastq/blob/master/README.md) ([link to download](https://github.com/10XGenomics/bamtofastq/releases))
 - `pigz` [v2.6](https://zlib.net/pigz/)
@@ -28,18 +27,18 @@ Preprocessing, alignment, QC, and quantification workflow for 10x Genomics singl
 - `STAR` [v2.7.10b](https://github.com/alexdobin/STAR)
 - `qualimap` [v.2.2.2a](http://qualimap.conesalab.org/)
 - `multiqc` [v1.13](https://multiqc.info/)
+<!-- Deprecated:
+- `parallel-fastq-dump` [link](https://github.com/rvalieris/parallel-fastq-dump) -->
 
-
-#### **Build `conda` environment:**
-Be sure to [install conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) first!
+#### **Build `conda`/`mamba` environment:**
 ```
-conda create --name align_snake
+mamba create --name align_snake
 
-conda activate align_snake
+mamba activate align_snake
 
-conda install -c bioconda ffq parallel-fastq-dump gget fastqc cutadapt star multiqc kallisto bustools snakemake
+mamba install -c bioconda ffq parallel-fastq-dump gget fastqc cutadapt star multiqc kallisto bustools snakemake fastq-dl
 
-conda install itertools
+mamba install itertools
 ```
 
 ## **Pipeiline overview:**
@@ -47,10 +46,19 @@ conda install itertools
 
 ## **Runtime info:**
 Run snakemake from command line with total desired core usage (`-j num_threads`) and increased latency wait time as well as restarts, because of delays from SRA (`--latency-wait`):
+### Example run w/ `slurm`:
+```
+snakemake --cluster-config slurm_config.yml \
+--cluster "sbatch --mail-type {cluster.mail-type} --mail-user {cluster.mail-user} -p {cluster.partition} -t {cluster.time} -N {cluster.nodes} --mem {cluster.mem} -D {cluster.chdir} -o {cluster.output}" \
+ --cluster-cancel scancel \
+-j 32 -k -p --nt
+```
+### Example run w/out `slurm`:
 ```
 conda activate align_snake
 snakemake -j 33 --keep-going --max-jobs-per-second 5 --latency 15 --restart-times 3
-```
+``` 
+
 I have found that NCBI does not like when you query their databases too often... The `--max-jobs-per-second` flag should fix this and `--restart-times 3` will retry the download a couple times. If you get a `too many queries` error, just rerun the Snakemake. I also recommend the `--keep-going` or `-k` flag so that the Snakemake doesn't die after encountering the error.
 
 

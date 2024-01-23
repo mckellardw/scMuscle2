@@ -6,7 +6,7 @@ import glob
 #TODO- change this from positional arguments...
 args = sys.argv
 PREFETCH_EXEC = args[1]
-FQD_EXEC = args[2]
+FASTERQDUMP_EXEC = args[2]
 THREADS = args[3]
 MEMLIMIT = args[4]
 
@@ -29,7 +29,7 @@ for SRR in SRR_list:
         --output-file tmp/{SRR}.sra \
         {SRR}
 
-        {FQD_EXEC} \
+        {FASTERQDUMP_EXEC} \
         --threads {THREADS} \
         --mem {MEMLIMIT} \
         --outdir tmp/ \

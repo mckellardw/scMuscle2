@@ -10,11 +10,11 @@ cd tmp
 
 # Fetch .bam file
 ${PREFETCH_EXEC} \
---verify yes \
---max-size 999999999999 \
---force ALL \
---type all \
-${SRR}
+    --verify yes \
+    --max-size 999999999999 \
+    --force ALL \
+    --type all \
+    ${SRR}
 
 # --output-directory tmp/ \
 # $(cat ./SRR_list.txt)
@@ -25,10 +25,10 @@ mkdir -p b2f/
 rm -rf b2f/
 
 ${BAM2FQ_EXEC} \
---nthreads ${THREADS} \
---reads-per-fastq=999999999999999 \
-${SRR}/*.bam \
-b2f/
+    --nthreads ${THREADS} \
+    --reads-per-fastq=999999999999999 \
+    ${SRR}/*.bam \
+    b2f/
 
 # Search for files matching the regex pattern
 N_FQs=$(find b2f/ -name *R1*.fastq.gz | wc -l)

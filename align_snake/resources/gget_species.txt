@@ -54,7 +54,6 @@ catagonus_wagneri
 catharus_ustulatus
 cavia_aperea
 cavia_porcellus
-cebus_capucinus
 cebus_imitator
 cercocebus_atys
 cervus_hanglu_yarkandensis
@@ -96,7 +95,7 @@ echeneis_naucrates
 echinops_telfairi
 electrophorus_electricus
 eptatretus_burgeri
-equus_asinus_asinus
+equus_asinus
 equus_caballus
 erinaceus_europaeus
 erpetoichthys_calabaricus
@@ -248,6 +247,9 @@ pteropus_vampyrus
 pundamilia_nyererei
 pygocentrus_nattereri
 rattus_norvegicus
+rattus_norvegicus_shrspbbbutx
+rattus_norvegicus_shrutx
+rattus_norvegicus_wkybbb
 rhinolophus_ferrumequinum
 rhinopithecus_bieti
 rhinopithecus_roxellana

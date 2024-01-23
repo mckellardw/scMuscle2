@@ -44,7 +44,7 @@ PRODIR: /gpfs/commons/groups/innovation/dwm/scMuscle2 # PROject DIRectory
 
 EXEC:
   PREFETCH: ~/sratoolkit.3.0.10-centos_linux64/bin/prefetch.3.0.10
-  FASTERQDUMP: ~/sratoolkit.3.0.20-centos_linux64/bin/fasterq-dump.3.0.10
+  FASTERQDUMP: ~/sratoolkit.3.0.10-centos_linux64/bin/fasterq-dump.3.0.10
   FASTQDL: fastq-dl
   # PFD: parallel-fastq-dump
   BAM2FQ: ~/usr/bin/bamtofastq_1.4.1

@@ -10,7 +10,7 @@ Draft of the human compendium, colored by sample ID (1,048,507 cells/nuclei):
 # Table of contents:
 <!---toc start-->
   * [Include your data](#how-to-include-your-data-in-scMuscle2)
-  * [Description of meta data](https://github.com/mckellardw/scMuscle2/metadata_info.md)
+  * [Description of meta data](https://github.com/mckellardw/scMuscle2/blob/main/metadata_info.md)
   * [Workflow](#workflow)
   * [Citation info](#citation-info)
 <!---toc end-->

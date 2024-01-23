@@ -27,7 +27,7 @@ rule preTrim_FastQC_R2:
         )
 
 # TSO, polyA, and polyG trimming
-rule cutadapt_R2:
+rule cutadapt:
     input:
         MERGED_R1_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R1.fq.gz",
         MERGED_R2_FQ = "{DATADIR}/align_out/{sample}/tmp/merged_R2.fq.gz"
