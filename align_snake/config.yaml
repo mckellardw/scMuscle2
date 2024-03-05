@@ -30,11 +30,6 @@ FASTQC_ADAPTERS: resources/fastqc_adapters.txt
 # Important directory file paths
 ########################################################################################################
 PRODIR: /gpfs/commons/groups/innovation/dwm/scMuscle2 # PROject DIRectory
-# TMPDIR: /workdir/dwm269/scMuscle2/tmp # DIRectory for TeMPorary files
-# METADIR: /workdir/dwm269/scMuscle2/metadata_ffq # METAdata DIRectory
-# DATADIR: /workdir/dwm269/scMuscle2/data # Directory for bigger data files (fastq's, STAR outputs, etc)
-# CACHEDIR: /workdir/dwm269/scMuscle2/data/cache # Dir for caching h5ad files for each sample
-# REFDIR: /workdir/dwm269/scMuscle2/refs # Dir for references from each species
 
 ########################################################################################################
 # Executables - file paths
@@ -46,8 +41,7 @@ EXEC:
   PREFETCH: ~/sratoolkit.3.0.10-centos_linux64/bin/prefetch.3.0.10
   FASTERQDUMP: ~/sratoolkit.3.0.10-centos_linux64/bin/fasterq-dump.3.0.10
   FASTQDL: fastq-dl
-  # PFD: parallel-fastq-dump
-  BAM2FQ: ~/usr/bin/bamtofastq_1.4.1
+  BAM2FQ: ~/bamtofastq_linux #v1.4.1
   CUTADAPT: cutadapt #v4.1
   FASTQC: fastqc #v0.11.9
   FFQ: ffq
@@ -60,6 +54,8 @@ EXEC:
   TRIMGALORE: trim_galore
   UMITOOLS: umi_tools #v
 
+## Deprecated
+# PFD: parallel-fastq-dump
 # BAM2SPLITBW: ~/DWM_utils/seq_utils/bam2splitBigWig.sh #Custom function in DWM_utils that splits a bam file by strand and converts it into bigwig format
 # FASTX_COLLAPSER: fastx_collapser
 # BLASTDB: /shared_data/genome_db/BLAST_NCBI # path to where the nt BLAST database is stored

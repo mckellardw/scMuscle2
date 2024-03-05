@@ -1,6 +1,7 @@
 
 # Description of metadata
 #TODO- update to match cellxgene requirements
+https://github.com/chanzuckerberg/single-cell-curation/tree/main/schema/4.1.0
 
 #### Source/citation info:
 - **source.label** - shorthand for the publication from which this data was taken (first author's last name plus year final manuscript was published)

@@ -28,7 +28,11 @@ rule get_fastqs:
             shell(
                 f"""
                 cd {DATADIR}/align_out/{wildcards.sample}
-                python {PRODIR}/align_snake/scripts/get_sra_fq.py {EXEC['PREFETCH']} {EXEC['FASTERQDUMP']} {threads} {params.MEMLIMIT}
+                python {PRODIR}/align_snake/scripts/get_sra_fq.py \
+                    {EXEC['PREFETCH']} \
+                    {EXEC['FASTERQDUMP']} \
+                    {threads} \
+                    {params.MEMLIMIT}
                 """
             )
         elif FORMAT == "bam":
@@ -36,7 +40,11 @@ rule get_fastqs:
             shell(
                 f"""
                 cd {DATADIR}/align_out/{wildcards.sample}
-                bash {PRODIR}/align_snake/scripts/get_sra_bam.sh {EXEC['PREFETCH']} {EXEC['BAM2FQ']} {threads} {wildcards.sample}
+                bash {PRODIR}/align_snake/scripts/get_sra_bam.sh \
+                    {EXEC['PREFETCH']} \
+                    {EXEC['BAM2FQ']} \
+                    {threads} \
+                    {wildcards.sample}
                 """
             )
         elif FORMAT == "aws": 

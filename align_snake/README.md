@@ -48,10 +48,7 @@ mamba install itertools
 Run snakemake from command line with total desired core usage (`-j num_threads`) and increased latency wait time as well as restarts, because of delays from SRA (`--latency-wait`):
 ### Example run w/ `slurm`:
 ```
-snakemake --cluster-config slurm_config.yml \
---cluster "sbatch --mail-type {cluster.mail-type} --mail-user {cluster.mail-user} -p {cluster.partition} -t {cluster.time} -N {cluster.nodes} --mem {cluster.mem} -D {cluster.chdir} -o {cluster.output}" \
- --cluster-cancel scancel \
--j 32 -k -p --nt
+snakemake --cluster-config slurm_config.yml --cluster "sbatch -p {cluster.partition} -t {cluster.time} -N {cluster.nodes} --mem {cluster.mem} -D {cluster.chdir} -o {cluster.output}"  --cluster-cancel scancel -j 64 -p --nt -k --rerun-incomplete
 ```
 ### Example run w/out `slurm`:
 ```
